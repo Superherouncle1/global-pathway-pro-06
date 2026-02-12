@@ -20,7 +20,7 @@ interface ChatMessage {
   sender_id: string;
   message: string;
   created_at: string;
-  profiles?: { name: string | null } | null;
+  profiles?: { name: string | null; avatar_url: string | null } | null;
 }
 
 const Community = () => {
@@ -65,7 +65,7 @@ const Community = () => {
   const loadMessages = async () => {
     const { data } = await supabase
       .from("chat_messages")
-      .select("id, sender_id, message, created_at, profiles(name)")
+      .select("id, sender_id, message, created_at, profiles(name, avatar_url)")
       .order("created_at", { ascending: true })
       .limit(100);
     if (data) setMessages(data as ChatMessage[]);
@@ -80,7 +80,7 @@ const Community = () => {
         async (payload) => {
           const { data } = await supabase
             .from("profiles")
-            .select("name")
+            .select("name, avatar_url")
             .eq("id", payload.new.sender_id)
             .single();
           const newMsg: ChatMessage = {
@@ -228,8 +228,12 @@ const Community = () => {
                       className="bg-card border border-border rounded-xl p-5 hover:shadow-hover transition-all hover:-translate-y-0.5"
                     >
                       <div className="flex items-center gap-3 mb-3">
-                        <div className={`w-11 h-11 rounded-full ${avatarColors[i % avatarColors.length]} flex items-center justify-center text-primary-foreground font-semibold text-sm`}>
-                          {getInitials(p.name)}
+                        <div className={`w-11 h-11 rounded-full ${avatarColors[i % avatarColors.length]} flex items-center justify-center text-primary-foreground font-semibold text-sm overflow-hidden`}>
+                          {p.avatar_url ? (
+                            <img src={p.avatar_url} alt={p.name || "User"} className="w-full h-full object-cover" />
+                          ) : (
+                            getInitials(p.name)
+                          )}
                         </div>
                         <div>
                           <p className="font-display font-semibold text-foreground">{p.name || "Anonymous"}</p>
@@ -266,8 +270,12 @@ const Community = () => {
                   ) : (
                     messages.map((msg) => (
                       <div key={msg.id} className="flex gap-3">
-                        <div className="w-8 h-8 rounded-full gradient-hero flex-shrink-0 flex items-center justify-center text-primary-foreground text-xs font-semibold">
-                          {getInitials(msg.profiles?.name || null)}
+                        <div className="w-8 h-8 rounded-full gradient-hero flex-shrink-0 flex items-center justify-center text-primary-foreground text-xs font-semibold overflow-hidden">
+                          {msg.profiles?.avatar_url ? (
+                            <img src={msg.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            getInitials(msg.profiles?.name || null)
+                          )}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-baseline gap-2 mb-0.5">
