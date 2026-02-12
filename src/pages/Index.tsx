@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BookOpen, Users, User, Globe, ArrowRight, GraduationCap, Compass, Sparkles } from "lucide-react";
+import { BookOpen, Users, User, Globe, ArrowRight, GraduationCap, Compass, Sparkles, MessageSquareQuote } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -71,8 +71,10 @@ const Index = () => {
                 </span>{" "}
                 Live it.
               </h1>
-              <p className="text-base text-muted-foreground mx-auto mb-8 leading-snug whitespace-pre-line">
-{`Horizn gives you everything you need to study abroad —\nexpert guides, a global community, and personalized support\nto turn your education dream into reality.`}
+              <p className="text-base text-muted-foreground mx-auto mb-8 leading-snug">
+                Horizn gives you everything you need to study abroad —
+                <br className="hidden md:inline" /> expert guides, a global community, and personalized support
+                <br className="hidden md:inline" /> to turn your education dream into reality.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -185,6 +187,24 @@ const Index = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <MessageSquareQuote className="w-10 h-10 text-primary mx-auto mb-4" />
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Testimonials
+            </h2>
+            <p className="text-muted-foreground text-lg">Coming Soon!</p>
+          </motion.div>
         </div>
       </section>
 
