@@ -1,0 +1,86 @@
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Globe } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const navItems = [
+  { label: "Home", path: "/" },
+  { label: "Resource Hub", path: "/resources" },
+  { label: "Your Space", path: "/your-space" },
+  { label: "Community", path: "/community" },
+  { label: "About Us", path: "/about" },
+];
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2">
+          <div className="w-9 h-9 rounded-lg gradient-hero flex items-center justify-center">
+            <Globe className="w-5 h-5 text-primary-foreground" />
+          </div>
+          <span className="font-display text-xl font-bold text-foreground">Horizn</span>
+        </Link>
+
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-1">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                location.pathname === item.path
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile toggle */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden p-2 rounded-lg hover:bg-muted text-foreground"
+        >
+          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-background border-b border-border overflow-hidden"
+          >
+            <div className="container mx-auto px-4 py-3 flex flex-col gap-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsOpen(false)}
+                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                    location.pathname === item.path
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
+
+export default Navbar;
