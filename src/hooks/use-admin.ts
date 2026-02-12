@@ -5,31 +5,37 @@ import { useAuth } from "@/contexts/AuthContext";
 export const useAdmin = () => {
   const { user } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAdmin = async () => {
       if (!user) {
         setIsAdmin(false);
+        setIsSuperAdmin(false);
         setLoading(false);
         return;
       }
 
-      const { data, error } = await supabase.rpc("has_role", {
+      // Check admin (has_role returns true for super_admin too)
+      const { data: adminData } = await supabase.rpc("has_role", {
         _user_id: user.id,
         _role: "admin",
       });
 
-      if (!error && data) {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
+      setIsAdmin(!!adminData);
+
+      // Check super_admin specifically
+      const { data: superData } = await supabase.rpc("is_super_admin", {
+        _user_id: user.id,
+      });
+
+      setIsSuperAdmin(!!superData);
       setLoading(false);
     };
 
     checkAdmin();
   }, [user]);
 
-  return { isAdmin, loading };
+  return { isAdmin, isSuperAdmin, loading };
 };

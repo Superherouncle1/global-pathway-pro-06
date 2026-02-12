@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_activity_log: {
+        Row: {
+          action_type: string
+          admin_id: string
+          created_at: string
+          details: string | null
+          id: string
+          target_user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          admin_id: string
+          created_at?: string
+          details?: string | null
+          id?: string
+          target_user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          admin_id?: string
+          created_at?: string
+          details?: string | null
+          id?: string
+          target_user_id?: string | null
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           created_at: string
@@ -147,6 +174,7 @@ export type Database = {
       }
       is_authenticated: { Args: never; Returns: boolean }
       is_owner: { Args: { profile_id: string }; Returns: boolean }
+      is_super_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "super_admin"
