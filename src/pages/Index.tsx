@@ -45,12 +45,16 @@ const Index = () => {
       <section className="relative pt-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-teal-light via-background to-background" />
         <div className="container mx-auto px-4 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[85vh] py-12">
+          <div className="flex flex-col items-center min-h-[85vh] py-16">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
+              className="text-center max-w-3xl"
             >
+              <h2 className="font-display text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight">
+                Horizn
+              </h2>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
                 <Sparkles className="w-4 h-4" />
                 Your Study Abroad Journey Starts Here
@@ -62,10 +66,10 @@ const Index = () => {
                 </span>{" "}
                 Live it.
               </h1>
-              <p className="text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed">
+              <p className="text-lg text-muted-foreground max-w-lg mx-auto mb-8 leading-relaxed">
                 Horizn gives you everything you need to study abroad — expert guides, a global community, and personalized support to turn your international education dream into reality.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/resources"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl gradient-hero text-primary-foreground font-semibold text-base shadow-soft hover:shadow-hover transition-all hover:scale-[1.02]"
@@ -86,7 +90,7 @@ const Index = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative"
+              className="relative mt-12 w-full max-w-2xl"
             >
               <div className="relative rounded-2xl overflow-hidden shadow-hover">
                 <img
