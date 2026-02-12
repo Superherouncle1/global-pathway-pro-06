@@ -45,13 +45,13 @@ const modules: Module[] = [
       "Research universities through official websites, rankings, and college fairs",
       "Consider location, cost of living, campus safety, and student diversity",
       "Evaluate academic programs, faculty quality, and student-to-faculty ratios",
-      "Look into extracurricular activities and support services for international students",
+      "Look into extracurricular activities and support services for students",
       "Speak with current students and alumni for firsthand perspectives",
     ],
     tips: [
       "Don't rely solely on rankings — find the school that fits YOUR goals",
       "Visit campuses virtually or in-person whenever possible",
-      "Check if the institution offers dedicated international student support services",
+      "Check if the institution offers dedicated student support services",
     ],
   },
   {
@@ -95,12 +95,12 @@ const modules: Module[] = [
     id: 5,
     title: "Financing Your Education",
     icon: DollarSign,
-    summary: "Explore funding options including scholarships, grants, assistantships, part-time work, and loan programs for international students.",
+    summary: "Explore funding options including scholarships, grants, assistantships, part-time work, and loan programs for students.",
     keyPoints: [
       "Explore scholarships — merit-based, need-based, and field-specific",
       "Look into grants from institutions, governments, and private organizations",
       "Consider teaching or research assistantships (especially for graduate students)",
-      "Understand part-time work regulations for international students",
+      "Understand part-time work regulations for students",
       "Research loan options and understand repayment obligations",
     ],
     tips: [
@@ -160,7 +160,7 @@ const modules: Module[] = [
     tips: [
       "Keep an open mind and step outside your comfort zone",
       "Ask questions — locals appreciate genuine curiosity about their culture",
-      "Connect with international student offices for orientation and ongoing support",
+      "Connect with student offices for orientation and ongoing support",
     ],
   },
   {
@@ -187,7 +187,7 @@ const recommendedLinks = [
   { title: "IIE Study Abroad", url: "https://www.iie.org/", desc: "Institute of International Education — scholarships and programs" },
   { title: "StudyPortals", url: "https://www.studyportals.com/", desc: "Search programs worldwide across 3,750+ universities" },
   { title: "IELTS / TOEFL Prep", url: "https://www.ets.org/toefl", desc: "Official English language test preparation resources" },
-  { title: "Scholarship Portal", url: "https://www.scholarshipportal.com/", desc: "Search scholarships available for international students" },
+  { title: "Scholarship Portal", url: "https://www.scholarshipportal.com/", desc: "Search scholarships available for students" },
   { title: "Numbeo Cost of Living", url: "https://www.numbeo.com/", desc: "Compare cost of living across cities worldwide" },
   { title: "EducationUSA", url: "https://educationusa.state.gov/", desc: "U.S. Department of State resource for studying in the USA" },
   { title: "DAAD", url: "https://www.daad.de/en/", desc: "German Academic Exchange Service — study in Germany" },

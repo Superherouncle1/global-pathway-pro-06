@@ -14,7 +14,7 @@ const Footer = () => {
               <span className="font-display text-lg font-bold">Horizn</span>
             </div>
             <p className="text-sm opacity-70 max-w-sm">
-              Empowering international students to achieve their study abroad dreams with expert guidance, resources, and a global community.
+              Empowering students to achieve their study abroad dreams with expert guidance, resources, and a global community.
             </p>
           </div>
 
@@ -40,7 +40,7 @@ const Footer = () => {
         <div className="mt-10 pt-6 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs opacity-50">© {new Date().getFullYear()} Horizn by Global Study Hub. All rights reserved.</p>
           <p className="text-xs opacity-50 flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 text-accent" /> for international students worldwide
+            Made with <Heart className="w-3 h-3 text-accent" /> for students worldwide
           </p>
         </div>
       </div>
