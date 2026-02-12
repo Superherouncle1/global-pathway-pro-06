@@ -12,6 +12,7 @@ import About from "./pages/About";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import TimiChat from "./components/TimiChat";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <TimiChat />
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>
