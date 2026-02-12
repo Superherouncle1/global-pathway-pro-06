@@ -71,10 +71,8 @@ const Index = () => {
                 </span>{" "}
                 Live it.
               </h1>
-              <p className="text-lg text-muted-foreground max-w-lg mx-auto mb-8 leading-relaxed">
-                Horizn gives you everything you need to study abroad —<br />
-                expert guides, a global community, and personalized support<br />
-                to turn your education dream into reality.
+              <p className="text-base text-muted-foreground mx-auto mb-8 leading-snug whitespace-pre-line">
+{`Horizn gives you everything you need to study abroad —\nexpert guides, a global community, and personalized support\nto turn your education dream into reality.`}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
