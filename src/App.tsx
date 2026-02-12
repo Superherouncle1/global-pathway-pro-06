@@ -13,6 +13,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import TimiChat from "./components/TimiChat";
+import TimiPage from "./pages/Timi";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/timi" element={<TimiPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <TimiChat />

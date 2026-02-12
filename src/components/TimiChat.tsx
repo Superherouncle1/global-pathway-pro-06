@@ -1,149 +1,18 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Loader2, Bot } from "lucide-react";
+import { X, Send, Loader2, Bot, Maximize2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-
-type Msg = { role: "user" | "assistant"; content: string };
-
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/timi-chat`;
-
-async function streamChat({
-  messages,
-  onDelta,
-  onDone,
-  onError,
-}: {
-  messages: Msg[];
-  onDelta: (t: string) => void;
-  onDone: () => void;
-  onError: (msg: string) => void;
-}) {
-  const resp = await fetch(CHAT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-    },
-    body: JSON.stringify({ messages }),
-  });
-
-  if (!resp.ok) {
-    const body = await resp.json().catch(() => ({}));
-    onError(body.error || "Something went wrong. Please try again.");
-    return;
-  }
-  if (!resp.body) {
-    onError("No response body");
-    return;
-  }
-
-  const reader = resp.body.getReader();
-  const decoder = new TextDecoder();
-  let buf = "";
-  let done = false;
-
-  while (!done) {
-    const { done: rd, value } = await reader.read();
-    if (rd) break;
-    buf += decoder.decode(value, { stream: true });
-
-    let idx: number;
-    while ((idx = buf.indexOf("\n")) !== -1) {
-      let line = buf.slice(0, idx);
-      buf = buf.slice(idx + 1);
-      if (line.endsWith("\r")) line = line.slice(0, -1);
-      if (line.startsWith(":") || line.trim() === "") continue;
-      if (!line.startsWith("data: ")) continue;
-      const json = line.slice(6).trim();
-      if (json === "[DONE]") {
-        done = true;
-        break;
-      }
-      try {
-        const parsed = JSON.parse(json);
-        const c = parsed.choices?.[0]?.delta?.content as string | undefined;
-        if (c) onDelta(c);
-      } catch {
-        buf = line + "\n" + buf;
-        break;
-      }
-    }
-  }
-
-  // flush
-  if (buf.trim()) {
-    for (let raw of buf.split("\n")) {
-      if (!raw) continue;
-      if (raw.endsWith("\r")) raw = raw.slice(0, -1);
-      if (!raw.startsWith("data: ")) continue;
-      const json = raw.slice(6).trim();
-      if (json === "[DONE]") continue;
-      try {
-        const p = JSON.parse(json);
-        const c = p.choices?.[0]?.delta?.content as string | undefined;
-        if (c) onDelta(c);
-      } catch {}
-    }
-  }
-  onDone();
-}
-
-const WELCOME: Msg = {
-  role: "assistant",
-  content:
-    "Hello! 👋 Bonjour! ¡Hola! 你好!\n\nI'm **Timi**, your study abroad assistant at **Global Study Hub**. I can help you with destinations, scholarships, visa processes, applications, and more.\n\nHow can I help you today?",
-};
+import { useTimiChat } from "@/hooks/use-timi-chat";
+import { SUGGESTIONS } from "@/lib/timi-stream";
 
 const TimiChat = () => {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([WELCOME]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const endRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, open]);
-
-  const send = async () => {
-    const text = input.trim();
-    if (!text || loading) return;
-    const userMsg: Msg = { role: "user", content: text };
-    setMessages((p) => [...p, userMsg]);
-    setInput("");
-    setLoading(true);
-
-    let assistantSoFar = "";
-    const upsert = (chunk: string) => {
-      assistantSoFar += chunk;
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        if (last?.role === "assistant" && prev.length > 1 && prev[prev.length - 2]?.role === "user") {
-          return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistantSoFar } : m));
-        }
-        return [...prev, { role: "assistant", content: assistantSoFar }];
-      });
-    };
-
-    try {
-      await streamChat({
-        messages: [...messages, userMsg].filter((m) => m !== WELCOME || messages.indexOf(m) > 0),
-        onDelta: upsert,
-        onDone: () => setLoading(false),
-        onError: (msg) => {
-          setMessages((p) => [...p, { role: "assistant", content: `⚠️ ${msg}` }]);
-          setLoading(false);
-        },
-      });
-    } catch {
-      setMessages((p) => [...p, { role: "assistant", content: "⚠️ Connection error. Please try again." }]);
-      setLoading(false);
-    }
-  };
+  const { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions } = useTimiChat();
+  const navigate = useNavigate();
 
   return (
     <>
-      {/* Floating button */}
       <AnimatePresence>
         {!open && (
           <motion.button
@@ -159,7 +28,6 @@ const TimiChat = () => {
         )}
       </AnimatePresence>
 
-      {/* Chat panel */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -178,6 +46,13 @@ const TimiChat = () => {
                 <p className="font-display font-semibold text-primary-foreground text-sm">Timi</p>
                 <p className="text-primary-foreground/70 text-xs">Study Abroad Assistant</p>
               </div>
+              <button
+                onClick={() => { setOpen(false); navigate("/timi"); }}
+                className="text-primary-foreground/70 hover:text-primary-foreground transition-colors mr-1"
+                title="Open full screen"
+              >
+                <Maximize2 className="w-4 h-4" />
+              </button>
               <button onClick={() => setOpen(false)} className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
                 <X className="w-5 h-5" />
               </button>
@@ -204,6 +79,22 @@ const TimiChat = () => {
                   </div>
                 </div>
               ))}
+
+              {/* Suggestion chips */}
+              {showSuggestions && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {SUGGESTIONS.map((s) => (
+                    <button
+                      key={s.label}
+                      onClick={() => sendMessage(s.message)}
+                      className="px-3 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-medium hover:bg-primary/10 transition-colors"
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {loading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex justify-start">
                   <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-3">
@@ -221,12 +112,7 @@ const TimiChat = () => {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      send();
-                    }
-                  }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
                   placeholder="Ask Timi anything..."
                   className="flex-1 px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm transition"
                   disabled={loading}
