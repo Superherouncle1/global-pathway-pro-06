@@ -52,9 +52,14 @@ const Index = () => {
               transition={{ duration: 0.7 }}
               className="text-center max-w-3xl"
             >
-              <h2 className="font-display text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight">
+              <motion.h2
+                initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="font-display text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent mb-4 tracking-tight"
+              >
                 Horizn
-              </h2>
+              </motion.h2>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
                 <Sparkles className="w-4 h-4" />
                 Your Study Abroad Journey Starts Here
@@ -90,7 +95,7 @@ const Index = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative mt-12 w-full max-w-2xl"
+              className="relative mt-12 w-full max-w-xl"
             >
               <div className="relative rounded-2xl overflow-hidden shadow-hover">
                 <img
