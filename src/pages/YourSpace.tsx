@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User, Mail, Phone, Globe, Save, Check } from "lucide-react";
+import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -11,18 +14,89 @@ const languages = [
 ];
 
 const YourSpace = () => {
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState({
     name: "",
     email: "",
     phone: "",
+    country: "",
+    field_of_study: "",
+    bio: "",
+    preferred_language: "English",
   });
-  const [selectedLang, setSelectedLang] = useState("English");
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      loadProfile();
+    }
+  }, [user]);
+
+  const loadProfile = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (data) {
+      setProfile({
+        name: data.name || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        country: data.country || "",
+        field_of_study: data.field_of_study || "",
+        bio: data.bio || "",
+        preferred_language: data.preferred_language || "English",
+      });
+    }
+    setLoadingProfile(false);
   };
+
+  const handleSave = async () => {
+    if (!user) return;
+    setSaving(true);
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        country: profile.country,
+        field_of_study: profile.field_of_study,
+        bio: profile.bio,
+        preferred_language: profile.preferred_language,
+      })
+      .eq("id", user.id);
+
+    setSaving(false);
+    if (!error) {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    }
+  };
+
+  if (authLoading || loadingProfile) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="pt-24 flex items-center justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,39 +135,37 @@ const YourSpace = () => {
                 <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
                   <User className="w-4 h-4 text-muted-foreground" /> Full Name
                 </label>
-                <input
-                  type="text"
-                  value={profile.name}
-                  onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                  placeholder="Enter your full name"
-                  className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
-                />
+                <input type="text" value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} placeholder="Enter your full name" className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition" />
               </div>
-
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
                   <Mail className="w-4 h-4 text-muted-foreground" /> Email Address
                 </label>
-                <input
-                  type="email"
-                  value={profile.email}
-                  onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
-                />
+                <input type="email" value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} placeholder="you@example.com" className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition" />
               </div>
-
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
                   <Phone className="w-4 h-4 text-muted-foreground" /> Contact Number
                 </label>
-                <input
-                  type="tel"
-                  value={profile.phone}
-                  onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                  placeholder="+1 (555) 000-0000"
-                  className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
-                />
+                <input type="tel" value={profile.phone} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} placeholder="+1 (555) 000-0000" className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition" />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-muted-foreground" /> Country
+                </label>
+                <input type="text" value={profile.country} onChange={(e) => setProfile({ ...profile, country: e.target.value })} placeholder="e.g. Nigeria, India, Brazil" className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition" />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-muted-foreground" /> Field of Study
+                </label>
+                <input type="text" value={profile.field_of_study} onChange={(e) => setProfile({ ...profile, field_of_study: e.target.value })} placeholder="e.g. Computer Science, Medicine" className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition" />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-muted-foreground" /> Bio
+                </label>
+                <textarea value={profile.bio} onChange={(e) => setProfile({ ...profile, bio: e.target.value })} placeholder="Tell the community about yourself..." rows={3} className="w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none" />
               </div>
             </div>
           </motion.div>
@@ -114,9 +186,9 @@ const YourSpace = () => {
               {languages.map((lang) => (
                 <button
                   key={lang}
-                  onClick={() => setSelectedLang(lang)}
+                  onClick={() => setProfile({ ...profile, preferred_language: lang })}
                   className={`px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                    selectedLang === lang
+                    profile.preferred_language === lang
                       ? "gradient-hero text-primary-foreground shadow-soft"
                       : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                   }`}
@@ -128,23 +200,18 @@ const YourSpace = () => {
           </motion.div>
 
           {/* Save Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
             <button
               onClick={handleSave}
-              className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-xl gradient-hero text-primary-foreground font-semibold shadow-soft hover:shadow-hover transition-all hover:scale-[1.01]"
+              disabled={saving}
+              className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-xl gradient-hero text-primary-foreground font-semibold shadow-soft hover:shadow-hover transition-all hover:scale-[1.01] disabled:opacity-60"
             >
-              {saved ? (
-                <>
-                  <Check className="w-5 h-5" /> Saved!
-                </>
+              {saving ? (
+                <><Loader2 className="w-5 h-5 animate-spin" /> Saving...</>
+              ) : saved ? (
+                <><Check className="w-5 h-5" /> Saved!</>
               ) : (
-                <>
-                  <Save className="w-5 h-5" /> Save Profile
-                </>
+                <><Save className="w-5 h-5" /> Save Profile</>
               )}
             </button>
           </motion.div>
