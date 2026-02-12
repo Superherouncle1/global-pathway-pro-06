@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Globe } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, Globe, LogIn, LogOut, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "Home", path: "/" },
@@ -14,6 +15,13 @@ const navItems = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -40,6 +48,22 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+
+          {user ? (
+            <button
+              onClick={handleSignOut}
+              className="ml-2 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex items-center gap-1.5"
+            >
+              <LogOut className="w-4 h-4" /> Sign Out
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              className="ml-2 px-4 py-2 rounded-lg text-sm font-medium gradient-hero text-primary-foreground flex items-center gap-1.5"
+            >
+              <LogIn className="w-4 h-4" /> Sign In
+            </Link>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -75,6 +99,23 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+
+              {user ? (
+                <button
+                  onClick={() => { handleSignOut(); setIsOpen(false); }}
+                  className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors text-left flex items-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" /> Sign Out
+                </button>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setIsOpen(false)}
+                  className="px-4 py-3 rounded-lg text-sm font-medium gradient-hero text-primary-foreground text-center flex items-center justify-center gap-2"
+                >
+                  <LogIn className="w-4 h-4" /> Sign In
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
