@@ -19,7 +19,7 @@ const faqItems = [
     a: "Costs vary significantly by country and institution. Key expenses include tuition fees, accommodation, food, transportation, health insurance, and personal expenses. Many countries offer more affordable options than you might expect — explore Europe, Asia, and Canada alongside traditional destinations.",
   },
   {
-    q: "How do I find scholarships for international students?",
+    q: "How do I find scholarships for students?",
     a: "Check university financial aid pages, explore platforms like ScholarshipPortal.com and IIE, look into government-sponsored programs (Fulbright, DAAD, Chevening), and apply to as many relevant scholarships as possible. Our Module 5 covers this extensively.",
   },
   {
@@ -32,7 +32,7 @@ const faqItems = [
   },
   {
     q: "Can I work while studying abroad?",
-    a: "Most countries allow international students to work part-time (typically 15-20 hours per week during term). Regulations vary by country and visa type. Always check the specific work authorization rules for your destination.",
+    a: "Most countries allow students to work part-time (typically 15-20 hours per week during term). Regulations vary by country and visa type. Always check the specific work authorization rules for your destination.",
   },
   {
     q: "How do I choose the right school for me?",
@@ -44,7 +44,7 @@ const faqItems = [
   },
   {
     q: "How do I prepare for culture shock?",
-    a: "Embrace cultural differences as learning opportunities. Research your destination's customs beforehand, connect with current international students, join campus organizations, and give yourself grace during the adjustment period. Module 8 covers this in detail.",
+    a: "Embrace cultural differences as learning opportunities. Research your destination's customs beforehand, connect with current students, join campus organizations, and give yourself grace during the adjustment period. Module 8 covers this in detail.",
   },
   {
     q: "Can I study abroad if I don't speak the local language?",
@@ -191,7 +191,7 @@ const About = () => {
           >
             <h1 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">About Us</h1>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Powered by Global Study Hub — guiding international students to their dreams since day one.
+              Powered by Global Study Hub — guiding students to their dreams since day one.
             </p>
           </motion.div>
 
@@ -201,7 +201,7 @@ const About = () => {
               {
                 icon: Info,
                 title: "Who We Are",
-                text: "Global Study Hub is a team of experienced international education professionals and former international students. We've walked the path you're on — and we built Horizn to make your journey smoother, faster, and more affordable.",
+                text: "Global Study Hub is a team of experienced education professionals and former students. We've walked the path you're on — and we built Horizn to make your journey smoother, faster, and more affordable.",
                 gradient: "gradient-hero",
               },
               {
@@ -213,13 +213,13 @@ const About = () => {
               {
                 icon: Eye,
                 title: "Our Vision",
-                text: "A world where every aspiring international student has equal access to the tools, resources, and community they need to achieve their study abroad dreams — no matter their background.",
+                text: "A world where every aspiring student has equal access to the tools, resources, and community they need to achieve their study abroad dreams — no matter their background.",
                 gradient: "gradient-hero",
               },
               {
                 icon: Target,
                 title: "Our Mission",
-                text: "To empower international students with comprehensive, accessible, and expert-driven resources that guide them through every step of the study abroad journey — from dream to graduation and beyond.",
+                text: "To empower students with comprehensive, accessible, and expert-driven resources that guide them through every step of the study abroad journey — from dream to graduation and beyond.",
                 gradient: "gradient-dark",
               },
             ].map((item, i) => (

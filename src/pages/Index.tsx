@@ -91,7 +91,7 @@ const Index = () => {
               <div className="relative rounded-2xl overflow-hidden shadow-hover">
                 <img
                   src={heroImage}
-                  alt="Diverse international students on a global campus"
+                  alt="Diverse students on a global campus"
                   className="w-full h-auto object-cover"
                   loading="eager"
                 />
