@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Users, MessageSquare, BarChart3, Trash2, Shield, ShieldOff,
-  Ban, CheckCircle, MessagesSquare, Crown, UserX,
+  Users, MessageSquare, BarChart3, Trash2, Shield,
+  Ban, CheckCircle, MessagesSquare, Crown, UserX, ClipboardList, Star,
 } from "lucide-react";
+import ActivityLog from "@/components/admin/ActivityLog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdmin } from "@/hooks/use-admin";
 import { useAuth } from "@/contexts/AuthContext";
@@ -39,13 +40,24 @@ interface ChatMessage {
 
 interface UserRole {
   user_id: string;
-  role: "admin" | "moderator" | "user";
+  role: "admin" | "moderator" | "user" | "super_admin";
 }
 
-type TabKey = "messages" | "members" | "chat" | "stats";
+interface ActivityEntry {
+  id: string;
+  admin_id: string;
+  action_type: string;
+  target_user_id: string | null;
+  details: string | null;
+  created_at: string;
+  admin_profile?: { name: string | null; email: string | null } | null;
+  target_profile?: { name: string | null; email: string | null } | null;
+}
+
+type TabKey = "messages" | "members" | "chat" | "stats" | "activity";
 
 const Admin = () => {
-  const { isAdmin, loading: adminLoading } = useAdmin();
+  const { isAdmin, isSuperAdmin, loading: adminLoading } = useAdmin();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
@@ -54,6 +66,7 @@ const Admin = () => {
   const [members, setMembers] = useState<Profile[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [userRoles, setUserRoles] = useState<UserRole[]>([]);
+  const [activityLog, setActivityLog] = useState<ActivityEntry[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -67,32 +80,60 @@ const Admin = () => {
 
     const fetchData = async () => {
       setLoadingData(true);
-      const [subsRes, membersRes, chatRes, rolesRes] = await Promise.all([
+      const [subsRes, membersRes, chatRes, rolesRes, logRes] = await Promise.all([
         supabase.from("contact_submissions").select("*").order("created_at", { ascending: false }),
         supabase.from("profiles").select("*").order("created_at", { ascending: false }),
         supabase.from("chat_messages").select("*, profiles(name, email)").order("created_at", { ascending: false }).limit(100),
         supabase.from("user_roles").select("user_id, role"),
+        supabase.from("admin_activity_log").select("*").order("created_at", { ascending: false }).limit(200),
       ]);
 
       if (subsRes.data) setSubmissions(subsRes.data);
       if (membersRes.data) setMembers(membersRes.data as Profile[]);
       if (chatRes.data) setChatMessages(chatRes.data as ChatMessage[]);
-      if (rolesRes.data) setUserRoles(rolesRes.data);
+      if (rolesRes.data) setUserRoles(rolesRes.data as UserRole[]);
+      
+      // Enrich activity log with profile data
+      if (logRes.data) {
+        const profileMap = new Map((membersRes.data || []).map((p: Profile) => [p.id, { name: p.name, email: p.email }]));
+        const enriched = logRes.data.map((entry: any) => ({
+          ...entry,
+          admin_profile: profileMap.get(entry.admin_id) || null,
+          target_profile: entry.target_user_id ? profileMap.get(entry.target_user_id) || null : null,
+        }));
+        setActivityLog(enriched);
+      }
       setLoadingData(false);
     };
 
     fetchData();
   }, [isAdmin]);
 
+  const logActivity = async (action_type: string, target_user_id?: string, details?: string) => {
+    if (!user) return;
+    await supabase.from("admin_activity_log").insert({
+      admin_id: user.id,
+      action_type,
+      target_user_id: target_user_id || null,
+      details: details || null,
+    });
+  };
+
   const handleDeleteSubmission = async (id: string) => {
     const { error } = await supabase.from("contact_submissions").delete().eq("id", id);
-    if (!error) setSubmissions((prev) => prev.filter((s) => s.id !== id));
+    if (!error) {
+      setSubmissions((prev) => prev.filter((s) => s.id !== id));
+      await logActivity("delete_submission", undefined, `Deleted contact submission ${id}`);
+    }
   };
 
   const handleDeleteChat = async (id: string) => {
     setActionLoading(id);
     const { error } = await supabase.from("chat_messages").delete().eq("id", id);
-    if (!error) setChatMessages((prev) => prev.filter((m) => m.id !== id));
+    if (!error) {
+      setChatMessages((prev) => prev.filter((m) => m.id !== id));
+      await logActivity("delete_message", undefined, `Deleted chat message ${id}`);
+    }
     setActionLoading(null);
   };
 
@@ -108,26 +149,32 @@ const Admin = () => {
           m.id === memberId ? { ...m, banned_at: isBanned ? null : new Date().toISOString() } : m
         )
       );
+      await logActivity(isBanned ? "unban" : "ban", memberId);
     }
     setActionLoading(null);
   };
 
   const handleSetRole = async (userId: string, role: "admin" | "moderator" | "user") => {
     setActionLoading(`role-${userId}`);
-    // Remove existing roles for this user first
+    const oldRole = getUserRole(userId);
     await supabase.from("user_roles").delete().eq("user_id", userId);
     if (role !== "user") {
       await supabase.from("user_roles").insert({ user_id: userId, role });
     }
-    // Refresh roles
     const { data } = await supabase.from("user_roles").select("user_id, role");
-    if (data) setUserRoles(data);
+    if (data) setUserRoles(data as UserRole[]);
+    await logActivity("role_change", userId, `Changed role from ${oldRole} to ${role}`);
     setActionLoading(null);
   };
 
   const getUserRole = (userId: string): string => {
     const r = userRoles.find((ur) => ur.user_id === userId);
     return r ? r.role : "user";
+  };
+
+  const isTargetSuperAdmin = (userId: string): boolean => {
+    const r = userRoles.find((ur) => ur.user_id === userId);
+    return r?.role === "super_admin";
   };
 
   if (authLoading || adminLoading) {
@@ -144,6 +191,7 @@ const Admin = () => {
     { key: "messages" as const, label: "Messages", icon: MessageSquare, count: submissions.length },
     { key: "members" as const, label: "User Management", icon: Users, count: members.length },
     { key: "chat" as const, label: "Chat Moderation", icon: MessagesSquare, count: chatMessages.length },
+    { key: "activity" as const, label: "Activity Log", icon: ClipboardList, count: activityLog.length },
     { key: "stats" as const, label: "Stats", icon: BarChart3 },
   ];
 
@@ -259,25 +307,33 @@ const Admin = () => {
                               const role = getUserRole(m.id);
                               const isBanned = !!m.banned_at;
                               const isSelf = m.id === user?.id;
+                              const targetIsSuperAdmin = isTargetSuperAdmin(m.id);
+                              const canModify = !isSelf && (isSuperAdmin || !targetIsSuperAdmin);
 
                               return (
                                 <tr key={m.id} className={`border-b border-border last:border-0 transition-colors ${isBanned ? "bg-destructive/5" : "hover:bg-muted/30"}`}>
                                   <td className="px-5 py-3">
-                                    <p className="text-foreground font-medium">{m.name || "—"}</p>
+                                    <div className="flex items-center gap-2">
+                                      <p className="text-foreground font-medium">{m.name || "—"}</p>
+                                      {targetIsSuperAdmin && <Star className="w-3.5 h-3.5 text-amber-500" />}
+                                    </div>
                                     <p className="text-xs text-muted-foreground">{m.email || "—"}</p>
                                   </td>
                                   <td className="px-5 py-3 text-muted-foreground">{m.country || "—"}</td>
                                   <td className="px-5 py-3">
                                     <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${
-                                      role === "admin"
+                                      role === "super_admin"
+                                        ? "bg-amber-500/15 text-amber-600"
+                                        : role === "admin"
                                         ? "bg-primary/15 text-primary"
                                         : role === "moderator"
                                         ? "bg-accent text-accent-foreground"
                                         : "bg-muted text-muted-foreground"
                                     }`}>
+                                      {role === "super_admin" && <Star className="w-3 h-3" />}
                                       {role === "admin" && <Crown className="w-3 h-3" />}
                                       {role === "moderator" && <Shield className="w-3 h-3" />}
-                                      {role.charAt(0).toUpperCase() + role.slice(1)}
+                                      {role === "super_admin" ? "Super Admin" : role.charAt(0).toUpperCase() + role.slice(1)}
                                     </span>
                                   </td>
                                   <td className="px-5 py-3">
@@ -292,9 +348,8 @@ const Admin = () => {
                                     )}
                                   </td>
                                   <td className="px-5 py-3">
-                                    {!isSelf && (
+                                    {canModify ? (
                                       <div className="flex items-center justify-end gap-1">
-                                        {/* Role buttons */}
                                         <select
                                           value={role}
                                           onChange={(e) => handleSetRole(m.id, e.target.value as "admin" | "moderator" | "user")}
@@ -305,8 +360,6 @@ const Admin = () => {
                                           <option value="moderator">Moderator</option>
                                           <option value="admin">Admin</option>
                                         </select>
-
-                                        {/* Ban/Unban */}
                                         <button
                                           onClick={() => handleToggleBan(m.id, isBanned)}
                                           disabled={actionLoading === m.id}
@@ -320,9 +373,10 @@ const Admin = () => {
                                           {isBanned ? <CheckCircle className="w-4 h-4" /> : <Ban className="w-4 h-4" />}
                                         </button>
                                       </div>
-                                    )}
-                                    {isSelf && (
+                                    ) : isSelf ? (
                                       <span className="text-xs text-muted-foreground italic">You</span>
+                                    ) : (
+                                      <span className="text-xs text-muted-foreground italic">Protected</span>
                                     )}
                                   </td>
                                 </tr>
@@ -375,6 +429,11 @@ const Admin = () => {
                     ))
                   )}
                 </motion.div>
+              )}
+
+              {/* Activity Log */}
+              {activeTab === "activity" && (
+                <ActivityLog entries={activityLog} />
               )}
 
               {/* Platform Stats */}
