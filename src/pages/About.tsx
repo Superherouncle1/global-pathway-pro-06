@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Info, Eye, Target, Rocket, HelpCircle, FileText, Shield,
+  Info, Eye, Target, HelpCircle, Shield,
   MessageSquare, Share2, ChevronDown, ChevronUp, Heart,
-  Globe, Users, BookOpen, ExternalLink
+  Mail, User, Send, Check, Loader2, ExternalLink
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -50,6 +51,106 @@ const faqItems = [
     a: "Yes! Many universities worldwide offer programs taught entirely in English. Additionally, studying abroad is a great opportunity to learn a new language. Many institutions offer language courses alongside your main program of study.",
   },
 ];
+
+const ContactCoachForm = () => {
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      message: form.message.trim(),
+    };
+    if (!trimmed.name || !trimmed.email || !trimmed.message) return;
+    if (trimmed.name.length > 100 || trimmed.email.length > 255 || trimmed.message.length > 2000) return;
+
+    setStatus("sending");
+    const { error } = await supabase.from("contact_submissions").insert(trimmed);
+    if (error) {
+      setStatus("error");
+    } else {
+      setStatus("sent");
+      setForm({ name: "", email: "", message: "" });
+      setTimeout(() => setStatus("idle"), 4000);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="rounded-2xl gradient-hero p-6 text-primary-foreground relative overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1),transparent)]" />
+      <div className="relative">
+        <MessageSquare className="w-8 h-8 mb-3 opacity-80" />
+        <h3 className="font-display text-lg font-semibold mb-1">Speak with a Study Abroad Coach</h3>
+        <p className="text-xs opacity-70 mb-4 leading-relaxed">
+          Send us a message and our team will get back to you.
+        </p>
+
+        {status === "sent" ? (
+          <div className="flex items-center gap-2 bg-card/20 backdrop-blur-sm rounded-xl p-4">
+            <Check className="w-5 h-5" />
+            <p className="text-sm font-medium">Message sent! We'll be in touch soon.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-2.5">
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 opacity-60" />
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="Your name"
+                required
+                maxLength={100}
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg bg-card/15 backdrop-blur-sm border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary-foreground/30"
+              />
+            </div>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 opacity-60" />
+              <input
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                placeholder="Your email"
+                required
+                maxLength={255}
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg bg-card/15 backdrop-blur-sm border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary-foreground/30"
+              />
+            </div>
+            <textarea
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+              placeholder="How can we help you?"
+              required
+              maxLength={2000}
+              rows={3}
+              className="w-full px-3 py-2.5 rounded-lg bg-card/15 backdrop-blur-sm border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary-foreground/30 resize-none"
+            />
+            <button
+              type="submit"
+              disabled={status === "sending"}
+              className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-card text-foreground font-semibold text-sm hover:bg-card/90 transition-colors disabled:opacity-60"
+            >
+              {status === "sending" ? (
+                <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>
+              ) : status === "error" ? (
+                "Try again"
+              ) : (
+                <><Send className="w-4 h-4" /> Send Message</>
+              )}
+            </button>
+          </form>
+        )}
+      </div>
+    </motion.div>
+  );
+};
 
 const About = () => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
@@ -210,30 +311,9 @@ const About = () => {
             </motion.div>
           </div>
 
-          {/* Speak with a Coach + Share */}
+          {/* Contact Coach Form + Share */}
           <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="rounded-2xl gradient-hero p-6 text-primary-foreground relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1),transparent)]" />
-              <div className="relative">
-                <MessageSquare className="w-8 h-8 mb-4 opacity-80" />
-                <h3 className="font-display text-xl font-semibold mb-2">Speak with a Study Abroad Coach</h3>
-                <p className="text-sm opacity-80 mb-5 leading-relaxed">
-                  Get personalized guidance from experienced coaches who've helped hundreds of international students succeed.
-                </p>
-                <a
-                  href="mailto:coach@globalstudyhub.com"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card text-foreground font-semibold text-sm hover:bg-card/90 transition-colors"
-                >
-                  Contact a Coach
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-              </div>
-            </motion.div>
+            <ContactCoachForm />
 
             <motion.div
               initial={{ opacity: 0, y: 15 }}
