@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Globe, LogIn, LogOut, User } from "lucide-react";
+import { Menu, X, Globe, LogIn, LogOut, User, Shield } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAdmin } from "@/hooks/use-admin";
 
 const navItems = [
   { label: "Home", path: "/" },
@@ -17,6 +18,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useAdmin();
 
   const handleSignOut = async () => {
     await signOut();
@@ -48,6 +50,19 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                location.pathname === "/admin"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              <Shield className="w-4 h-4" /> Admin
+            </Link>
+          )}
 
           {user ? (
             <button
@@ -99,6 +114,20 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    location.pathname === "/admin"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <Shield className="w-4 h-4" /> Admin
+                </Link>
+              )}
 
               {user ? (
                 <button
