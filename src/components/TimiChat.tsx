@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Loader2, Bot, Maximize2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -8,23 +8,65 @@ import { SUGGESTIONS } from "@/lib/timi-stream";
 
 const TimiChat = () => {
   const [open, setOpen] = useState(false);
+  const [bubbleDismissed, setBubbleDismissed] = useState(false);
+  const [showBubble, setShowBubble] = useState(false);
   const { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions } = useTimiChat();
   const navigate = useNavigate();
+
+  // Show welcome bubble after 2 seconds
+  useEffect(() => {
+    if (open || bubbleDismissed) return;
+    const timer = setTimeout(() => setShowBubble(true), 2000);
+    return () => clearTimeout(timer);
+  }, [open, bubbleDismissed]);
+
+  // Hide bubble when chat opens
+  useEffect(() => {
+    if (open) setShowBubble(false);
+  }, [open]);
 
   return (
     <>
       <AnimatePresence>
         {!open && (
-          <motion.button
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            onClick={() => setOpen(true)}
-            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full gradient-hero text-primary-foreground shadow-hover flex items-center justify-center hover:scale-105 transition-transform"
-            aria-label="Open Timi chat"
-          >
-            <Bot className="w-6 h-6" />
-          </motion.button>
+          <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+            {/* Welcome bubble */}
+            <AnimatePresence>
+              {showBubble && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className="relative bg-card border border-border rounded-2xl rounded-br-md shadow-hover px-4 py-3 max-w-[240px] cursor-pointer"
+                  onClick={() => { setShowBubble(false); setOpen(true); }}
+                >
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setBubbleDismissed(true); setShowBubble(false); }}
+                    className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-muted border border-border flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                  <p className="text-sm text-foreground font-medium">Hi there! 👋 I'm <span className="text-primary font-semibold">Timi</span></p>
+                  <p className="text-xs text-muted-foreground mt-1">Need help with studying abroad? Click to chat!</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Floating button with pulse ring */}
+            <motion.button
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              onClick={() => setOpen(true)}
+              className="relative w-14 h-14 rounded-full gradient-hero text-primary-foreground shadow-hover flex items-center justify-center hover:scale-105 transition-transform"
+              aria-label="Open Timi chat"
+            >
+              {/* Pulse ring */}
+              <span className="absolute inset-0 rounded-full gradient-hero opacity-40 animate-ping" style={{ animationDuration: "2.5s" }} />
+              <Bot className="w-6 h-6 relative z-10" />
+            </motion.button>
+          </div>
         )}
       </AnimatePresence>
 
