@@ -238,11 +238,14 @@ const YourSpace = () => {
             </div>
           </motion.div>
 
+          {/* Personal AI Genius */}
+          <PersonalAIGenius />
+
           {/* Language Choice */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.3 }}
             className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-card mb-6"
           >
             <h2 className="font-display text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
@@ -266,9 +269,6 @@ const YourSpace = () => {
               ))}
             </div>
           </motion.div>
-
-          {/* Personal AI Genius */}
-          <PersonalAIGenius />
 
           {/* Save Button */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
