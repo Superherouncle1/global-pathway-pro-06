@@ -2,3 +2,6 @@ project_id = "wgtprqsrzxdudtffbwed"
 
 [functions.timi-chat]
 verify_jwt = false
+
+[functions.personal-ai-genius]
+verify_jwt = false

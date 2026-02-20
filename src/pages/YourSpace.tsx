@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 
 const languages = [
   "English", "Français", "Español", "Deutsch", "العربية",
@@ -150,7 +151,7 @@ const YourSpace = () => {
               Your Profile
             </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Your Space
+              My Space
             </h1>
             <p className="text-muted-foreground">
               Set up your profile and customize your experience.
@@ -266,8 +267,11 @@ const YourSpace = () => {
             </div>
           </motion.div>
 
+          {/* Personal AI Genius */}
+          <PersonalAIGenius />
+
           {/* Save Button */}
-          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
             <button
               onClick={handleSave}
               disabled={saving}
