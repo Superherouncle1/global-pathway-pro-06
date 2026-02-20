@@ -41,6 +41,72 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_profiles: {
+        Row: {
+          additional_context: string | null
+          biggest_challenges: string | null
+          career_goals: string | null
+          conversation_history: Json | null
+          created_at: string
+          current_institution: string | null
+          education_level: string | null
+          field_of_study: string | null
+          graduation_year: string | null
+          help_areas: string[] | null
+          id: string
+          opportunity_types: string[] | null
+          preferred_study_duration: string | null
+          study_abroad_goals: string | null
+          target_countries: string[] | null
+          tools_used: string | null
+          trained_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          additional_context?: string | null
+          biggest_challenges?: string | null
+          career_goals?: string | null
+          conversation_history?: Json | null
+          created_at?: string
+          current_institution?: string | null
+          education_level?: string | null
+          field_of_study?: string | null
+          graduation_year?: string | null
+          help_areas?: string[] | null
+          id?: string
+          opportunity_types?: string[] | null
+          preferred_study_duration?: string | null
+          study_abroad_goals?: string | null
+          target_countries?: string[] | null
+          tools_used?: string | null
+          trained_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          additional_context?: string | null
+          biggest_challenges?: string | null
+          career_goals?: string | null
+          conversation_history?: Json | null
+          created_at?: string
+          current_institution?: string | null
+          education_level?: string | null
+          field_of_study?: string | null
+          graduation_year?: string | null
+          help_areas?: string[] | null
+          id?: string
+          opportunity_types?: string[] | null
+          preferred_study_duration?: string | null
+          study_abroad_goals?: string | null
+          target_countries?: string[] | null
+          tools_used?: string | null
+          trained_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           created_at: string
