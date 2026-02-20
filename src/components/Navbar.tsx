@@ -8,7 +8,7 @@ import { useAdmin } from "@/hooks/use-admin";
 const navItems = [
   { label: "Home", path: "/" },
   { label: "Resource Hub", path: "/resources" },
-  { label: "Your Space", path: "/your-space" },
+  { label: "My Space", path: "/your-space" },
   { label: "Community", path: "/community" },
   { label: "About Us", path: "/about" },
 ];
