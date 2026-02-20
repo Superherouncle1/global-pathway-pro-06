@@ -7,12 +7,14 @@ import { type AIProfile } from "./AITrainingWizard";
 type Msg = { role: "user" | "assistant"; content: string };
 
 const GENIUS_SUGGESTIONS = [
-  { label: "🎓 Find my scholarships", message: "Based on my profile, what are the most specific scholarships I should apply to right now? Include names, amounts, and deadlines." },
-  { label: "🌍 Best countries for me", message: "Given my field, goals, and budget concerns, which specific countries and universities are the strongest match for me?" },
-  { label: "📋 My visa roadmap", message: "Walk me through the exact visa application process for my top target countries, step by step." },
-  { label: "📝 SOP help", message: "Help me craft a compelling Statement of Purpose strategy based on my specific background and goals." },
-  { label: "💰 Funding strategy", message: "What's a realistic funding plan for my study abroad journey given my situation?" },
-  { label: "🗓️ My action plan", message: "Create a personalised month-by-month action plan for me to study abroad in the next intake cycle." },
+  { label: "🎓 Find my scholarships", message: "Search the web right now and find the most current scholarships I should apply to based on my profile. Include the official portal links, award amounts, and exact deadlines for the current cycle." },
+  { label: "🌍 Best countries for me", message: "Given my field, goals, and budget, which specific countries and universities are the strongest match for me? Include current admission rates and funding availability." },
+  { label: "📋 My visa roadmap", message: "Give me the current, step-by-step visa application process for my top target countries — including exact financial requirements, processing times right now, and the official application portals." },
+  { label: "🎤 Mock admissions interview", message: "Start a mock university admissions interview with me. Play the role of a tough but fair admissions interviewer. Ask me one question at a time, score my answers, and give me coaching after each one." },
+  { label: "🏛️ Visa interview prep", message: "Start a visa interview simulation with me for my target country. Play a strict embassy officer and flag any answers that would raise suspicion. End with a visa approval probability assessment." },
+  { label: "💰 Funding strategy", message: "Build me a complete funding strategy for studying abroad — scholarships, assistantships, loans, and part-time work options specific to my target countries and field." },
+  { label: "📝 SOP strategy", message: "Help me craft a compelling Statement of Purpose strategy based on my specific background and goals. Include what admissions committees at my target universities specifically look for." },
+  { label: "🗓️ My action plan", message: "Create a personalised month-by-month action plan for me to study abroad in the next intake cycle, including application deadlines, visa timelines, and scholarship deadlines." },
 ];
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/personal-ai-genius`;
