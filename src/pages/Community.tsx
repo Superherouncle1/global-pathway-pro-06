@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Users, MessageCircle, Search, Send, MapPin, GraduationCap, Loader2 } from "lucide-react";
+import { Users, MessageCircle, Search, Send, MapPin, GraduationCap, Loader2, Building2 } from "lucide-react";
+import OpportunitiesBoard from "@/components/community/OpportunitiesBoard";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -28,7 +29,7 @@ const Community = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [newMessage, setNewMessage] = useState("");
-  const [activeTab, setActiveTab] = useState<"directory" | "chat">("directory");
+  const [activeTab, setActiveTab] = useState<"directory" | "chat" | "opportunities">("directory");
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -196,10 +197,23 @@ const Community = () => {
                 <MessageCircle className="w-4 h-4 inline mr-2" />
                 Chat
               </button>
+              <button
+                onClick={() => setActiveTab("opportunities")}
+                className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  activeTab === "opportunities" ? "bg-card text-foreground shadow-card" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Building2 className="w-4 h-4 inline mr-2" />
+                Opportunities
+              </button>
             </div>
           </div>
 
-          {activeTab === "directory" ? (
+          {activeTab === "opportunities" ? (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <OpportunitiesBoard />
+            </motion.div>
+          ) : activeTab === "directory" ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto">
               <div className="relative mb-6">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

@@ -160,6 +160,54 @@ export type Database = {
         }
         Relationships: []
       }
+      opportunity_listings: {
+        Row: {
+          application_link: string | null
+          contact_email: string | null
+          country: string | null
+          created_at: string
+          deadline: string | null
+          description: string
+          id: string
+          institution_name: string
+          is_active: boolean
+          listing_type: string
+          posted_by: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          application_link?: string | null
+          contact_email?: string | null
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description: string
+          id?: string
+          institution_name: string
+          is_active?: boolean
+          listing_type: string
+          posted_by: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          application_link?: string | null
+          contact_email?: string | null
+          country?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string
+          id?: string
+          institution_name?: string
+          is_active?: boolean
+          listing_type?: string
+          posted_by?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
