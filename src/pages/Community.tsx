@@ -172,7 +172,7 @@ const Community = () => {
               The Community
             </h1>
             <p className="text-muted-foreground max-w-lg mx-auto">
-              Connect with fellow students from around the world. Share experiences, ask questions, and grow together.
+              A marketplace connecting students and institutions worldwide. Network with peers, chat in real-time, and discover admissions, scholarships &amp; recruitment opportunities.
             </p>
           </motion.div>
 
