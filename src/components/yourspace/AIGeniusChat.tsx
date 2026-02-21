@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Loader2, RotateCcw, Sparkles, User } from "lucide-react";
+import { Send, Loader2, RotateCcw, Sparkles, User, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { type AIProfile } from "./AITrainingWizard";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -96,6 +97,24 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const showSuggestions = messages.length === 1;
+  const prevMsgCountRef = useRef(messages.length);
+
+  const voice = useVoiceMode({
+    onTranscript: (text) => {
+      sendMessage(text);
+    },
+  });
+
+  // Auto-speak new assistant messages when voice mode is on
+  useEffect(() => {
+    if (voice.voiceEnabled && messages.length > prevMsgCountRef.current) {
+      const last = messages[messages.length - 1];
+      if (last?.role === "assistant" && !loading) {
+        voice.speak(last.content);
+      }
+    }
+    prevMsgCountRef.current = messages.length;
+  }, [messages, loading, voice.voiceEnabled]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -153,12 +172,29 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
           <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
           <span className="text-xs text-muted-foreground font-medium">Active & learning your context</span>
         </div>
-        <button
-          onClick={onRetrain}
-          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded-lg hover:bg-primary/10"
-        >
-          <RotateCcw className="w-3 h-3" /> Update training
-        </button>
+        <div className="flex items-center gap-1">
+          {/* Voice mode toggle */}
+          {voice.supported && (
+            <button
+              onClick={voice.toggleVoice}
+              className={`flex items-center gap-1.5 text-xs font-medium transition-colors px-2 py-1 rounded-lg ${
+                voice.voiceEnabled
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+              }`}
+              title={voice.voiceEnabled ? "Disable voice mode" : "Enable voice mode"}
+            >
+              {voice.voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+              <span className="hidden sm:inline">Voice {voice.voiceEnabled ? "On" : "Off"}</span>
+            </button>
+          )}
+          <button
+            onClick={onRetrain}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded-lg hover:bg-primary/10"
+          >
+            <RotateCcw className="w-3 h-3" /> Update training
+          </button>
+        </div>
       </div>
 
       {/* Messages */}
@@ -232,12 +268,39 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
 
       {/* Input */}
       <div className="flex gap-2 pt-3 mt-3 border-t border-border flex-shrink-0">
+        {/* Mic button (visible when voice mode is on) */}
+        {voice.voiceEnabled && voice.sttSupported && (
+          <button
+            onClick={voice.isListening ? voice.stopListening : voice.startListening}
+            disabled={loading}
+            className={`w-10 h-10 self-end rounded-xl flex items-center justify-center transition-all flex-shrink-0 ${
+              voice.isListening
+                ? "bg-destructive text-destructive-foreground animate-pulse shadow-soft"
+                : "bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10"
+            }`}
+            title={voice.isListening ? "Stop listening" : "Tap to speak"}
+          >
+            {voice.isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+          </button>
+        )}
+
+        {/* Stop speaking button */}
+        {voice.isSpeaking && (
+          <button
+            onClick={voice.stopSpeaking}
+            className="w-10 h-10 self-end rounded-xl bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10 flex items-center justify-center transition-all flex-shrink-0"
+            title="Stop speaking"
+          >
+            <VolumeX className="w-4 h-4" />
+          </button>
+        )}
+
         <textarea
           ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKey}
-          placeholder="Ask your Personal AI Genius anything..."
+          placeholder={voice.isListening ? "Listening..." : "Ask your Personal AI Genius anything..."}
           rows={1}
           className="flex-1 px-4 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none min-h-[44px] max-h-[120px]"
           style={{ height: "auto" }}
