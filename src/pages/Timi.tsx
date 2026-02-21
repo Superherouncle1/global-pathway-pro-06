@@ -1,4 +1,4 @@
-import { Send, Loader2, Bot, ArrowLeft } from "lucide-react";
+import { Send, Loader2, Bot, ArrowLeft, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
@@ -7,7 +7,7 @@ import { useTimiChat } from "@/hooks/use-timi-chat";
 import { SUGGESTIONS } from "@/lib/timi-stream";
 
 const TimiPage = () => {
-  const { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions } = useTimiChat();
+  const { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions, voice } = useTimiChat();
   const navigate = useNavigate();
 
   return (
@@ -34,6 +34,20 @@ const TimiPage = () => {
             <h1 className="font-display font-bold text-foreground text-lg">Timi</h1>
             <p className="text-xs text-muted-foreground">Your Study Abroad Assistant • Global Study Hub</p>
           </div>
+          <div className="flex-1" />
+          {voice.supported && (
+            <button
+              onClick={voice.toggleVoice}
+              className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
+                voice.voiceEnabled
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+              }`}
+            >
+              {voice.voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+              <span>Voice {voice.voiceEnabled ? "On" : "Off"}</span>
+            </button>
+          )}
         </motion.div>
 
         {/* Chat area */}
@@ -98,15 +112,37 @@ const TimiPage = () => {
             <div ref={endRef} />
           </div>
 
-          {/* Input */}
           <div className="p-4 border-t border-border">
             <div className="flex gap-3">
+              {voice.voiceEnabled && voice.sttSupported && (
+                <button
+                  onClick={voice.isListening ? voice.stopListening : voice.startListening}
+                  disabled={loading}
+                  className={`px-4 py-3 rounded-xl transition-all flex-shrink-0 ${
+                    voice.isListening
+                      ? "bg-destructive text-destructive-foreground animate-pulse"
+                      : "bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10"
+                  }`}
+                  title={voice.isListening ? "Stop listening" : "Tap to speak"}
+                >
+                  {voice.isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </button>
+              )}
+              {voice.isSpeaking && (
+                <button
+                  onClick={voice.stopSpeaking}
+                  className="px-4 py-3 rounded-xl bg-muted text-muted-foreground hover:text-primary transition-all flex-shrink-0"
+                  title="Stop speaking"
+                >
+                  <VolumeX className="w-4 h-4" />
+                </button>
+              )}
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-                placeholder="Ask Timi anything about studying abroad..."
+                placeholder={voice.isListening ? "Listening..." : "Ask Timi anything about studying abroad..."}
                 className="flex-1 px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm transition"
                 disabled={loading}
                 autoFocus

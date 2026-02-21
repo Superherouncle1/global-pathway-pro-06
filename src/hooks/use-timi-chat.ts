@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { streamChat, WELCOME, type Msg } from "@/lib/timi-stream";
+import { useVoiceMode } from "@/hooks/use-voice-mode";
 
 export function useTimiChat() {
   const [messages, setMessages] = useState<Msg[]>([WELCOME]);
@@ -7,10 +8,7 @@ export function useTimiChat() {
   const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const showSuggestions = messages.length === 1 && messages[0] === WELCOME && !loading;
-
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  const prevMsgCountRef = useRef(messages.length);
 
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
@@ -48,7 +46,27 @@ export function useTimiChat() {
     }
   };
 
+  const voice = useVoiceMode({
+    sttMode: "gemini",
+    onTranscript: (text) => sendMessage(text),
+  });
+
+  // Auto-speak new assistant messages when voice mode is on
+  useEffect(() => {
+    if (voice.voiceEnabled && messages.length > prevMsgCountRef.current) {
+      const last = messages[messages.length - 1];
+      if (last?.role === "assistant" && !loading) {
+        voice.speak(last.content);
+      }
+    }
+    prevMsgCountRef.current = messages.length;
+  }, [messages, loading, voice.voiceEnabled]);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   const send = () => sendMessage(input);
 
-  return { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions };
+  return { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions, voice };
 }

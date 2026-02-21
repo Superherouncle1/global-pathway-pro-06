@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Loader2, Bot, Maximize2 } from "lucide-react";
+import { X, Send, Loader2, Bot, Maximize2, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { useTimiChat } from "@/hooks/use-timi-chat";
@@ -10,7 +10,7 @@ const TimiChat = () => {
   const [open, setOpen] = useState(false);
   const [bubbleDismissed, setBubbleDismissed] = useState(false);
   const [showBubble, setShowBubble] = useState(false);
-  const { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions } = useTimiChat();
+  const { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions, voice } = useTimiChat();
   const navigate = useNavigate();
 
   // Show welcome bubble after 2 seconds
@@ -88,16 +88,31 @@ const TimiChat = () => {
                 <p className="font-display font-semibold text-primary-foreground text-sm">Timi</p>
                 <p className="text-primary-foreground/70 text-xs">Study Abroad Assistant</p>
               </div>
-              <button
-                onClick={() => { setOpen(false); navigate("/timi"); }}
-                className="text-primary-foreground/70 hover:text-primary-foreground transition-colors mr-1"
-                title="Open full screen"
-              >
-                <Maximize2 className="w-4 h-4" />
-              </button>
-              <button onClick={() => setOpen(false)} className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-1">
+                {voice.supported && (
+                  <button
+                    onClick={voice.toggleVoice}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      voice.voiceEnabled
+                        ? "text-primary-foreground bg-primary-foreground/20"
+                        : "text-primary-foreground/50 hover:text-primary-foreground"
+                    }`}
+                    title={voice.voiceEnabled ? "Disable voice" : "Enable voice"}
+                  >
+                    {voice.voiceEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                  </button>
+                )}
+                <button
+                  onClick={() => { setOpen(false); navigate("/timi"); }}
+                  className="text-primary-foreground/70 hover:text-primary-foreground transition-colors p-1.5"
+                  title="Open full screen"
+                >
+                  <Maximize2 className="w-4 h-4" />
+                </button>
+                <button onClick={() => setOpen(false)} className="text-primary-foreground/70 hover:text-primary-foreground transition-colors p-1.5">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
@@ -150,12 +165,35 @@ const TimiChat = () => {
             {/* Input */}
             <div className="p-3 border-t border-border flex-shrink-0">
               <div className="flex gap-2">
+                {voice.voiceEnabled && voice.sttSupported && (
+                  <button
+                    onClick={voice.isListening ? voice.stopListening : voice.startListening}
+                    disabled={loading}
+                    className={`px-3 py-2.5 rounded-xl transition-all flex-shrink-0 ${
+                      voice.isListening
+                        ? "bg-destructive text-destructive-foreground animate-pulse"
+                        : "bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10"
+                    }`}
+                    title={voice.isListening ? "Stop" : "Speak"}
+                  >
+                    {voice.isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                  </button>
+                )}
+                {voice.isSpeaking && (
+                  <button
+                    onClick={voice.stopSpeaking}
+                    className="px-3 py-2.5 rounded-xl bg-muted text-muted-foreground hover:text-primary transition-all flex-shrink-0"
+                    title="Stop speaking"
+                  >
+                    <VolumeX className="w-4 h-4" />
+                  </button>
+                )}
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-                  placeholder="Ask Timi anything..."
+                  placeholder={voice.isListening ? "Listening..." : "Ask Timi anything..."}
                   className="flex-1 px-3 py-2.5 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm transition"
                   disabled={loading}
                 />
