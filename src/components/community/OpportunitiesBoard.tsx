@@ -153,6 +153,15 @@ const OpportunitiesBoard = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
+      {/* Marketplace description */}
+      <div className="text-center mb-8 p-6 bg-card border border-border rounded-2xl">
+        <h2 className="font-display text-xl font-semibold text-foreground mb-2">Opportunities Marketplace</h2>
+        <p className="text-muted-foreground text-sm max-w-2xl mx-auto">
+          This space is for universities, institutions, and programs to post admissions openings, scholarships, and recruitment opportunities. 
+          Institutions can also browse student profiles to discover and reach out to potential candidates directly.
+        </p>
+      </div>
+
       {/* Header actions */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <Button onClick={() => setShowForm(true)} className="gradient-hero text-primary-foreground gap-2">
