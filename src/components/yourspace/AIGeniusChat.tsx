@@ -100,6 +100,7 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
   const prevMsgCountRef = useRef(messages.length);
 
   const voice = useVoiceMode({
+    sttMode: "gemini",
     onTranscript: (text) => {
       sendMessage(text);
     },
