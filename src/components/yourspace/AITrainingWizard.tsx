@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   GraduationCap, Globe, Target, Lightbulb, Wrench, ChevronRight, ChevronLeft,
@@ -40,6 +40,8 @@ interface Props {
   onComplete: (profile: AIProfile) => void;
   saving: boolean;
   initialData?: Partial<AIProfile>;
+  initialStep?: number;
+  onProgressChange?: (profile: AIProfile, step: number) => void;
 }
 
 const inputClass = "w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition text-sm";
@@ -59,8 +61,8 @@ const ToggleChip = ({ label, selected, onClick }: { label: string; selected: boo
   </button>
 );
 
-export default function AITrainingWizard({ onComplete, saving, initialData }: Props) {
-  const [step, setStep] = useState(1);
+export default function AITrainingWizard({ onComplete, saving, initialData, initialStep, onProgressChange }: Props) {
+  const [step, setStep] = useState(initialStep || 1);
   const [profile, setProfile] = useState<AIProfile>({
     education_level: initialData?.education_level || "",
     current_institution: initialData?.current_institution || "",
@@ -80,9 +82,15 @@ export default function AITrainingWizard({ onComplete, saving, initialData }: Pr
   const toggle = (key: "opportunity_types" | "target_countries" | "help_areas", val: string) => {
     setProfile((p) => {
       const arr = p[key];
-      return { ...p, [key]: arr.includes(val) ? arr.filter((x) => x !== val) : [...arr, val] };
+      const updated = { ...p, [key]: arr.includes(val) ? arr.filter((x) => x !== val) : [...arr, val] };
+      return updated;
     });
   };
+
+  // Auto-save progress on step or profile change
+  useEffect(() => {
+    onProgressChange?.(profile, step);
+  }, [step, profile]);
 
   const canNext = () => {
     if (step === 1) return !!profile.education_level && !!profile.field_of_study;

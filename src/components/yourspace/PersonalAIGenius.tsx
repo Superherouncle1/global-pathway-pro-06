@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Brain, Sparkles, ChevronDown, ChevronUp, Loader2, RefreshCw } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,6 +15,8 @@ export default function PersonalAIGenius() {
   const [trainedAt, setTrainedAt] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [draftStep, setDraftStep] = useState(1);
+  const saveDraftTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (user) loadAIProfile();
@@ -28,8 +30,8 @@ export default function PersonalAIGenius() {
       .eq("user_id", user.id)
       .single();
 
-    if (data && data.trained_at) {
-      setAiProfile({
+    if (data) {
+      const profile: AIProfile = {
         education_level: data.education_level || "",
         current_institution: data.current_institution || "",
         field_of_study: data.field_of_study || "",
@@ -43,13 +45,37 @@ export default function PersonalAIGenius() {
         biggest_challenges: data.biggest_challenges || "",
         tools_used: data.tools_used || "",
         additional_context: data.additional_context || "",
-      });
-      setTrainedAt(data.trained_at);
-      setView("chat");
+      };
+      setAiProfile(profile);
+
+      if (data.trained_at) {
+        setTrainedAt(data.trained_at);
+        setView("chat");
+      } else {
+        // Draft exists — resume training
+        const convHistory = data.conversation_history as any;
+        const savedStep = convHistory?.draft_step || 1;
+        setDraftStep(savedStep);
+        setView("training");
+        setExpanded(true);
+      }
     } else {
       setView("untrained");
     }
   };
+
+  const saveDraft = useCallback((profile: AIProfile, step: number) => {
+    if (!user) return;
+    if (saveDraftTimer.current) clearTimeout(saveDraftTimer.current);
+    saveDraftTimer.current = setTimeout(async () => {
+      await supabase.from("ai_profiles").upsert({
+        user_id: user.id,
+        ...profile,
+        conversation_history: { draft_step: step },
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id" });
+    }, 1000); // debounce 1s
+  }, [user]);
 
   const handleTrainingComplete = async (profile: AIProfile) => {
     if (!user) return;
@@ -185,6 +211,8 @@ export default function PersonalAIGenius() {
                     onComplete={handleTrainingComplete}
                     saving={saving}
                     initialData={aiProfile || undefined}
+                    initialStep={draftStep}
+                    onProgressChange={saveDraft}
                   />
                 </motion.div>
               )}
