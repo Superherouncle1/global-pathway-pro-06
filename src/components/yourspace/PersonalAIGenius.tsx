@@ -5,8 +5,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AITrainingWizard, { type AIProfile } from "./AITrainingWizard";
 import AIGeniusChat from "./AIGeniusChat";
+import GinieTutorial from "./GinieTutorial";
 
-type ViewState = "loading" | "untrained" | "training" | "chat";
+type ViewState = "loading" | "tutorial" | "untrained" | "training" | "chat";
 
 export default function PersonalAIGenius() {
   const { user } = useAuth();
@@ -16,10 +17,19 @@ export default function PersonalAIGenius() {
   const [saving, setSaving] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [draftStep, setDraftStep] = useState(1);
+  const [userName, setUserName] = useState("");
   const saveDraftTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (user) loadAIProfile();
+    if (user) {
+      loadAIProfile();
+      // Fetch first name for tutorial greeting
+      (async () => {
+        const { data } = await supabase.from("profiles").select("name").eq("id", user.id).single();
+        const fullName = data?.name || user.user_metadata?.name || "";
+        setUserName(fullName.split(" ")[0] || "");
+      })();
+    }
   }, [user]);
 
   const loadAIProfile = async () => {
@@ -60,7 +70,8 @@ export default function PersonalAIGenius() {
         setExpanded(true);
       }
     } else {
-      setView("untrained");
+      setView("tutorial");
+      setExpanded(true);
     }
   };
 
@@ -129,8 +140,10 @@ export default function PersonalAIGenius() {
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
               {view === "loading" && "Loading..."}
+              {view === "tutorial" && "Discover what Ginie can do for you"}
               {view === "untrained" && "Train Ginie to get hyper-personalised study abroad intelligence"}
-              {view === "training" && "Setting up your AI Genius..."}
+              {view === "training" && "Setting up Ginie..."}
+              {view === "chat" && trainedAt && `Trained · Last updated ${formatDate(trainedAt)}`}
               {view === "chat" && trainedAt && `Trained · Last updated ${formatDate(trainedAt)}`}
             </p>
           </div>
@@ -171,7 +184,15 @@ export default function PersonalAIGenius() {
                 </div>
               )}
 
-              {/* Untrained — welcome screen */}
+              {/* Tutorial flow */}
+              {view === "tutorial" && (
+                <GinieTutorial
+                  userName={userName}
+                  onComplete={() => setView("training")}
+                />
+              )}
+
+              {/* Untrained — fallback welcome screen */}
               {view === "untrained" && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4">
                   <div className="w-16 h-16 rounded-2xl gradient-hero flex items-center justify-center mx-auto mb-4 shadow-soft">
@@ -184,11 +205,6 @@ export default function PersonalAIGenius() {
                   <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
                     After training, Ginie will give you <strong className="text-foreground">specific scholarships, real deadlines, exact programs</strong> — no fluff, no generic advice.
                   </p>
-                  <div className="grid grid-cols-3 gap-3 mb-6 max-w-sm mx-auto">
-                    {["🎯 Hyper-personalised", "🌐 Web-grounded", "⚡ Always current"].map((f) => (
-                      <div key={f} className="bg-muted rounded-xl px-2 py-2.5 text-xs text-muted-foreground font-medium">{f}</div>
-                    ))}
-                  </div>
                   <button
                     onClick={() => setView("training")}
                     className="px-8 py-3.5 rounded-xl gradient-hero text-primary-foreground font-semibold shadow-soft hover:shadow-hover transition-all hover:scale-[1.02] text-sm"
