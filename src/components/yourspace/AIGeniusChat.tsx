@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Loader2, RotateCcw, Sparkles, User, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -85,41 +85,47 @@ async function streamChat({
 interface Props {
   aiProfile: AIProfile;
   onRetrain: () => void;
+  userName?: string;
 }
 
-export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
+export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Props) {
   const { user } = useAuth();
-  const [userName, setUserName] = useState<string>("");
 
-  // Fetch user's display name from profile
-  useEffect(() => {
-    if (!user) return;
-    (async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("name")
-        .eq("id", user.id)
-        .single();
-      const fullName = data?.name || user.user_metadata?.name || "";
-      setUserName(fullName.split(" ")[0] || "");
-    })();
-  }, [user]);
+  const welcomeContent = useMemo(() => {
+    const greeting = userName ? `Hey ${userName}! 👋` : "Hey there! 👋";
+    return `${greeting} I'm **Gini**, your Personal AI Genius — and I know exactly who you are.\n\nYou're studying **${aiProfile.field_of_study || "your field"}**, targeting **${aiProfile.target_countries?.join(", ") || "your dream destinations"}**, and working towards **${aiProfile.career_goals?.substring(0, 80) || "your goals"}${(aiProfile.career_goals?.length || 0) > 80 ? "..." : ""}**.\n\nI'm here with hyper-personalised, specific, actionable intelligence — no fluff, no generic advice. What do you need today?`;
+  }, [userName, aiProfile]);
 
-  const greeting = userName ? `Hey ${userName}! 👋` : "Hey there! 👋";
-
-  const WELCOME: Msg = {
+  const WELCOME: Msg = useMemo(() => ({
     role: "assistant",
-    content: `${greeting} I'm **Ginie**, your Personal AI Genius — and I know exactly who you are.\n\nYou're studying **${aiProfile.field_of_study || "your field"}**, targeting **${aiProfile.target_countries?.join(", ") || "your dream destinations"}**, and working towards **${aiProfile.career_goals?.substring(0, 80) || "your goals"}${(aiProfile.career_goals?.length || 0) > 80 ? "..." : ""}**.\n\nI'm here with hyper-personalised, specific, actionable intelligence — no fluff, no generic advice. What do you need today?`,
-  };
+    content: welcomeContent,
+  }), [welcomeContent]);
 
-  const [messages, setMessages] = useState<Msg[]>([WELCOME]);
+  const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [historyLoaded, setHistoryLoaded] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const prevMsgCountRef = useRef(messages.length);
+  const prevMsgCountRef = useRef(0);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const initializedRef = useRef(false);
+
+  // Initialize messages with WELCOME once userName is ready
+  useEffect(() => {
+    if (initializedRef.current) {
+      // Update existing welcome message when userName loads
+      setMessages(prev => {
+        if (prev.length > 0 && prev[0].role === "assistant") {
+          return [WELCOME, ...prev.slice(1)];
+        }
+        return prev;
+      });
+    } else {
+      setMessages([WELCOME]);
+      initializedRef.current = true;
+    }
+  }, [WELCOME]);
 
   // Load saved conversation history
   useEffect(() => {
@@ -133,7 +139,7 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
       if (data?.conversation_history) {
         const history = data.conversation_history as any;
         if (Array.isArray(history) && history.length > 0) {
-          setMessages([WELCOME, ...history]);
+          setMessages(prev => [prev[0] || WELCOME, ...history]);
         }
       }
       setHistoryLoaded(true);
@@ -145,7 +151,6 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
     if (!user) return;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(async () => {
-      // Save all messages except the welcome message
       const toSave = msgs.slice(1);
       if (toSave.length === 0) return;
       await supabase
@@ -206,9 +211,12 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
       });
     };
 
+    // Filter out the welcome message from API calls
+    const apiMessages = messages.filter((_, i) => i > 0);
+
     try {
       await streamChat({
-        messages: [...messages.filter(m => m !== WELCOME || messages.indexOf(m) > 0), userMsg],
+        messages: [...apiMessages, userMsg],
         aiProfile,
         onDelta: upsert,
         onDone: () => setLoading(false),
@@ -239,7 +247,6 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
           <span className="text-xs text-muted-foreground font-medium">Active & learning your context</span>
         </div>
         <div className="flex items-center gap-1">
-          {/* Voice mode toggle */}
           {voice.supported && (
             <button
               onClick={voice.toggleVoice}
@@ -300,7 +307,6 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
           ))}
         </AnimatePresence>
 
-        {/* Loading indicator */}
         {loading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start gap-2">
             <div className="w-7 h-7 rounded-full gradient-hero flex items-center justify-center shadow-soft">
@@ -314,7 +320,6 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
           </motion.div>
         )}
 
-        {/* Suggestion chips */}
         {showSuggestions && !loading && (
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap gap-2 pt-1">
             {GENIUS_SUGGESTIONS.map((s) => (
@@ -334,7 +339,6 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
 
       {/* Input */}
       <div className="flex gap-2 pt-3 mt-3 border-t border-border flex-shrink-0">
-        {/* Mic button (visible when voice mode is on) */}
         {voice.voiceEnabled && voice.sttSupported && (
           <button
             onClick={voice.isListening ? voice.stopListening : voice.startListening}
@@ -350,7 +354,6 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
           </button>
         )}
 
-        {/* Stop speaking button */}
         {voice.isSpeaking && (
           <button
             onClick={voice.stopSpeaking}
@@ -366,7 +369,7 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKey}
-          placeholder={voice.isListening ? "Listening..." : "Ask Ginie anything..."}
+          placeholder={voice.isListening ? "Listening..." : "Ask Gini anything..."}
           rows={1}
           className="flex-1 px-4 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none min-h-[44px] max-h-[120px]"
           style={{ height: "auto" }}

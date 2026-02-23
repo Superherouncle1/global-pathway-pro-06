@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AITrainingWizard, { type AIProfile } from "./AITrainingWizard";
 import AIGeniusChat from "./AIGeniusChat";
-import GinieTutorial from "./GinieTutorial";
+import GiniTutorial from "./GiniTutorial";
 
 type ViewState = "loading" | "tutorial" | "untrained" | "training" | "chat";
 
@@ -23,7 +23,6 @@ export default function PersonalAIGenius() {
   useEffect(() => {
     if (user) {
       loadAIProfile();
-      // Fetch first name for tutorial greeting
       (async () => {
         const { data } = await supabase.from("profiles").select("name").eq("id", user.id).single();
         const fullName = data?.name || user.user_metadata?.name || "";
@@ -62,7 +61,6 @@ export default function PersonalAIGenius() {
         setTrainedAt(data.trained_at);
         setView("chat");
       } else {
-        // Draft exists — resume training
         const convHistory = data.conversation_history as any;
         const savedStep = convHistory?.draft_step || 1;
         setDraftStep(savedStep);
@@ -85,7 +83,7 @@ export default function PersonalAIGenius() {
         conversation_history: { draft_step: step },
         updated_at: new Date().toISOString(),
       }, { onConflict: "user_id" });
-    }, 1000); // debounce 1s
+    }, 1000);
   }, [user]);
 
   const handleTrainingComplete = async (profile: AIProfile) => {
@@ -120,7 +118,7 @@ export default function PersonalAIGenius() {
       transition={{ delay: 0.25 }}
       className="bg-card border border-border rounded-2xl shadow-card overflow-hidden"
     >
-      {/* Header — always visible */}
+      {/* Header */}
       <button
         onClick={() => setExpanded((e) => !e)}
         className="w-full flex items-center justify-between p-6 md:p-8 text-left group"
@@ -131,7 +129,7 @@ export default function PersonalAIGenius() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-display text-lg font-semibold text-foreground">Ginie — My Personal AI Genius</h2>
+              <h2 className="font-display text-lg font-semibold text-foreground">Gini — My Personal AI Genius</h2>
               {view === "chat" && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/15 text-primary text-xs font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Active
@@ -140,10 +138,9 @@ export default function PersonalAIGenius() {
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
               {view === "loading" && "Loading..."}
-              {view === "tutorial" && "Discover what Ginie can do for you"}
-              {view === "untrained" && "Train Ginie to get hyper-personalised study abroad intelligence"}
-              {view === "training" && "Setting up Ginie..."}
-              {view === "chat" && trainedAt && `Trained · Last updated ${formatDate(trainedAt)}`}
+              {view === "tutorial" && "Discover what Gini can do for you"}
+              {view === "untrained" && "Train Gini to get hyper-personalised study abroad intelligence"}
+              {view === "training" && "Setting up Gini..."}
               {view === "chat" && trainedAt && `Trained · Last updated ${formatDate(trainedAt)}`}
             </p>
           </div>
@@ -153,7 +150,7 @@ export default function PersonalAIGenius() {
             <button
               onClick={(e) => { e.stopPropagation(); setView("training"); setExpanded(true); }}
               className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all"
-              title="Retrain AI Genius"
+              title="Retrain Gini"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
@@ -177,33 +174,30 @@ export default function PersonalAIGenius() {
             className="overflow-hidden"
           >
             <div className="px-6 md:px-8 pb-6 md:pb-8">
-              {/* Loading */}
               {view === "loading" && (
                 <div className="flex justify-center py-8">
                   <Loader2 className="w-6 h-6 animate-spin text-primary" />
                 </div>
               )}
 
-              {/* Tutorial flow */}
               {view === "tutorial" && (
-                <GinieTutorial
+                <GiniTutorial
                   userName={userName}
                   onComplete={() => setView("training")}
                 />
               )}
 
-              {/* Untrained — fallback welcome screen */}
               {view === "untrained" && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4">
                   <div className="w-16 h-16 rounded-2xl gradient-hero flex items-center justify-center mx-auto mb-4 shadow-soft">
                     <Sparkles className="w-8 h-8 text-primary-foreground" />
                   </div>
-                  <h3 className="font-display text-xl font-bold text-foreground mb-2">Train Ginie, Your Personal AI Genius</h3>
+                  <h3 className="font-display text-xl font-bold text-foreground mb-2">Train Gini, Your Personal AI Genius</h3>
                   <p className="text-sm text-muted-foreground mb-1 max-w-md mx-auto">
-                    Unlike generic AI, Ginie learns <strong className="text-foreground">everything about you</strong> — your goals, your field, your target countries, and your challenges.
+                    Unlike generic AI, Gini learns <strong className="text-foreground">everything about you</strong> — your goals, your field, your target countries, and your challenges.
                   </p>
                   <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
-                    After training, Ginie will give you <strong className="text-foreground">specific scholarships, real deadlines, exact programs</strong> — no fluff, no generic advice.
+                    After training, Gini will give you <strong className="text-foreground">specific scholarships, real deadlines, exact programs</strong> — no fluff, no generic advice.
                   </p>
                   <button
                     onClick={() => setView("training")}
@@ -214,13 +208,12 @@ export default function PersonalAIGenius() {
                 </motion.div>
               )}
 
-              {/* Training wizard */}
               {view === "training" && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   <div className="mb-5 p-3 rounded-xl bg-primary/8 border border-primary/20">
-                     <p className="text-xs text-primary font-medium flex items-center gap-2">
+                    <p className="text-xs text-primary font-medium flex items-center gap-2">
                       <Brain className="w-3.5 h-3.5" />
-                      Your answers train Ginie to give you specific, relevant, real-time intelligence — not generic advice.
+                      Your answers train Gini to give you specific, relevant, real-time intelligence — not generic advice.
                     </p>
                   </div>
                   <AITrainingWizard
@@ -233,12 +226,12 @@ export default function PersonalAIGenius() {
                 </motion.div>
               )}
 
-              {/* Chat */}
               {view === "chat" && aiProfile && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-[520px] flex flex-col">
                   <AIGeniusChat
                     aiProfile={aiProfile}
                     onRetrain={() => setView("training")}
+                    userName={userName}
                   />
                 </motion.div>
               )}
