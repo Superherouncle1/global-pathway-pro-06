@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Loader2, RotateCcw, Sparkles, User, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { type AIProfile } from "./AITrainingWizard";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -86,6 +88,7 @@ interface Props {
 }
 
 export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
+  const { user } = useAuth();
   const WELCOME: Msg = {
     role: "assistant",
     content: `Welcome back! I'm your **Personal AI Genius** — and I know exactly who you are.\n\nYou're studying **${aiProfile.field_of_study || "your field"}**, targeting **${aiProfile.target_countries?.join(", ") || "your dream destinations"}**, and working towards **${aiProfile.career_goals?.substring(0, 80) || "your goals"}${(aiProfile.career_goals?.length || 0) > 80 ? "..." : ""}**.\n\nI'm here with hyper-personalised, specific, actionable intelligence — no fluff, no generic advice. What do you need today?`,
@@ -94,10 +97,47 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
   const [messages, setMessages] = useState<Msg[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const showSuggestions = messages.length === 1;
   const prevMsgCountRef = useRef(messages.length);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Load saved conversation history
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data } = await supabase
+        .from("ai_profiles")
+        .select("conversation_history")
+        .eq("user_id", user.id)
+        .single();
+      if (data?.conversation_history) {
+        const history = data.conversation_history as any;
+        if (Array.isArray(history) && history.length > 0) {
+          setMessages([WELCOME, ...history]);
+        }
+      }
+      setHistoryLoaded(true);
+    })();
+  }, [user]);
+
+  // Save conversation history (debounced)
+  const saveHistory = useCallback((msgs: Msg[]) => {
+    if (!user) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(async () => {
+      // Save all messages except the welcome message
+      const toSave = msgs.slice(1);
+      if (toSave.length === 0) return;
+      await supabase
+        .from("ai_profiles")
+        .update({ conversation_history: toSave as any })
+        .eq("user_id", user.id);
+    }, 1500);
+  }, [user]);
+
+  const showSuggestions = messages.length === 1 && historyLoaded;
 
   const voice = useVoiceMode({
     sttMode: "gemini",
@@ -120,6 +160,13 @@ export default function AIGeniusChat({ aiProfile, onRetrain }: Props) {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Persist chat after each completed exchange
+  useEffect(() => {
+    if (historyLoaded && !loading && messages.length > 1) {
+      saveHistory(messages);
+    }
+  }, [messages, loading, historyLoaded]);
 
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
