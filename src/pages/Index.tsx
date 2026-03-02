@@ -1,22 +1,22 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BookOpen, Users, User, Globe, ArrowRight, GraduationCap, Compass, Sparkles, MessageSquareQuote } from "lucide-react";
+import { Users, User, Globe, ArrowRight, GraduationCap, Compass, Sparkles, MessageSquareQuote, BrainCircuit } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const features = [
   {
-    icon: BookOpen,
-    title: "Resource Hub",
-    description: "9 expert-crafted modules covering everything from school selection to career prep.",
-    link: "/resources",
+    icon: BrainCircuit,
+    title: "Gini — Your AI Genius",
+    description: "Train your personal AI to find scholarships, prep for interviews, and guide your entire journey.",
+    link: "/your-space",
     color: "gradient-hero",
   },
   {
     icon: User,
-    title: "Your Space",
-    description: "Personalize your profile, choose your language, and track your journey.",
+    title: "My Space",
+    description: "Personalize your profile, access resources, choose your language, and track your journey.",
     link: "/your-space",
     color: "gradient-coral",
   },
@@ -78,11 +78,11 @@ const Index = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  to="/resources"
+                  to="/your-space"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl gradient-hero text-primary-foreground font-semibold text-base shadow-soft hover:shadow-hover transition-all hover:scale-[1.02]"
                 >
-                  Explore Resources
-                  <ArrowRight className="w-4 h-4" />
+                  Train Your AI Genius
+                  <Sparkles className="w-4 h-4" />
                 </Link>
                 <Link
                   to="/about"
