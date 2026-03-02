@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Globe, LogIn, LogOut, User, Shield } from "lucide-react";
+import { Menu, X, Globe, LogIn, LogOut, User, Shield, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAdmin } from "@/hooks/use-admin";
 
 const navItems = [
   { label: "Home", path: "/" },
-  { label: "Resource Hub", path: "/resources" },
   { label: "My Space", path: "/your-space" },
   { label: "Community", path: "/community" },
   { label: "About Us", path: "/about" },
 ];
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,6 +50,17 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+
+          <Link
+            to="/your-space"
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${
+              location.pathname === "/your-space"
+                ? "bg-primary text-primary-foreground"
+                : "gradient-hero text-primary-foreground shadow-soft hover:shadow-hover"
+            }`}
+          >
+            <Sparkles className="w-4 h-4" /> Gini
+          </Link>
 
           {isAdmin && (
             <Link
@@ -114,6 +125,14 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+
+              <Link
+                to="/your-space"
+                onClick={() => setIsOpen(false)}
+                className="px-4 py-3 rounded-lg text-sm font-semibold gradient-hero text-primary-foreground flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" /> Gini — AI Genius
+              </Link>
 
               {isAdmin && (
                 <Link

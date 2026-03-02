@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2, Camera } from "lucide-react";
+import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2, Camera, ArrowRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -240,6 +240,31 @@ const YourSpace = () => {
 
           {/* Personal AI Genius */}
           <PersonalAIGenius />
+
+          {/* Resource Hub Link */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+          >
+            <Link
+              to="/resources"
+              className="group block bg-card border border-border rounded-2xl p-6 md:p-8 shadow-card hover:shadow-hover transition-all hover:-translate-y-0.5 mb-6"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl gradient-hero flex items-center justify-center">
+                    <BookOpen className="w-6 h-6 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <h2 className="font-display text-lg font-semibold text-foreground">Resource Hub</h2>
+                    <p className="text-sm text-muted-foreground">9 expert modules — scholarships, visas, career prep & more</p>
+                  </div>
+                </div>
+                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+              </div>
+            </Link>
+          </motion.div>
 
           {/* Language Choice */}
           <motion.div
