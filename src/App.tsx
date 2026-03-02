@@ -11,6 +11,7 @@ import Community from "./pages/Community";
 import About from "./pages/About";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import GiniPage from "./pages/Gini";
 import NotFound from "./pages/NotFound";
 import TimiChat from "./components/TimiChat";
 import TimiPage from "./pages/Timi";
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/your-space" element={<YourSpace />} />
+            <Route path="/gini" element={<GiniPage />} />
             <Route path="/community" element={<Community />} />
             <Route path="/about" element={<About />} />
             <Route path="/auth" element={<Auth />} />

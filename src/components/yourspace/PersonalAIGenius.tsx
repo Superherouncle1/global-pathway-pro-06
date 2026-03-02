@@ -9,13 +9,13 @@ import GiniTutorial from "./GiniTutorial";
 
 type ViewState = "loading" | "tutorial" | "untrained" | "training" | "chat";
 
-export default function PersonalAIGenius() {
+export default function PersonalAIGenius({ defaultExpanded = false }: { defaultExpanded?: boolean }) {
   const { user } = useAuth();
   const [view, setView] = useState<ViewState>("loading");
   const [aiProfile, setAiProfile] = useState<AIProfile | null>(null);
   const [trainedAt, setTrainedAt] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const [draftStep, setDraftStep] = useState(1);
   const [userName, setUserName] = useState("");
   const saveDraftTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

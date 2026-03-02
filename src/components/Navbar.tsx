@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Globe, LogIn, LogOut, User, Shield, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,30 +37,47 @@ const Navbar = () => {
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                location.pathname === item.path
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-
-          <Link
-            to="/your-space"
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-              location.pathname === "/your-space"
-                ? "bg-primary text-primary-foreground"
-                : "gradient-hero text-primary-foreground shadow-soft hover:shadow-hover"
-            }`}
-          >
-            <Sparkles className="w-4 h-4" /> Gini
-          </Link>
+          {navItems.map((item) => {
+            if (item.path === "/your-space") {
+              return (
+                <React.Fragment key={item.path}>
+                  <Link
+                    to="/gini"
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${
+                      location.pathname === "/gini"
+                        ? "bg-primary text-primary-foreground"
+                        : "gradient-hero text-primary-foreground shadow-soft hover:shadow-hover"
+                    }`}
+                  >
+                    <Sparkles className="w-4 h-4" /> Gini
+                  </Link>
+                  <Link
+                    to={item.path}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      location.pathname === item.path
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </React.Fragment>
+              );
+            }
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  location.pathname === item.path
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
 
           {isAdmin && (
             <Link
@@ -111,28 +128,50 @@ const Navbar = () => {
             className="md:hidden bg-background border-b border-border overflow-hidden"
           >
             <div className="container mx-auto px-4 py-3 flex flex-col gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    location.pathname === item.path
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-
-              <Link
-                to="/your-space"
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-3 rounded-lg text-sm font-semibold gradient-hero text-primary-foreground flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4" /> Gini — AI Genius
-              </Link>
+              {navItems.map((item) => {
+                if (item.path === "/your-space") {
+                  return (
+                    <React.Fragment key={item.path}>
+                      <Link
+                        to="/gini"
+                        onClick={() => setIsOpen(false)}
+                        className={`px-4 py-3 rounded-lg text-sm font-semibold flex items-center gap-2 ${
+                          location.pathname === "/gini"
+                            ? "bg-primary text-primary-foreground"
+                            : "gradient-hero text-primary-foreground"
+                        }`}
+                      >
+                        <Sparkles className="w-4 h-4" /> Gini — AI Genius
+                      </Link>
+                      <Link
+                        to={item.path}
+                        onClick={() => setIsOpen(false)}
+                        className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                          location.pathname === item.path
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    </React.Fragment>
+                  );
+                }
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                      location.pathname === item.path
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
 
               {isAdmin && (
                 <Link
