@@ -49,7 +49,7 @@ const Navbar = () => {
                         : "gradient-hero text-primary-foreground shadow-soft hover:shadow-hover"
                     }`}
                   >
-                    <Sparkles className="w-4 h-4" /> Gini
+                    <Sparkles className="w-4 h-4" /> GINIE
                   </Link>
                   <Link
                     to={item.path}
@@ -141,7 +141,7 @@ const Navbar = () => {
                             : "gradient-hero text-primary-foreground"
                         }`}
                       >
-                        <Sparkles className="w-4 h-4" /> Gini — AI Genius
+                        <Sparkles className="w-4 h-4" /> GINIE — AI Genius
                       </Link>
                       <Link
                         to={item.path}

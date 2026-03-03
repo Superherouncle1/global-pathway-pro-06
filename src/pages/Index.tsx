@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 const features = [
   {
     icon: BrainCircuit,
-    title: "Gini — Your AI Genius",
+    title: "GINIE — Your AI Genius",
     description: "Train your personal AI to find scholarships, prep for interviews, and guide your entire journey.",
     link: "/your-space",
     color: "gradient-hero",

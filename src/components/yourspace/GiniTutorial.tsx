@@ -5,18 +5,18 @@ import { Sparkles, Brain, Globe, Target, Zap, ChevronRight, ChevronLeft, Rocket 
 const TUTORIAL_STEPS = [
   {
     icon: Sparkles,
-    title: "Meet Ginie 👋",
+    title: "Meet GINIE 👋",
     subtitle: "Your Personal AI Genius",
     description:
-      "Ginie isn't a generic chatbot — it's YOUR dedicated, internet-connected study-abroad advisor that knows exactly who you are, what you want, and where you're going.",
+      "GINIE isn't a generic chatbot — it's YOUR dedicated, internet-connected study-abroad advisor that knows exactly who you are, what you want, and where you're going.",
     highlights: ["Hyper-personalised to YOU", "Real-time web search", "Always up-to-date"],
   },
   {
     icon: Brain,
-    title: "Train Ginie on YOU",
+    title: "Train GINIE on YOU",
     subtitle: "6 quick steps, ~3 minutes",
     description:
-      "Tell Ginie about your education, target countries, career goals, and challenges. The more you share, the sharper and more relevant Ginie's intelligence becomes.",
+      "Tell GINIE about your education, target countries, career goals, and challenges. The more you share, the sharper and more relevant GINIE's intelligence becomes.",
     highlights: ["Your education & field", "Target countries & goals", "Challenges & preferences"],
   },
   {
@@ -24,7 +24,7 @@ const TUTORIAL_STEPS = [
     title: "Get Real-Time Intelligence",
     subtitle: "Scholarships, visas, deadlines — live",
     description:
-      "Once trained, Ginie searches the web in real-time to find current scholarships, visa requirements, university deadlines, and funding — specific to YOUR profile.",
+      "Once trained, GINIE searches the web in real-time to find current scholarships, visa requirements, university deadlines, and funding — specific to YOUR profile.",
     highlights: ["Live scholarship search", "Current visa requirements", "Exact deadlines & portals"],
   },
   {
@@ -32,7 +32,7 @@ const TUTORIAL_STEPS = [
     title: "Interview Coaching",
     subtitle: "Mock interviews with AI scoring",
     description:
-      "Ginie can run full mock admissions and visa interviews, scoring your answers 1–10 and coaching you on exactly what to improve — like having a private mentor.",
+      "GINIE can run full mock admissions and visa interviews, scoring your answers 1–10 and coaching you on exactly what to improve — like having a private mentor.",
     highlights: ["Admissions mock interviews", "Visa interview simulation", "Answer scoring & coaching"],
   },
   {
@@ -40,7 +40,7 @@ const TUTORIAL_STEPS = [
     title: "Always Getting Smarter",
     subtitle: "Update anytime, chat persists",
     description:
-      "Your training is saved and your chat history persists across sessions. You can retrain Ginie anytime as your goals evolve — it grows with you.",
+      "Your training is saved and your chat history persists across sessions. You can retrain GINIE anytime as your goals evolve — it grows with you.",
     highlights: ["Persistent chat history", "Retrain anytime", "Voice mode supported"],
   },
 ];
