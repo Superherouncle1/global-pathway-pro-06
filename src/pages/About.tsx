@@ -89,7 +89,10 @@ const ContactCoachForm = () => {
         <MessageSquare className="w-8 h-8 mb-3 opacity-80" />
         <h3 className="font-display text-lg font-semibold mb-1">Speak with a Study Abroad Coach</h3>
         <p className="text-xs opacity-70 mb-4 leading-relaxed">
-          Send us a message and our team will get back to you.
+          Send us a message and our team will get back to you. You can also reach us directly at{" "}
+          <a href="mailto:abraham.loorig@imageofafrica.org" className="underline font-medium">
+            abraham.loorig@imageofafrica.org
+          </a>
         </p>
 
         {status === "sent" ? (
