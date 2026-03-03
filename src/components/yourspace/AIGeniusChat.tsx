@@ -93,7 +93,7 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
 
   const welcomeContent = useMemo(() => {
     const greeting = userName ? `Hey ${userName}! 👋` : "Hey there! 👋";
-    return `${greeting} I'm **Gini**, your Personal AI Genius — and I know exactly who you are.\n\nYou're studying **${aiProfile.field_of_study || "your field"}**, targeting **${aiProfile.target_countries?.join(", ") || "your dream destinations"}**, and working towards **${aiProfile.career_goals?.substring(0, 80) || "your goals"}${(aiProfile.career_goals?.length || 0) > 80 ? "..." : ""}**.\n\nI'm here with hyper-personalised, specific, actionable intelligence — no fluff, no generic advice. What do you need today?`;
+    return `${greeting} I'm **GINIE**, your Personal AI Genius — and I know exactly who you are.\n\nYou're studying **${aiProfile.field_of_study || "your field"}**, targeting **${aiProfile.target_countries?.join(", ") || "your dream destinations"}**, and working towards **${aiProfile.career_goals?.substring(0, 80) || "your goals"}${(aiProfile.career_goals?.length || 0) > 80 ? "..." : ""}**.\n\nI'm here with hyper-personalised, specific, actionable intelligence — no fluff, no generic advice. What do you need today?`;
   }, [userName, aiProfile]);
 
   const WELCOME: Msg = useMemo(() => ({
@@ -369,7 +369,7 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKey}
-          placeholder={voice.isListening ? "Listening..." : "Ask Gini anything..."}
+          placeholder={voice.isListening ? "Listening..." : "Ask GINIE anything..."}
           rows={1}
           className="flex-1 px-4 py-2.5 rounded-xl bg-muted border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none min-h-[44px] max-h-[120px]"
           style={{ height: "auto" }}

@@ -129,7 +129,7 @@ export default function PersonalAIGenius({ defaultExpanded = false }: { defaultE
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-display text-lg font-semibold text-foreground">Gini — My Personal AI Genius</h2>
+              <h2 className="font-display text-lg font-semibold text-foreground">GINIE — My Personal AI Genius</h2>
               {view === "chat" && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/15 text-primary text-xs font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Active
@@ -138,9 +138,9 @@ export default function PersonalAIGenius({ defaultExpanded = false }: { defaultE
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
               {view === "loading" && "Loading..."}
-              {view === "tutorial" && "Discover what Gini can do for you"}
-              {view === "untrained" && "Train Gini to get hyper-personalised study abroad intelligence"}
-              {view === "training" && "Setting up Gini..."}
+              {view === "tutorial" && "Discover what GINIE can do for you"}
+              {view === "untrained" && "Train GINIE to get hyper-personalised study abroad intelligence"}
+              {view === "training" && "Setting up GINIE..."}
               {view === "chat" && trainedAt && `Trained · Last updated ${formatDate(trainedAt)}`}
             </p>
           </div>
@@ -150,7 +150,7 @@ export default function PersonalAIGenius({ defaultExpanded = false }: { defaultE
             <button
               onClick={(e) => { e.stopPropagation(); setView("training"); setExpanded(true); }}
               className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all"
-              title="Retrain Gini"
+              title="Retrain GINIE"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
@@ -192,12 +192,12 @@ export default function PersonalAIGenius({ defaultExpanded = false }: { defaultE
                   <div className="w-16 h-16 rounded-2xl gradient-hero flex items-center justify-center mx-auto mb-4 shadow-soft">
                     <Sparkles className="w-8 h-8 text-primary-foreground" />
                   </div>
-                  <h3 className="font-display text-xl font-bold text-foreground mb-2">Train Gini, Your Personal AI Genius</h3>
+                   <h3 className="font-display text-xl font-bold text-foreground mb-2">Train GINIE, Your Personal AI Genius</h3>
                   <p className="text-sm text-muted-foreground mb-1 max-w-md mx-auto">
-                    Unlike generic AI, Gini learns <strong className="text-foreground">everything about you</strong> — your goals, your field, your target countries, and your challenges.
+                    Unlike generic AI, GINIE learns <strong className="text-foreground">everything about you</strong> — your goals, your field, your target countries, and your challenges.
                   </p>
                   <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
-                    After training, Gini will give you <strong className="text-foreground">specific scholarships, real deadlines, exact programs</strong> — no fluff, no generic advice.
+                    After training, GINIE will give you <strong className="text-foreground">specific scholarships, real deadlines, exact programs</strong> — no fluff, no generic advice.
                   </p>
                   <button
                     onClick={() => setView("training")}
@@ -213,7 +213,7 @@ export default function PersonalAIGenius({ defaultExpanded = false }: { defaultE
                   <div className="mb-5 p-3 rounded-xl bg-primary/8 border border-primary/20">
                     <p className="text-xs text-primary font-medium flex items-center gap-2">
                       <Brain className="w-3.5 h-3.5" />
-                      Your answers train Gini to give you specific, relevant, real-time intelligence — not generic advice.
+                      Your answers train GINIE to give you specific, relevant, real-time intelligence — not generic advice.
                     </p>
                   </div>
                   <AITrainingWizard
