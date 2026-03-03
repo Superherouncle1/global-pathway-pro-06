@@ -33,6 +33,7 @@ const Footer = () => {
               <Link to="/about" className="text-sm opacity-70 hover:opacity-100 transition-opacity">About Us</Link>
               <Link to="/about#faq" className="text-sm opacity-70 hover:opacity-100 transition-opacity">FAQ</Link>
               <Link to="/about#terms" className="text-sm opacity-70 hover:opacity-100 transition-opacity">Terms & Privacy</Link>
+              <a href="mailto:abraham.loorig@imageofafrica.org" className="text-sm opacity-70 hover:opacity-100 transition-opacity">Contact Us</a>
             </div>
           </div>
         </div>
