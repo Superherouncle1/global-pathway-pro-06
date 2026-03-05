@@ -26,6 +26,9 @@ const TimiChat = () => {
     if (open) setShowBubble(false);
   }, [open]);
 
+  // Hide Timi on the Gini page to avoid covering GINIE's send button
+  if (location === "/gini") return null;
+
   return (
     <>
       <AnimatePresence>
