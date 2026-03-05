@@ -10,6 +10,7 @@ import { type AIProfile } from "./AITrainingWizard";
 type Msg = { role: "user" | "assistant"; content: string };
 
 const GENIUS_SUGGESTIONS = [
+  { label: "🚢 Semester at Sea", message: "Tell me everything about Semester at Sea — how it works, the voyages available, costs, financial aid, academic credit, and whether it's a good fit for my profile and goals. Include the application process and upcoming voyage dates." },
   { label: "🎓 Find my scholarships", message: "Search the web right now and find the most current scholarships I should apply to based on my profile. Include the official portal links, award amounts, and exact deadlines for the current cycle." },
   { label: "🌍 Best countries for me", message: "Given my field, goals, and budget, which specific countries and universities are the strongest match for me? Include current admission rates and funding availability." },
   { label: "📋 My visa roadmap", message: "Give me the current, step-by-step visa application process for my top target countries — including exact financial requirements, processing times right now, and the official application portals." },
