@@ -12,6 +12,7 @@ const TimiChat = () => {
   const [showBubble, setShowBubble] = useState(false);
   const { messages, input, setInput, loading, endRef, send, sendMessage, showSuggestions, voice } = useTimiChat();
   const navigate = useNavigate();
+  const location = window.location.pathname;
 
   // Show welcome bubble after 2 seconds
   useEffect(() => {
@@ -24,6 +25,9 @@ const TimiChat = () => {
   useEffect(() => {
     if (open) setShowBubble(false);
   }, [open]);
+
+  // Hide Timi on the Gini page to avoid covering GINIE's send button
+  if (location === "/gini") return null;
 
   return (
     <>
