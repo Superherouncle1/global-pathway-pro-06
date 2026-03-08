@@ -177,8 +177,8 @@ const Community = () => {
           </motion.div>
 
           {/* Tabs */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex bg-muted rounded-xl p-1">
+          <div className="flex justify-center mb-8 overflow-x-auto">
+            <div className="inline-flex bg-muted rounded-xl p-1 min-w-0">
               <button
                 onClick={() => setActiveTab("directory")}
                 className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
