@@ -126,9 +126,13 @@ const Gini = () => {
               <div className="h-full">
                 <PathwayMap aiProfile={aiProfile} />
               </div>
-            ) : (
+            ) : activeView === "simulator" ? (
               <div className="h-full">
                 <OpportunitySimulator aiProfile={aiProfile} />
+              </div>
+            ) : (
+              <div className="h-full">
+                <ScholarshipMatcher aiProfile={aiProfile} />
               </div>
             )}
           </div>
