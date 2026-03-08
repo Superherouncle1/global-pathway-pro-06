@@ -105,6 +105,16 @@ const Gini = () => {
             >
               ⚡ Simulator
             </button>
+            <button
+              onClick={() => setActiveView("scholarships")}
+              className={`flex-1 py-3 text-xs font-semibold text-center transition-colors ${
+                activeView === "scholarships"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground"
+              }`}
+            >
+              🏆 Scholarships
+            </button>
           </div>
 
           <div className="flex-1 overflow-hidden">
