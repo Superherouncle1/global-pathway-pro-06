@@ -32,7 +32,8 @@ const Footer = () => {
             <div className="flex flex-col gap-2">
               <Link to="/about" className="text-sm opacity-70 hover:opacity-100 transition-opacity">About Us</Link>
               <Link to="/about#faq" className="text-sm opacity-70 hover:opacity-100 transition-opacity">FAQ</Link>
-              <Link to="/about#terms" className="text-sm opacity-70 hover:opacity-100 transition-opacity">Terms & Privacy</Link>
+              <Link to="/privacy" className="text-sm opacity-70 hover:opacity-100 transition-opacity">Privacy Policy</Link>
+              <Link to="/about#terms" className="text-sm opacity-70 hover:opacity-100 transition-opacity">Terms of Use</Link>
               <a href="mailto:abraham.loorig@imageofafrica.org" className="text-sm opacity-70 hover:opacity-100 transition-opacity">Contact Us</a>
             </div>
           </div>
