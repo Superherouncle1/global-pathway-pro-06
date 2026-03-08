@@ -1,8 +1,8 @@
-import { MessageSquare, Map, ChevronLeft, ChevronRight } from "lucide-react";
+import { MessageSquare, Map, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-export type GiniView = "chat" | "pathway";
+export type GiniView = "chat" | "pathway" | "simulator";
 
 interface Props {
   activeView: GiniView;
@@ -14,6 +14,7 @@ interface Props {
 const items = [
   { id: "chat" as const, label: "Chat with GINIE", icon: MessageSquare },
   { id: "pathway" as const, label: "Pathway Map", icon: Map },
+  { id: "simulator" as const, label: "Simulator", icon: Zap },
 ];
 
 export default function GiniSidebar({ activeView, onViewChange, collapsed, onToggleCollapse }: Props) {

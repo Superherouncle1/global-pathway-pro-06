@@ -143,9 +143,13 @@ const Gini = () => {
                 <PersonalAIGenius defaultExpanded />
               </div>
             </div>
-          ) : (
+          ) : activeView === "pathway" ? (
             <div className="h-full">
               <PathwayMap aiProfile={aiProfile} />
+            </div>
+          ) : (
+            <div className="h-full">
+              <OpportunitySimulator aiProfile={aiProfile} />
             </div>
           )}
         </main>
