@@ -5,6 +5,7 @@ import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 import GiniSidebar, { type GiniView } from "@/components/gini/GiniSidebar";
 import PathwayMap from "@/components/gini/PathwayMap";
 import OpportunitySimulator from "@/components/gini/OpportunitySimulator";
+import ScholarshipMatcher from "@/components/gini/ScholarshipMatcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -104,6 +105,16 @@ const Gini = () => {
             >
               ⚡ Simulator
             </button>
+            <button
+              onClick={() => setActiveView("scholarships")}
+              className={`flex-1 py-3 text-xs font-semibold text-center transition-colors ${
+                activeView === "scholarships"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground"
+              }`}
+            >
+              🏆 Scholarships
+            </button>
           </div>
 
           <div className="flex-1 overflow-hidden">
@@ -115,9 +126,13 @@ const Gini = () => {
               <div className="h-full">
                 <PathwayMap aiProfile={aiProfile} />
               </div>
-            ) : (
+            ) : activeView === "simulator" ? (
               <div className="h-full">
                 <OpportunitySimulator aiProfile={aiProfile} />
+              </div>
+            ) : (
+              <div className="h-full">
+                <ScholarshipMatcher aiProfile={aiProfile} />
               </div>
             )}
           </div>
@@ -147,9 +162,13 @@ const Gini = () => {
             <div className="h-full">
               <PathwayMap aiProfile={aiProfile} />
             </div>
-          ) : (
+          ) : activeView === "simulator" ? (
             <div className="h-full">
               <OpportunitySimulator aiProfile={aiProfile} />
+            </div>
+          ) : (
+            <div className="h-full">
+              <ScholarshipMatcher aiProfile={aiProfile} />
             </div>
           )}
         </main>
