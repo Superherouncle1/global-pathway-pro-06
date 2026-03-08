@@ -92,7 +92,17 @@ const Gini = () => {
                   : "text-muted-foreground"
               }`}
             >
-              🗺️ Pathway Map
+              🗺️ Pathway
+            </button>
+            <button
+              onClick={() => setActiveView("simulator")}
+              className={`flex-1 py-3 text-xs font-semibold text-center transition-colors ${
+                activeView === "simulator"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground"
+              }`}
+            >
+              ⚡ Simulator
             </button>
           </div>
 
