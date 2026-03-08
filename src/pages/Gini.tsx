@@ -5,6 +5,7 @@ import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 import GiniSidebar, { type GiniView } from "@/components/gini/GiniSidebar";
 import PathwayMap from "@/components/gini/PathwayMap";
 import OpportunitySimulator from "@/components/gini/OpportunitySimulator";
+import ScholarshipMatcher from "@/components/gini/ScholarshipMatcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
