@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.simulate-opportunities]
 verify_jwt = false
+
+[functions.match-scholarships]
+verify_jwt = false
