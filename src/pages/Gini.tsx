@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 import GiniSidebar, { type GiniView } from "@/components/gini/GiniSidebar";
 import PathwayMap from "@/components/gini/PathwayMap";
+import OpportunitySimulator from "@/components/gini/OpportunitySimulator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -91,7 +92,17 @@ const Gini = () => {
                   : "text-muted-foreground"
               }`}
             >
-              🗺️ Pathway Map
+              🗺️ Pathway
+            </button>
+            <button
+              onClick={() => setActiveView("simulator")}
+              className={`flex-1 py-3 text-xs font-semibold text-center transition-colors ${
+                activeView === "simulator"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground"
+              }`}
+            >
+              ⚡ Simulator
             </button>
           </div>
 
@@ -100,9 +111,13 @@ const Gini = () => {
               <div className="h-full overflow-auto p-4">
                 <PersonalAIGenius defaultExpanded />
               </div>
-            ) : (
+            ) : activeView === "pathway" ? (
               <div className="h-full">
                 <PathwayMap aiProfile={aiProfile} />
+              </div>
+            ) : (
+              <div className="h-full">
+                <OpportunitySimulator aiProfile={aiProfile} />
               </div>
             )}
           </div>
@@ -128,9 +143,13 @@ const Gini = () => {
                 <PersonalAIGenius defaultExpanded />
               </div>
             </div>
-          ) : (
+          ) : activeView === "pathway" ? (
             <div className="h-full">
               <PathwayMap aiProfile={aiProfile} />
+            </div>
+          ) : (
+            <div className="h-full">
+              <OpportunitySimulator aiProfile={aiProfile} />
             </div>
           )}
         </main>
