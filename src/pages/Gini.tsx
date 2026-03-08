@@ -114,7 +114,7 @@ const Gini = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <div className="pt-16 flex-1 flex overflow-hidden" style={{ height: "calc(100vh - 64px)" }}>
+      <div className="mt-16 flex-1 flex overflow-hidden" style={{ height: "calc(100vh - 64px)" }}>
         <GiniSidebar
           activeView={activeView}
           onViewChange={setActiveView}
