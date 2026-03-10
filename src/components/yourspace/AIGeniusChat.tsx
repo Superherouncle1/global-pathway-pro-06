@@ -237,7 +237,15 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
         messages: [...apiMessages, userMsg],
         aiProfile,
         onDelta: upsert,
-        onDone: () => setLoading(false),
+        onDone: () => {
+          setLoading(false);
+          // Refresh credits after each message
+          if (user) {
+            supabase.from("user_credits").select("credits").eq("user_id", user.id).single().then(({ data }) => {
+              setCredits(data?.credits ?? 0);
+            });
+          }
+        },
         onError: (msg) => {
           setMessages((p) => [...p, { role: "assistant", content: `⚠️ ${msg}` }]);
           setLoading(false);
