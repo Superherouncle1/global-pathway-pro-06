@@ -1,9 +1,10 @@
-import { MessageSquare, Map, Zap, Award, ChevronLeft, ChevronRight, Coins } from "lucide-react";
+import { MessageSquare, Map, Zap, Award, ChevronLeft, ChevronRight, Coins, Infinity } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAdmin } from "@/hooks/use-admin";
 import { Badge } from "@/components/ui/badge";
 
 export type GiniView = "chat" | "pathway" | "simulator" | "scholarships";
