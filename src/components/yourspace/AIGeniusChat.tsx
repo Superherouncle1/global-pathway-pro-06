@@ -255,6 +255,9 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
           }
         },
         onError: (msg) => {
+          if (msg.includes("credits")) {
+            setCredits(0);
+          }
           setMessages((p) => [...p, { role: "assistant", content: `⚠️ ${msg}` }]);
           setLoading(false);
         },
