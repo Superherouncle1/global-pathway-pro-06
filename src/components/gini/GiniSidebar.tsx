@@ -100,33 +100,31 @@ export default function GiniSidebar({ activeView, onViewChange, collapsed, onTog
       </nav>
 
       {/* Credits Badge */}
-      {credits !== null && (
+      {(isSuperAdmin || credits !== null) && (
         <div className="p-3 border-t border-border">
           <div
             className={cn(
               "flex items-center gap-2 rounded-lg px-3 py-2 bg-sidebar-accent/50",
               collapsed && "justify-center px-0"
             )}
-            title={collapsed ? `${credits} credits remaining` : undefined}
+            title={collapsed ? (isSuperAdmin ? "Unlimited credits" : `${credits} credits remaining`) : undefined}
           >
-            <Coins className="w-4 h-4 text-primary flex-shrink-0" />
+            {isSuperAdmin ? (
+              <Infinity className="w-4 h-4 text-primary flex-shrink-0" />
+            ) : (
+              <Coins className="w-4 h-4 text-primary flex-shrink-0" />
+            )}
             {!collapsed && (
               <div className="flex items-center justify-between flex-1 min-w-0">
                 <span className="text-xs text-sidebar-foreground truncate">Credits</span>
-                <Badge
-                  variant={credits > 10 ? "default" : "destructive"}
-                  className="text-[10px] px-1.5 py-0"
-                >
-                  {credits}
+                <Badge variant="default" className="text-[10px] px-1.5 py-0">
+                  {isSuperAdmin ? "∞" : credits}
                 </Badge>
               </div>
             )}
             {collapsed && (
-              <Badge
-                variant={credits > 10 ? "default" : "destructive"}
-                className="text-[10px] px-1.5 py-0 absolute-none"
-              >
-                {credits}
+              <Badge variant="default" className="text-[10px] px-1.5 py-0 absolute-none">
+                {isSuperAdmin ? "∞" : credits}
               </Badge>
             )}
           </div>

@@ -99,9 +99,10 @@ interface Props {
 
 export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Props) {
   const { user } = useAuth();
+  const { isSuperAdmin } = useAdmin();
   const navigate = useNavigate();
   const [credits, setCredits] = useState<number | null>(null);
-  const noCredits = credits !== null && credits <= 0;
+  const noCredits = !isSuperAdmin && credits !== null && credits <= 0;
 
   // Load credits
   useEffect(() => {
