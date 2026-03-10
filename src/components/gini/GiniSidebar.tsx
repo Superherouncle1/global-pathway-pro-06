@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAdmin } from "@/hooks/use-admin";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
 export type GiniView = "chat" | "pathway" | "simulator" | "scholarships";
