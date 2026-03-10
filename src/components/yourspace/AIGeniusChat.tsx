@@ -92,7 +92,23 @@ interface Props {
 
 export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Props) {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [credits, setCredits] = useState<number | null>(null);
+  const noCredits = credits !== null && credits <= 0;
 
+  // Load credits
+  useEffect(() => {
+    if (!user) return;
+    const loadCredits = async () => {
+      const { data } = await supabase
+        .from("user_credits")
+        .select("credits")
+        .eq("user_id", user.id)
+        .single();
+      setCredits(data?.credits ?? 0);
+    };
+    loadCredits();
+  }, [user]);
   const welcomeContent = useMemo(() => {
     const greeting = userName ? `Hey ${userName}! 👋` : "Hey there! 👋";
     return `${greeting} I'm **GINIE**, your Personal AI Genius — and I know exactly who you are.\n\nYou're studying **${aiProfile.field_of_study || "your field"}**, targeting **${aiProfile.target_countries?.join(", ") || "your dream destinations"}**, and working towards **${aiProfile.career_goals?.substring(0, 80) || "your goals"}${(aiProfile.career_goals?.length || 0) > 80 ? "..." : ""}**.\n\nI'm here with hyper-personalised, specific, actionable intelligence — no fluff, no generic advice. What do you need today?`;
