@@ -27,7 +27,9 @@ const items = [
 export default function GiniSidebar({ activeView, onViewChange, collapsed, onToggleCollapse }: Props) {
   const { user } = useAuth();
   const { isSuperAdmin } = useAdmin();
+  const navigate = useNavigate();
   const [credits, setCredits] = useState<number | null>(null);
+  const showTopUp = !isSuperAdmin && credits !== null && credits <= 10;
 
   useEffect(() => {
     if (!user) return;
