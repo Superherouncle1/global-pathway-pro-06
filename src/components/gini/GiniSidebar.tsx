@@ -1,6 +1,10 @@
-import { MessageSquare, Map, Zap, Award, ChevronLeft, ChevronRight } from "lucide-react";
+import { MessageSquare, Map, Zap, Award, ChevronLeft, ChevronRight, Coins } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { Badge } from "@/components/ui/badge";
 
 export type GiniView = "chat" | "pathway" | "simulator" | "scholarships";
 
@@ -19,6 +23,35 @@ const items = [
 ];
 
 export default function GiniSidebar({ activeView, onViewChange, collapsed, onToggleCollapse }: Props) {
+  const { user } = useAuth();
+  const [credits, setCredits] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    const fetchCredits = async () => {
+      const { data } = await supabase
+        .from("user_credits")
+        .select("credits")
+        .eq("user_id", user.id)
+        .single();
+      if (data) setCredits(data.credits);
+    };
+    fetchCredits();
+
+    const channel = supabase
+      .channel("sidebar-credits")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "user_credits", filter: `user_id=eq.${user.id}` },
+        (payload: any) => {
+          if (payload.new?.credits !== undefined) setCredits(payload.new.credits);
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [user]);
+
   return (
     <motion.aside
       initial={false}
@@ -63,6 +96,40 @@ export default function GiniSidebar({ activeView, onViewChange, collapsed, onTog
           );
         })}
       </nav>
+
+      {/* Credits Badge */}
+      {credits !== null && (
+        <div className="p-3 border-t border-border">
+          <div
+            className={cn(
+              "flex items-center gap-2 rounded-lg px-3 py-2 bg-sidebar-accent/50",
+              collapsed && "justify-center px-0"
+            )}
+            title={collapsed ? `${credits} credits remaining` : undefined}
+          >
+            <Coins className="w-4 h-4 text-primary flex-shrink-0" />
+            {!collapsed && (
+              <div className="flex items-center justify-between flex-1 min-w-0">
+                <span className="text-xs text-sidebar-foreground truncate">Credits</span>
+                <Badge
+                  variant={credits > 10 ? "default" : "destructive"}
+                  className="text-[10px] px-1.5 py-0"
+                >
+                  {credits}
+                </Badge>
+              </div>
+            )}
+            {collapsed && (
+              <Badge
+                variant={credits > 10 ? "default" : "destructive"}
+                className="text-[10px] px-1.5 py-0 absolute-none"
+              >
+                {credits}
+              </Badge>
+            )}
+          </div>
+        </div>
+      )}
     </motion.aside>
   );
 }
