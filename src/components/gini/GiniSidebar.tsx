@@ -104,7 +104,7 @@ export default function GiniSidebar({ activeView, onViewChange, collapsed, onTog
 
       {/* Credits Badge */}
       {(isSuperAdmin || credits !== null) && (
-        <div className="p-3 border-t border-border">
+        <div className="p-3 border-t border-border space-y-2">
           <div
             className={cn(
               "flex items-center gap-2 rounded-lg px-3 py-2 bg-sidebar-accent/50",
@@ -120,17 +120,38 @@ export default function GiniSidebar({ activeView, onViewChange, collapsed, onTog
             {!collapsed && (
               <div className="flex items-center justify-between flex-1 min-w-0">
                 <span className="text-xs text-sidebar-foreground truncate">Credits</span>
-                <Badge variant="default" className="text-[10px] px-1.5 py-0">
+                <Badge
+                  variant={!isSuperAdmin && credits !== null && credits <= 10 ? "destructive" : "default"}
+                  className="text-[10px] px-1.5 py-0"
+                >
                   {isSuperAdmin ? "∞" : credits}
                 </Badge>
               </div>
             )}
             {collapsed && (
-              <Badge variant="default" className="text-[10px] px-1.5 py-0 absolute-none">
+              <Badge
+                variant={!isSuperAdmin && credits !== null && credits <= 10 ? "destructive" : "default"}
+                className="text-[10px] px-1.5 py-0 absolute-none"
+              >
                 {isSuperAdmin ? "∞" : credits}
               </Badge>
             )}
           </div>
+
+          {/* Top-up button when credits are low */}
+          {showTopUp && (
+            <button
+              onClick={() => navigate("/pricing")}
+              className={cn(
+                "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors",
+                collapsed && "justify-center px-2"
+              )}
+              title={collapsed ? "Top up credits" : undefined}
+            >
+              <Plus className="w-3.5 h-3.5 flex-shrink-0" />
+              {!collapsed && <span>Top up credits</span>}
+            </button>
+          )}
         </div>
       )}
     </motion.aside>
