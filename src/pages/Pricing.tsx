@@ -13,12 +13,14 @@ import { Badge } from "@/components/ui/badge";
 const planFeatures: Record<string, string[]> = {
   starter: [
     "50 AI credits/month",
+    "GINIE — Personal AI Genius",
     "Basic scholarship matching",
     "Community access",
     "Email support",
   ],
   professional: [
     "150 AI credits/month",
+    "GINIE — Personal AI Genius",
     "Advanced scholarship matching",
     "Pathway mapping",
     "Priority support",
@@ -26,9 +28,9 @@ const planFeatures: Record<string, string[]> = {
   ],
   premium: [
     "350 AI credits/month",
+    "GINIE — Personal AI Genius",
     "All Professional features",
     "Opportunity simulator",
-    "Dedicated AI genius",
     "1-on-1 onboarding",
   ],
 };
