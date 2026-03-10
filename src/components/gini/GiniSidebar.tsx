@@ -1,9 +1,10 @@
-import { MessageSquare, Map, Zap, Award, ChevronLeft, ChevronRight, Coins } from "lucide-react";
+import { MessageSquare, Map, Zap, Award, ChevronLeft, ChevronRight, Coins, Infinity } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAdmin } from "@/hooks/use-admin";
 import { Badge } from "@/components/ui/badge";
 
 export type GiniView = "chat" | "pathway" | "simulator" | "scholarships";
@@ -24,6 +25,7 @@ const items = [
 
 export default function GiniSidebar({ activeView, onViewChange, collapsed, onToggleCollapse }: Props) {
   const { user } = useAuth();
+  const { isSuperAdmin } = useAdmin();
   const [credits, setCredits] = useState<number | null>(null);
 
   useEffect(() => {
@@ -98,33 +100,31 @@ export default function GiniSidebar({ activeView, onViewChange, collapsed, onTog
       </nav>
 
       {/* Credits Badge */}
-      {credits !== null && (
+      {(isSuperAdmin || credits !== null) && (
         <div className="p-3 border-t border-border">
           <div
             className={cn(
               "flex items-center gap-2 rounded-lg px-3 py-2 bg-sidebar-accent/50",
               collapsed && "justify-center px-0"
             )}
-            title={collapsed ? `${credits} credits remaining` : undefined}
+            title={collapsed ? (isSuperAdmin ? "Unlimited credits" : `${credits} credits remaining`) : undefined}
           >
-            <Coins className="w-4 h-4 text-primary flex-shrink-0" />
+            {isSuperAdmin ? (
+              <Infinity className="w-4 h-4 text-primary flex-shrink-0" />
+            ) : (
+              <Coins className="w-4 h-4 text-primary flex-shrink-0" />
+            )}
             {!collapsed && (
               <div className="flex items-center justify-between flex-1 min-w-0">
                 <span className="text-xs text-sidebar-foreground truncate">Credits</span>
-                <Badge
-                  variant={credits > 10 ? "default" : "destructive"}
-                  className="text-[10px] px-1.5 py-0"
-                >
-                  {credits}
+                <Badge variant="default" className="text-[10px] px-1.5 py-0">
+                  {isSuperAdmin ? "∞" : credits}
                 </Badge>
               </div>
             )}
             {collapsed && (
-              <Badge
-                variant={credits > 10 ? "default" : "destructive"}
-                className="text-[10px] px-1.5 py-0 absolute-none"
-              >
-                {credits}
+              <Badge variant="default" className="text-[10px] px-1.5 py-0 absolute-none">
+                {isSuperAdmin ? "∞" : credits}
               </Badge>
             )}
           </div>

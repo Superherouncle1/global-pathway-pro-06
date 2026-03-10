@@ -36,25 +36,30 @@ serve(async (req) => {
     }
 
     if (userId) {
-      const { data: creditData } = await supabaseClient
-        .from("user_credits")
-        .select("credits")
-        .eq("user_id", userId)
-        .single();
+      // Check if user is a super_admin — unlimited credits
+      const { data: isSuperAdmin } = await supabaseClient.rpc("is_super_admin", { _user_id: userId });
 
-      const currentCredits = creditData?.credits ?? 0;
-      if (currentCredits <= 0) {
-        return new Response(
-          JSON.stringify({ error: "no_credits", message: "You've used all your credits. Upgrade your plan to continue using GINIE." }),
-          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+      if (!isSuperAdmin) {
+        const { data: creditData } = await supabaseClient
+          .from("user_credits")
+          .select("credits")
+          .eq("user_id", userId)
+          .single();
+
+        const currentCredits = creditData?.credits ?? 0;
+        if (currentCredits <= 0) {
+          return new Response(
+            JSON.stringify({ error: "no_credits", message: "You've used all your credits. Upgrade your plan to continue using GINIE." }),
+            { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        // Deduct 1 credit
+        await supabaseClient
+          .from("user_credits")
+          .update({ credits: currentCredits - 1, updated_at: new Date().toISOString() })
+          .eq("user_id", userId);
       }
-
-      // Deduct 1 credit
-      await supabaseClient
-        .from("user_credits")
-        .update({ credits: currentCredits - 1, updated_at: new Date().toISOString() })
-        .eq("user_id", userId);
     }
 
     const profileContext = aiProfile ? buildProfileContext(aiProfile) : "";

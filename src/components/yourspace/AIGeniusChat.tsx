@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdmin } from "@/hooks/use-admin";
 import { type AIProfile } from "./AITrainingWizard";
 import { useNavigate } from "react-router-dom";
 
@@ -98,9 +99,10 @@ interface Props {
 
 export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Props) {
   const { user } = useAuth();
+  const { isSuperAdmin } = useAdmin();
   const navigate = useNavigate();
   const [credits, setCredits] = useState<number | null>(null);
-  const noCredits = credits !== null && credits <= 0;
+  const noCredits = !isSuperAdmin && credits !== null && credits <= 0;
 
   // Load credits
   useEffect(() => {
