@@ -9,6 +9,7 @@ const navItems = [
   { label: "Home", path: "/" },
   { label: "My Space", path: "/your-space" },
   { label: "Community", path: "/community" },
+  { label: "Pricing", path: "/pricing" },
   { label: "About Us", path: "/about" },
 ];
 
