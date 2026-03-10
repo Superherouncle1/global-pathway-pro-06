@@ -27,12 +27,14 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/personal-ai-
 async function streamChat({
   messages,
   aiProfile,
+  accessToken,
   onDelta,
   onDone,
   onError,
 }: {
   messages: Msg[];
   aiProfile: AIProfile | null;
+  accessToken?: string;
   onDelta: (t: string) => void;
   onDone: () => void;
   onError: (msg: string) => void;
@@ -41,7 +43,7 @@ async function streamChat({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      Authorization: `Bearer ${accessToken || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
     },
     body: JSON.stringify({ messages, aiProfile }),
   });
