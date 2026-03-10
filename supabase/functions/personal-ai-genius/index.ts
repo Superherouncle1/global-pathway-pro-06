@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,6 +16,46 @@ serve(async (req) => {
     const { messages, aiProfile } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    // Check and deduct credits
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    const authHeader = req.headers.get("Authorization");
+    let userId: string | null = null;
+    if (authHeader) {
+      const token = authHeader.replace("Bearer ", "");
+      // Try to get user - if it's anon key, skip credit check
+      if (token !== Deno.env.get("SUPABASE_ANON_KEY")) {
+        const { data: userData } = await supabaseClient.auth.getUser(token);
+        userId = userData?.user?.id ?? null;
+      }
+    }
+
+    if (userId) {
+      const { data: creditData } = await supabaseClient
+        .from("user_credits")
+        .select("credits")
+        .eq("user_id", userId)
+        .single();
+
+      const currentCredits = creditData?.credits ?? 0;
+      if (currentCredits <= 0) {
+        return new Response(
+          JSON.stringify({ error: "no_credits", message: "You've used all your credits. Upgrade your plan to continue using GINIE." }),
+          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Deduct 1 credit
+      await supabaseClient
+        .from("user_credits")
+        .update({ credits: currentCredits - 1, updated_at: new Date().toISOString() })
+        .eq("user_id", userId);
+    }
 
     const profileContext = aiProfile ? buildProfileContext(aiProfile) : "";
     const today = new Date();

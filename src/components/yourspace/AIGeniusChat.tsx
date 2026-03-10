@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Loader2, RotateCcw, Sparkles, User, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { Send, Loader2, RotateCcw, Sparkles, User, Mic, MicOff, Volume2, VolumeX, Crown } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { type AIProfile } from "./AITrainingWizard";
+import { useNavigate } from "react-router-dom";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -26,12 +27,14 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/personal-ai-
 async function streamChat({
   messages,
   aiProfile,
+  accessToken,
   onDelta,
   onDone,
   onError,
 }: {
   messages: Msg[];
   aiProfile: AIProfile | null;
+  accessToken?: string;
   onDelta: (t: string) => void;
   onDone: () => void;
   onError: (msg: string) => void;
@@ -40,14 +43,18 @@ async function streamChat({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      Authorization: `Bearer ${accessToken || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
     },
     body: JSON.stringify({ messages, aiProfile }),
   });
 
   if (!resp.ok) {
     const body = await resp.json().catch(() => ({}));
-    onError(body.error || "Something went wrong. Please try again.");
+    if (body.error === "no_credits") {
+      onError("You've used all your credits. Please upgrade your plan to continue.");
+      return;
+    }
+    onError(body.error || body.message || "Something went wrong. Please try again.");
     return;
   }
   if (!resp.body) { onError("No response body"); return; }
@@ -91,7 +98,23 @@ interface Props {
 
 export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Props) {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [credits, setCredits] = useState<number | null>(null);
+  const noCredits = credits !== null && credits <= 0;
 
+  // Load credits
+  useEffect(() => {
+    if (!user) return;
+    const loadCredits = async () => {
+      const { data } = await supabase
+        .from("user_credits")
+        .select("credits")
+        .eq("user_id", user.id)
+        .single();
+      setCredits(data?.credits ?? 0);
+    };
+    loadCredits();
+  }, [user]);
   const welcomeContent = useMemo(() => {
     const greeting = userName ? `Hey ${userName}! 👋` : "Hey there! 👋";
     return `${greeting} I'm **GINIE**, your Personal AI Genius — and I know exactly who you are.\n\nYou're studying **${aiProfile.field_of_study || "your field"}**, targeting **${aiProfile.target_countries?.join(", ") || "your dream destinations"}**, and working towards **${aiProfile.career_goals?.substring(0, 80) || "your goals"}${(aiProfile.career_goals?.length || 0) > 80 ? "..." : ""}**.\n\nI'm here with hyper-personalised, specific, actionable intelligence — no fluff, no generic advice. What do you need today?`;
@@ -194,7 +217,7 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
 
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
-    if (!trimmed || loading) return;
+    if (!trimmed || loading || noCredits) return;
     const userMsg: Msg = { role: "user", content: trimmed };
     setMessages((p) => [...p, userMsg]);
     setInput("");
@@ -215,13 +238,26 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
     // Filter out the welcome message from API calls
     const apiMessages = messages.filter((_, i) => i > 0);
 
+    const { data: { session } } = await supabase.auth.getSession();
     try {
       await streamChat({
         messages: [...apiMessages, userMsg],
         aiProfile,
+        accessToken: session?.access_token,
         onDelta: upsert,
-        onDone: () => setLoading(false),
+        onDone: () => {
+          setLoading(false);
+          // Refresh credits after each message
+          if (user) {
+            supabase.from("user_credits").select("credits").eq("user_id", user.id).single().then(({ data }) => {
+              setCredits(data?.credits ?? 0);
+            });
+          }
+        },
         onError: (msg) => {
+          if (msg.includes("credits")) {
+            setCredits(0);
+          }
           setMessages((p) => [...p, { role: "assistant", content: `⚠️ ${msg}` }]);
           setLoading(false);
         },
@@ -338,58 +374,79 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
         <div ref={endRef} />
       </div>
 
-      {/* Input */}
-      <div className="flex gap-2 pt-3 mt-3 border-t border-border flex-shrink-0">
-        {voice.isSpeaking && (
+      {/* Upgrade Banner */}
+      {noCredits && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-0 mt-3 p-4 rounded-xl bg-primary/10 border border-primary/20 text-center flex-shrink-0"
+        >
+          <Crown className="w-6 h-6 text-primary mx-auto mb-2" />
+          <p className="text-sm font-semibold text-foreground mb-1">You've used all your free credits</p>
+          <p className="text-xs text-muted-foreground mb-3">Upgrade to a plan to keep using GINIE and unlock unlimited study abroad intelligence.</p>
           <button
-            onClick={voice.stopSpeaking}
-            className="w-10 h-10 self-end rounded-xl bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10 flex items-center justify-center transition-all flex-shrink-0"
-            title="Stop speaking"
+            onClick={() => navigate("/pricing")}
+            className="px-6 py-2.5 rounded-xl gradient-hero text-primary-foreground font-semibold text-sm shadow-soft hover:shadow-hover transition-all hover:scale-[1.02]"
           >
-            <VolumeX className="w-4 h-4" />
+            View Plans
           </button>
-        )}
+        </motion.div>
+      )}
 
-        <div className="flex-1 relative">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKey}
-            placeholder={voice.isListening ? "Listening..." : "Ask GINIE anything..."}
-            rows={1}
-            className="w-full px-4 py-2.5 pr-12 rounded-xl bg-muted border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none min-h-[44px] max-h-[120px]"
-            style={{ height: "auto" }}
-            onInput={(e) => {
-              const t = e.currentTarget;
-              t.style.height = "auto";
-              t.style.height = Math.min(t.scrollHeight, 120) + "px";
-            }}
-          />
-          {voice.supported && voice.sttSupported && (
+      {/* Input */}
+      {!noCredits && (
+        <div className="flex gap-2 pt-3 mt-3 border-t border-border flex-shrink-0">
+          {voice.isSpeaking && (
             <button
-              onClick={voice.isListening ? voice.stopListening : voice.startListening}
-              disabled={loading}
-              className={`absolute right-2 bottom-1.5 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
-                voice.isListening
-                  ? "bg-destructive text-destructive-foreground animate-pulse"
-                  : "text-muted-foreground hover:text-primary hover:bg-primary/10"
-              }`}
-              title={voice.isListening ? "Stop listening" : "Tap to speak"}
+              onClick={voice.stopSpeaking}
+              className="w-10 h-10 self-end rounded-xl bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10 flex items-center justify-center transition-all flex-shrink-0"
+              title="Stop speaking"
             >
-              {voice.isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              <VolumeX className="w-4 h-4" />
             </button>
           )}
-        </div>
 
-        <button
-          onClick={() => sendMessage(input)}
-          disabled={!input.trim() || loading}
-          className="w-10 h-10 self-end rounded-xl gradient-hero text-primary-foreground flex items-center justify-center shadow-soft hover:shadow-hover transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100 flex-shrink-0"
-        >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-        </button>
-      </div>
+          <div className="flex-1 relative">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKey}
+              placeholder={voice.isListening ? "Listening..." : "Ask GINIE anything..."}
+              rows={1}
+              className="w-full px-4 py-2.5 pr-12 rounded-xl bg-muted border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none min-h-[44px] max-h-[120px]"
+              style={{ height: "auto" }}
+              onInput={(e) => {
+                const t = e.currentTarget;
+                t.style.height = "auto";
+                t.style.height = Math.min(t.scrollHeight, 120) + "px";
+              }}
+            />
+            {voice.supported && voice.sttSupported && (
+              <button
+                onClick={voice.isListening ? voice.stopListening : voice.startListening}
+                disabled={loading}
+                className={`absolute right-2 bottom-1.5 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
+                  voice.isListening
+                    ? "bg-destructive text-destructive-foreground animate-pulse"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+                }`}
+                title={voice.isListening ? "Stop listening" : "Tap to speak"}
+              >
+                {voice.isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </button>
+            )}
+          </div>
+
+          <button
+            onClick={() => sendMessage(input)}
+            disabled={!input.trim() || loading}
+            className="w-10 h-10 self-end rounded-xl gradient-hero text-primary-foreground flex items-center justify-center shadow-soft hover:shadow-hover transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100 flex-shrink-0"
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
