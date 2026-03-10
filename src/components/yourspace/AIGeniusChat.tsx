@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdmin } from "@/hooks/use-admin";
 import { type AIProfile } from "./AITrainingWizard";
 import { useNavigate } from "react-router-dom";
 
