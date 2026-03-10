@@ -13,6 +13,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import GiniPage from "./pages/Gini";
 import Privacy from "./pages/Privacy";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import TimiChat from "./components/TimiChat";
 import TimiPage from "./pages/Timi";
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/timi" element={<TimiPage />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
