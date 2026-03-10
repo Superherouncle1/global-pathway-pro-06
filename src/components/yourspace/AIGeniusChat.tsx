@@ -50,7 +50,11 @@ async function streamChat({
 
   if (!resp.ok) {
     const body = await resp.json().catch(() => ({}));
-    onError(body.error || "Something went wrong. Please try again.");
+    if (body.error === "no_credits") {
+      onError("You've used all your credits. Please upgrade your plan to continue.");
+      return;
+    }
+    onError(body.error || body.message || "Something went wrong. Please try again.");
     return;
   }
   if (!resp.body) { onError("No response body"); return; }
