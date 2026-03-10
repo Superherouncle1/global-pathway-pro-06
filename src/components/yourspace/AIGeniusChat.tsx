@@ -211,7 +211,7 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
 
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
-    if (!trimmed || loading) return;
+    if (!trimmed || loading || noCredits) return;
     const userMsg: Msg = { role: "user", content: trimmed };
     setMessages((p) => [...p, userMsg]);
     setInput("");
