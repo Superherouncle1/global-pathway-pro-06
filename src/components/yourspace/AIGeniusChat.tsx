@@ -363,58 +363,79 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
         <div ref={endRef} />
       </div>
 
-      {/* Input */}
-      <div className="flex gap-2 pt-3 mt-3 border-t border-border flex-shrink-0">
-        {voice.isSpeaking && (
+      {/* Upgrade Banner */}
+      {noCredits && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-0 mt-3 p-4 rounded-xl bg-primary/10 border border-primary/20 text-center flex-shrink-0"
+        >
+          <Crown className="w-6 h-6 text-primary mx-auto mb-2" />
+          <p className="text-sm font-semibold text-foreground mb-1">You've used all your free credits</p>
+          <p className="text-xs text-muted-foreground mb-3">Upgrade to a plan to keep using GINIE and unlock unlimited study abroad intelligence.</p>
           <button
-            onClick={voice.stopSpeaking}
-            className="w-10 h-10 self-end rounded-xl bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10 flex items-center justify-center transition-all flex-shrink-0"
-            title="Stop speaking"
+            onClick={() => navigate("/pricing")}
+            className="px-6 py-2.5 rounded-xl gradient-hero text-primary-foreground font-semibold text-sm shadow-soft hover:shadow-hover transition-all hover:scale-[1.02]"
           >
-            <VolumeX className="w-4 h-4" />
+            View Plans
           </button>
-        )}
+        </motion.div>
+      )}
 
-        <div className="flex-1 relative">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKey}
-            placeholder={voice.isListening ? "Listening..." : "Ask GINIE anything..."}
-            rows={1}
-            className="w-full px-4 py-2.5 pr-12 rounded-xl bg-muted border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none min-h-[44px] max-h-[120px]"
-            style={{ height: "auto" }}
-            onInput={(e) => {
-              const t = e.currentTarget;
-              t.style.height = "auto";
-              t.style.height = Math.min(t.scrollHeight, 120) + "px";
-            }}
-          />
-          {voice.supported && voice.sttSupported && (
+      {/* Input */}
+      {!noCredits && (
+        <div className="flex gap-2 pt-3 mt-3 border-t border-border flex-shrink-0">
+          {voice.isSpeaking && (
             <button
-              onClick={voice.isListening ? voice.stopListening : voice.startListening}
-              disabled={loading}
-              className={`absolute right-2 bottom-1.5 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
-                voice.isListening
-                  ? "bg-destructive text-destructive-foreground animate-pulse"
-                  : "text-muted-foreground hover:text-primary hover:bg-primary/10"
-              }`}
-              title={voice.isListening ? "Stop listening" : "Tap to speak"}
+              onClick={voice.stopSpeaking}
+              className="w-10 h-10 self-end rounded-xl bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10 flex items-center justify-center transition-all flex-shrink-0"
+              title="Stop speaking"
             >
-              {voice.isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              <VolumeX className="w-4 h-4" />
             </button>
           )}
-        </div>
 
-        <button
-          onClick={() => sendMessage(input)}
-          disabled={!input.trim() || loading}
-          className="w-10 h-10 self-end rounded-xl gradient-hero text-primary-foreground flex items-center justify-center shadow-soft hover:shadow-hover transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100 flex-shrink-0"
-        >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-        </button>
-      </div>
+          <div className="flex-1 relative">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKey}
+              placeholder={voice.isListening ? "Listening..." : "Ask GINIE anything..."}
+              rows={1}
+              className="w-full px-4 py-2.5 pr-12 rounded-xl bg-muted border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none min-h-[44px] max-h-[120px]"
+              style={{ height: "auto" }}
+              onInput={(e) => {
+                const t = e.currentTarget;
+                t.style.height = "auto";
+                t.style.height = Math.min(t.scrollHeight, 120) + "px";
+              }}
+            />
+            {voice.supported && voice.sttSupported && (
+              <button
+                onClick={voice.isListening ? voice.stopListening : voice.startListening}
+                disabled={loading}
+                className={`absolute right-2 bottom-1.5 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
+                  voice.isListening
+                    ? "bg-destructive text-destructive-foreground animate-pulse"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+                }`}
+                title={voice.isListening ? "Stop listening" : "Tap to speak"}
+              >
+                {voice.isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </button>
+            )}
+          </div>
+
+          <button
+            onClick={() => sendMessage(input)}
+            disabled={!input.trim() || loading}
+            className="w-10 h-10 self-end rounded-xl gradient-hero text-primary-foreground flex items-center justify-center shadow-soft hover:shadow-hover transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100 flex-shrink-0"
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
