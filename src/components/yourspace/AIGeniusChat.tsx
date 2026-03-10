@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Loader2, RotateCcw, Sparkles, User, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { Send, Loader2, RotateCcw, Sparkles, User, Mic, MicOff, Volume2, VolumeX, Crown } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { type AIProfile } from "./AITrainingWizard";
+import { useNavigate } from "react-router-dom";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
