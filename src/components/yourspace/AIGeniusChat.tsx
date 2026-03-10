@@ -234,10 +234,12 @@ export default function AIGeniusChat({ aiProfile, onRetrain, userName = "" }: Pr
     // Filter out the welcome message from API calls
     const apiMessages = messages.filter((_, i) => i > 0);
 
+    const { data: { session } } = await supabase.auth.getSession();
     try {
       await streamChat({
         messages: [...apiMessages, userMsg],
         aiProfile,
+        accessToken: session?.access_token,
         onDelta: upsert,
         onDone: () => {
           setLoading(false);
