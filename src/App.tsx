@@ -13,6 +13,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import GiniPage from "./pages/Gini";
 import Privacy from "./pages/Privacy";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import TimiChat from "./components/TimiChat";
 import TimiPage from "./pages/Timi";
