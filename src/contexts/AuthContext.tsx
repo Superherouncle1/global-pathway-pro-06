@@ -24,43 +24,43 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const PLAN_TIERS = {
   starter: {
-    product_id: "prod_U409bsY9Mpfdop",
-    price_id: "price_1T5s9MRtAz9AjFQFwDDwjntC",
+    product_id: "prod_U8C9WeagccyDIX",
+    price_id: "price_1T9vkrRtAz9AjFQFzY7kbxWE",
     name: "Starter",
-    price: 5,
+    price: 4.99,
     credits: 50,
   },
   professional: {
-    product_id: "prod_U40ABCvOgTe1cT",
-    price_id: "price_1T5sAYRtAz9AjFQFRgffPm6Y",
+    product_id: "prod_U8CAu8HWqH8VCr",
+    price_id: "price_1T9vlmRtAz9AjFQF70VPoEJF",
     name: "Professional",
-    price: 10,
+    price: 9.99,
     credits: 150,
   },
   premium: {
-    product_id: "prod_U40BICCBipwIwd",
-    price_id: "price_1T5sAlRtAz9AjFQFhUS9yb4n",
+    product_id: "prod_U8CAvc9HOMpJqL",
+    price_id: "price_1T9vmZRtAz9AjFQFYu1yCT6W",
     name: "Premium",
-    price: 30,
+    price: 19.99,
     credits: 350,
   },
 } as const;
 
 export const CREDIT_TOPUPS = {
   small: {
-    price_id: "price_1T6PQZRtAz9AjFQFl7GKCuqe",
+    price_id: "price_1T9vmxRtAz9AjFQFG6mVLL6F",
     credits: 30,
-    price: 5,
+    price: 4.99,
   },
   medium: {
-    price_id: "price_1T6PRmRtAz9AjFQFtcbrIRfG",
+    price_id: "price_1T9vnJRtAz9AjFQFBoOPzZPp",
     credits: 80,
-    price: 10,
+    price: 9.99,
   },
   large: {
-    price_id: "price_1T6PRyRtAz9AjFQFMID12VcK",
-    credits: 200,
-    price: 25,
+    price_id: "price_1T9vnbRtAz9AjFQF4SeEc1E6",
+    credits: 180,
+    price: 19.99,
   },
 } as const;
 

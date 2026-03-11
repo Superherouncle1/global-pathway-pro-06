@@ -14,9 +14,9 @@ const logStep = (step: string, details?: any) => {
 
 // Map price IDs to credit amounts
 const CREDIT_AMOUNTS: Record<string, number> = {
-  "price_1T6PQZRtAz9AjFQFl7GKCuqe": 30,
-  "price_1T6PRmRtAz9AjFQFtcbrIRfG": 80,
-  "price_1T6PRyRtAz9AjFQFMID12VcK": 200,
+  "price_1T9vmxRtAz9AjFQFG6mVLL6F": 30,
+  "price_1T9vnJRtAz9AjFQFBoOPzZPp": 80,
+  "price_1T9vnbRtAz9AjFQF4SeEc1E6": 180,
 };
 
 serve(async (req) => {
