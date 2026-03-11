@@ -27,7 +27,7 @@ const planFeatures: Record<string, string[]> = {
     "Interview preparation",
   ],
   premium: [
-    "350 AI credits/month",
+    "400 AI credits/month",
     "GINIE — Personal AI Genius",
     "All Professional features",
     "Opportunity simulator",
