@@ -42,7 +42,7 @@ export const PLAN_TIERS = {
     price_id: "price_1T9vmZRtAz9AjFQFYu1yCT6W",
     name: "Premium",
     price: 19.99,
-    credits: 350,
+    credits: 400,
   },
 } as const;
 
