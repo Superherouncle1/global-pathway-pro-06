@@ -89,6 +89,8 @@ export const WELCOME: Msg = {
 };
 
 export const SUGGESTIONS = [
+  { label: "🚢 Semester at Sea", message: "Tell me about Semester at Sea — how does it work, what countries do you visit, how much does it cost, and what financial aid is available?" },
+  { label: "🇬🇧 Global Talent Visa", message: "Tell me about the UK Global Talent Visa — who is eligible, how do you apply, what are the endorsing bodies, and how does it compare to other UK visas?" },
   { label: "🎓 Top Scholarships", message: "What are the top scholarships available for international students?" },
   { label: "🌍 Best Destinations", message: "What are the best countries to study abroad in 2026?" },
   { label: "📋 Visa Guide", message: "Can you walk me through the student visa process?" },
