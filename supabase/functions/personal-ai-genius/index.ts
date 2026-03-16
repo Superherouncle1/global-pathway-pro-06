@@ -204,6 +204,73 @@ Always provide current, verified visa information for the user's target countrie
 - Work rights: 48 hours/fortnight during studies
 - Post-study work visa options
 
+## UK GLOBAL TALENT VISA — DEEP KNOWLEDGE
+The Global Talent Visa is a prestigious UK immigration route for exceptionally talented or promising individuals in specific fields. It is NOT a student visa — it is an endorsement-based work/residency visa that can lead to settlement.
+
+### Overview
+- **What it is**: A visa for leaders and emerging leaders in academia/research, arts & culture, digital technology, or fashion. It allows living and working in the UK without a job offer.
+- **Duration**: Up to 5 years, extendable, and leads to Indefinite Leave to Remain (ILR/settlement) in as few as 3 years.
+- **No job offer required**: Holders can work for any employer, be self-employed, freelance, or start a business.
+- **Website**: gov.uk/global-talent
+- **Cost**: £716 application fee + Immigration Health Surcharge (IHS) of £1,035/year
+
+### Endorsing Bodies (by field)
+- **Academia & Research**: UK Research and Innovation (UKRI) — ukri.org
+- **Arts & Culture**: Arts Council England — artscouncil.org.uk
+- **Digital Technology**: Tech Nation (now part of Companies House / Founders Forum pathway)
+- **Fashion**: British Fashion Council — britishfashioncouncil.co.uk
+
+### Two Routes
+1. **Exceptional Talent (Leader)**: Recognised as a leading talent in their field. Can apply for ILR after 3 years.
+2. **Exceptional Promise (Emerging Leader)**: Recognised as having potential to be a leading talent. Can apply for ILR after 5 years (or 3 if meet accelerated criteria).
+
+### Eligibility Criteria (varies by endorsing body, but generally):
+- Evidence of significant contributions to the field (publications, patents, media coverage, awards, speaking engagements)
+- Letters of recommendation from established experts
+- For Digital Technology: evidence of innovation, product impact, recognition in tech community
+- For Academia: published research, peer recognition, grants
+- PhD holders from eligible UK institutions may qualify for a fast-track endorsement
+
+### Application Process
+1. **Stage 1 — Endorsement**: Apply to the relevant endorsing body with evidence portfolio. Processing time: ~8 weeks.
+2. **Stage 2 — Visa Application**: Once endorsed, apply for the visa itself via gov.uk. Processing time: ~3 weeks (standard), ~5 working days (priority).
+3. Total process: ~3-4 months from start to visa in hand.
+
+### Key Benefits
+- No need for employer sponsorship — total freedom to work, freelance, consult
+- Switch employers without visa implications
+- Bring dependents (partner + children under 18)
+- Path to permanent residency (ILR) and British citizenship
+- No minimum salary requirement
+- Count time on other UK visas toward ILR in some cases
+
+### Who Should Consider Global Talent Visa
+- PhD students/graduates in STEM, social sciences, humanities, or arts
+- Tech founders, engineers, product managers with demonstrable impact
+- Researchers with published work and peer recognition
+- Artists, musicians, performers with international recognition
+- Graduates of top UK universities who have produced exceptional work
+- Professionals transitioning from Tier 2/Skilled Worker who want more flexibility
+
+### How It Compares to Other UK Visas
+- **vs. Skilled Worker Visa**: No employer sponsorship needed, more flexibility, but requires endorsement
+- **vs. Graduate Route**: Global Talent has no time limit and leads to settlement faster
+- **vs. Innovator Founder**: Global Talent is broader (not just business founders)
+- **vs. High Potential Individual (HPI)**: HPI is only 2 years, no settlement path; Global Talent is long-term
+
+### Common Misconceptions
+- "It's only for famous people" → FALSE. Emerging talent route is for promising individuals early in career
+- "You need a PhD" → FALSE. Alternative evidence of exceptional ability is accepted
+- "It's only for tech" → FALSE. Covers academia, arts, fashion, and digital technology
+- "You need to already be in the UK" → FALSE. Can apply from anywhere in the world
+
+### Tips for Strong Applications
+- Gather 3+ strong recommendation letters from recognised figures in the field
+- Document all media coverage, awards, conference presentations, and patents
+- Show evidence of commercial success or real-world impact of work
+- For tech: demonstrate products/services used at scale, open-source contributions, or revenue impact
+- Apply early — endorsement slots may have capacity limits
+
 ## INTERVIEW COACHING — ADMISSIONS INTERVIEWS
 
 ### University Admissions Interview Preparation
