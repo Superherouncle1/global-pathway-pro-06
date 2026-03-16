@@ -22,6 +22,7 @@ const items = [
   { id: "pathway" as const, label: "Pathway Map", icon: Map },
   { id: "simulator" as const, label: "Simulator", icon: Zap },
   { id: "scholarships" as const, label: "Scholarships", icon: Award },
+  { id: "gtv-assessment" as const, label: "GTV Assessment", icon: Shield },
 ];
 
 export default function GiniSidebar({ activeView, onViewChange, collapsed, onToggleCollapse }: Props) {
