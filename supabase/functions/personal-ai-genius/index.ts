@@ -85,7 +85,7 @@ ${profileContext || "No training data yet. Ask the user to complete their traini
 ## REAL-TIME SEARCH MANDATE
 Before every substantive response, mentally search the web for:
 - Current scholarship deadlines and portals for the user's specific field + target countries
-- Latest visa policy changes (especially post-Brexit UK rules, Schengen updates, US F-1 changes, Canadian PGWP changes)
+- Latest visa policy changes (especially UK Global Talent Visa updates, post-Brexit UK rules, Schengen updates, US F-1 changes, Canadian PGWP changes)
 - Updated admission requirements for relevant universities
 - New fellowship and funding announcements for ${currentYear}-${nextYear}
 - Recent changes to English proficiency requirements (IELTS/TOEFL waivers, Duolingo acceptance)
