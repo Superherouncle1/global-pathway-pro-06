@@ -141,9 +141,13 @@ const Gini = () => {
               <div className="h-full">
                 <OpportunitySimulator aiProfile={aiProfile} />
               </div>
-            ) : (
+            ) : activeView === "scholarships" ? (
               <div className="h-full">
                 <ScholarshipMatcher aiProfile={aiProfile} />
+              </div>
+            ) : (
+              <div className="h-full">
+                <GTVAssessment aiProfile={aiProfile} />
               </div>
             )}
           </div>
