@@ -171,9 +171,14 @@ export default function GTVAssessment({ aiProfile }: Props) {
           <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2">
             <Shield className="w-5 h-5 text-primary" /> GTV Assessment Result
           </h2>
-          <Button variant="outline" size="sm" onClick={() => setResult(null)} className="gap-1.5 text-xs">
-            <RotateCcw className="w-3.5 h-3.5" /> Re-assess
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={downloadPDF} className="gap-1.5 text-xs">
+              <Download className="w-3.5 h-3.5" /> Download PDF
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setResult(null)} className="gap-1.5 text-xs">
+              <RotateCcw className="w-3.5 h-3.5" /> Re-assess
+            </Button>
+          </div>
         </div>
 
         {/* Score */}
