@@ -1,4 +1,4 @@
-import { MessageSquare, Map, Zap, Award, ChevronLeft, ChevronRight, Coins, Infinity, Plus } from "lucide-react";
+import { MessageSquare, Map, Zap, Award, Shield, ChevronLeft, ChevronRight, Coins, Infinity, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
