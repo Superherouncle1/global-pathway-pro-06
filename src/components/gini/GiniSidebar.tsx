@@ -8,7 +8,7 @@ import { useAdmin } from "@/hooks/use-admin";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
-export type GiniView = "chat" | "pathway" | "simulator" | "scholarships";
+export type GiniView = "chat" | "pathway" | "simulator" | "scholarships" | "gtv-assessment";
 
 interface Props {
   activeView: GiniView;
