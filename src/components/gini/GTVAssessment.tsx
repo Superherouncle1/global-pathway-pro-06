@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, CheckCircle2, XCircle, AlertTriangle, Loader2, ArrowRight, RotateCcw } from "lucide-react";
+import { Shield, CheckCircle2, XCircle, AlertTriangle, Loader2, ArrowRight, RotateCcw, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { type AIProfile } from "@/components/yourspace/AITrainingWizard";
 import { useToast } from "@/hooks/use-toast";
+import jsPDF from "jspdf";
 
 interface Props {
   aiProfile: AIProfile | null;
