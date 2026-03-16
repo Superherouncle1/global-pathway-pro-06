@@ -116,6 +116,16 @@ const Gini = () => {
             >
               🏆 Scholarships
             </button>
+            <button
+              onClick={() => setActiveView("gtv-assessment")}
+              className={`flex-1 py-3 text-xs font-semibold text-center transition-colors ${
+                activeView === "gtv-assessment"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground"
+              }`}
+            >
+              🛡️ GTV
+            </button>
           </div>
 
           <div className="flex-1 overflow-hidden">
