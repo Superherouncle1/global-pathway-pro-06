@@ -1,4 +1,4 @@
-import { MessageSquare, Map, Zap, Award, ChevronLeft, ChevronRight, Coins, Infinity, Plus } from "lucide-react";
+import { MessageSquare, Map, Zap, Award, Shield, ChevronLeft, ChevronRight, Coins, Infinity, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { useAdmin } from "@/hooks/use-admin";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
-export type GiniView = "chat" | "pathway" | "simulator" | "scholarships";
+export type GiniView = "chat" | "pathway" | "simulator" | "scholarships" | "gtv-assessment";
 
 interface Props {
   activeView: GiniView;
@@ -22,6 +22,7 @@ const items = [
   { id: "pathway" as const, label: "Pathway Map", icon: Map },
   { id: "simulator" as const, label: "Simulator", icon: Zap },
   { id: "scholarships" as const, label: "Scholarships", icon: Award },
+  { id: "gtv-assessment" as const, label: "GTV Assessment", icon: Shield },
 ];
 
 export default function GiniSidebar({ activeView, onViewChange, collapsed, onToggleCollapse }: Props) {

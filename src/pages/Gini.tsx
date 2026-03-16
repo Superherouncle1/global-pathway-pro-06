@@ -6,6 +6,7 @@ import GiniSidebar, { type GiniView } from "@/components/gini/GiniSidebar";
 import PathwayMap from "@/components/gini/PathwayMap";
 import OpportunitySimulator from "@/components/gini/OpportunitySimulator";
 import ScholarshipMatcher from "@/components/gini/ScholarshipMatcher";
+import GTVAssessment from "@/components/gini/GTVAssessment";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -115,6 +116,16 @@ const Gini = () => {
             >
               🏆 Scholarships
             </button>
+            <button
+              onClick={() => setActiveView("gtv-assessment")}
+              className={`flex-1 py-3 text-xs font-semibold text-center transition-colors ${
+                activeView === "gtv-assessment"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground"
+              }`}
+            >
+              🛡️ GTV
+            </button>
           </div>
 
           <div className="flex-1 overflow-hidden">
@@ -130,9 +141,13 @@ const Gini = () => {
               <div className="h-full">
                 <OpportunitySimulator aiProfile={aiProfile} />
               </div>
-            ) : (
+            ) : activeView === "scholarships" ? (
               <div className="h-full">
                 <ScholarshipMatcher aiProfile={aiProfile} />
+              </div>
+            ) : (
+              <div className="h-full">
+                <GTVAssessment aiProfile={aiProfile} />
               </div>
             )}
           </div>
@@ -166,9 +181,13 @@ const Gini = () => {
             <div className="h-full">
               <OpportunitySimulator aiProfile={aiProfile} />
             </div>
-          ) : (
+          ) : activeView === "scholarships" ? (
             <div className="h-full">
               <ScholarshipMatcher aiProfile={aiProfile} />
+            </div>
+          ) : (
+            <div className="h-full">
+              <GTVAssessment aiProfile={aiProfile} />
             </div>
           )}
         </main>
