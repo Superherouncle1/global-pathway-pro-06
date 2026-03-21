@@ -49,7 +49,7 @@ export const useReferral = () => {
   }, [fetchOrCreateCode]);
 
   const getReferralUrl = useCallback(() => {
-    const base = "https://global-pathway-pro-06.lovable.app";
+    const base = window.location.origin;
     if (!referralCode) return base;
     return `${base}/auth?ref=${referralCode}`;
   }, [referralCode]);
