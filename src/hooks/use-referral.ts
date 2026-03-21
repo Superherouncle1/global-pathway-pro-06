@@ -49,8 +49,9 @@ export const useReferral = () => {
   }, [fetchOrCreateCode]);
 
   const getReferralUrl = useCallback(() => {
-    if (!referralCode) return window.location.origin;
-    return `${window.location.origin}/auth?ref=${referralCode}`;
+    const base = "https://global-pathway-pro-06.lovable.app";
+    if (!referralCode) return base;
+    return `${base}/auth?ref=${referralCode}`;
   }, [referralCode]);
 
   return { referralCode, referralCount, loading, getReferralUrl, refresh: fetchOrCreateCode };
