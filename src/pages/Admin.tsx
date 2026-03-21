@@ -216,6 +216,7 @@ const Admin = () => {
     { key: "members" as const, label: "User Management", icon: Users, count: members.length },
     { key: "chat" as const, label: "Chat Moderation", icon: MessagesSquare, count: chatMessages.length },
     { key: "activity" as const, label: "Activity Log", icon: ClipboardList, count: activityLog.length },
+    { key: "referrals" as const, label: "Referrals", icon: Share2, count: referralStats.reduce((s, r) => s + r.signup_count, 0) },
     { key: "stats" as const, label: "Stats", icon: BarChart3 },
   ];
 
