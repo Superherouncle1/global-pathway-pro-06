@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Users, MessageSquare, BarChart3, Trash2, Shield,
-  Ban, CheckCircle, MessagesSquare, Crown, UserX, ClipboardList, Star,
+  Ban, CheckCircle, MessagesSquare, Crown, UserX, ClipboardList, Star, Share2,
 } from "lucide-react";
 import ActivityLog from "@/components/admin/ActivityLog";
 import { supabase } from "@/integrations/supabase/client";
