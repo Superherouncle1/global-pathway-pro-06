@@ -54,7 +54,14 @@ interface ActivityEntry {
   target_profile?: { name: string | null; email: string | null } | null;
 }
 
-type TabKey = "messages" | "members" | "chat" | "stats" | "activity";
+type TabKey = "messages" | "members" | "chat" | "stats" | "activity" | "referrals";
+
+interface ReferralStat {
+  referrer_id: string;
+  referrer_name: string | null;
+  referrer_email: string | null;
+  signup_count: number;
+}
 
 const Admin = () => {
   const { isAdmin, isSuperAdmin, loading: adminLoading } = useAdmin();
