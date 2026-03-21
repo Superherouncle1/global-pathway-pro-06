@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Globe, Heart } from "lucide-react";
+import { Globe, Heart, Share2 } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -39,11 +39,37 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs opacity-50">© {new Date().getFullYear()} Horizn by Global Study Hub. All rights reserved.</p>
-          <p className="text-xs opacity-50 flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 text-accent" /> for students worldwide
-          </p>
+        {/* Share CTA */}
+        <div className="mt-10 pt-6 border-t border-primary-foreground/10 flex flex-col items-center gap-4">
+          <button
+            onClick={async () => {
+              if (navigator.share) {
+                try {
+                  await navigator.share({
+                    title: "Horizn — Study Abroad Companion",
+                    text: "Check out Horizn — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
+                    url: window.location.origin,
+                  });
+                } catch {
+                  navigator.clipboard.writeText(window.location.origin);
+                }
+              } else {
+                navigator.clipboard.writeText(window.location.origin);
+              }
+            }}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+            style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1a1a" }}
+          >
+            <Share2 className="w-4 h-4" />
+            Share Horizn with a Friend
+          </button>
+
+          <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs opacity-50">© {new Date().getFullYear()} Horizn by Global Study Hub. All rights reserved.</p>
+            <p className="text-xs opacity-50 flex items-center gap-1">
+              Made with <Heart className="w-3 h-3 text-accent" /> for students worldwide
+            </p>
+          </div>
         </div>
       </div>
     </footer>
