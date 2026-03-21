@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Globe, Heart } from "lucide-react";
+import { Globe, Heart, Share2 } from "lucide-react";
 
 const Footer = () => {
   return (
