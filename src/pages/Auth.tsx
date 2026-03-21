@@ -44,6 +44,14 @@ const Auth = () => {
         if (error) {
           setError(error.message);
         } else {
+          // Record referral after signup — we need to wait for auth state to get user id
+          // The auth listener in AuthContext will set the user; we use a one-time listener here
+          const { data: { subscription: sub } } = (await import("@/integrations/supabase/client")).supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === "SIGNED_IN" && session?.user) {
+              await recordReferral(session.user.id);
+              sub.unsubscribe();
+            }
+          });
           navigate("/");
         }
       }
