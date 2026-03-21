@@ -10,7 +10,7 @@ const Footer = () => {
   const { getReferralUrl, referralCount } = useReferral();
 
   const handleShare = async () => {
-    const url = user ? getReferralUrl() : "https://global-pathway-pro-06.lovable.app";
+    const url = user ? getReferralUrl() : window.location.origin;
     if (navigator.share) {
       try {
         await navigator.share({
