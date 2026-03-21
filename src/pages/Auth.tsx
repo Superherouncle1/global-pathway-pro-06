@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Globe, Mail, Lock, User, ArrowRight, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { captureReferralCode, recordReferral } from "@/hooks/use-referral";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
