@@ -461,6 +461,56 @@ const Admin = () => {
                 <ActivityLog entries={activityLog} />
               )}
 
+              {/* Referrals */}
+              {activeTab === "referrals" && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-card rounded-xl border border-border p-5 text-center">
+                      <Share2 className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <p className="font-display text-2xl font-bold text-foreground">{referralStats.reduce((s, r) => s + r.signup_count, 0)}</p>
+                      <p className="text-xs text-muted-foreground">Total Referral Signups</p>
+                    </div>
+                    <div className="bg-card rounded-xl border border-border p-5 text-center">
+                      <Users className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <p className="font-display text-2xl font-bold text-foreground">{referralStats.length}</p>
+                      <p className="text-xs text-muted-foreground">Active Referrers</p>
+                    </div>
+                    <div className="bg-card rounded-xl border border-border p-5 text-center">
+                      <Star className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <p className="font-display text-2xl font-bold text-foreground">
+                        {referralStats.filter((r) => r.signup_count >= 5).length}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Rewarded (5+ referrals)</p>
+                    </div>
+                  </div>
+
+                  <h3 className="font-display font-semibold text-foreground">Referral Leaderboard</h3>
+                  {referralStats.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No referrals yet.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {referralStats.map((stat, i) => (
+                        <div key={stat.referrer_id} className="flex items-center justify-between bg-card border border-border rounded-xl p-4">
+                          <div className="flex items-center gap-3">
+                            <span className="font-display font-bold text-muted-foreground text-sm w-6">#{i + 1}</span>
+                            <div>
+                              <p className="font-medium text-foreground text-sm">{stat.referrer_name || "Unknown"}</p>
+                              <p className="text-xs text-muted-foreground">{stat.referrer_email}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-display font-bold text-foreground">{stat.signup_count}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {Math.floor(stat.signup_count / 5) * 20} credits earned
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              )}
+
               {/* Platform Stats */}
               {activeTab === "stats" && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
