@@ -76,6 +76,7 @@ const Admin = () => {
   const [activityLog, setActivityLog] = useState<ActivityEntry[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [referralStats, setReferralStats] = useState<ReferralStat[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth");
