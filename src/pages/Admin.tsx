@@ -88,12 +88,13 @@ const Admin = () => {
 
     const fetchData = async () => {
       setLoadingData(true);
-      const [subsRes, membersRes, chatRes, rolesRes, logRes] = await Promise.all([
+      const [subsRes, membersRes, chatRes, rolesRes, logRes, referralsRes] = await Promise.all([
         supabase.from("contact_submissions").select("*").order("created_at", { ascending: false }),
         supabase.from("profiles").select("*").order("created_at", { ascending: false }),
         supabase.from("chat_messages").select("*, profiles(name, email)").order("created_at", { ascending: false }).limit(100),
         supabase.from("user_roles").select("user_id, role"),
         supabase.from("admin_activity_log").select("*").order("created_at", { ascending: false }).limit(200),
+        supabase.from("referral_signups").select("*").order("created_at", { ascending: false }),
       ]);
 
       if (subsRes.data) setSubmissions(subsRes.data);
