@@ -1,7 +1,32 @@
 import { Link } from "react-router-dom";
 import { Globe, Heart, Share2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Footer = () => {
+  const { toast } = useToast();
+
+  const handleShare = async () => {
+    const url = window.location.origin;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Horizn — Study Abroad Companion",
+          text: "Check out Horizn — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
+          url,
+        });
+        return;
+      } catch {
+        // User cancelled or share failed — fall through to clipboard
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast({ title: "Link copied!", description: "Share it with your friends 🎉" });
+    } catch {
+      toast({ title: "Couldn't copy link", description: "Please copy this URL manually: " + url, variant: "destructive" });
+    }
+  };
+
   return (
     <footer className="bg-foreground text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -42,21 +67,13 @@ const Footer = () => {
         {/* Share CTA */}
         <div className="mt-10 pt-6 border-t border-primary-foreground/10 flex flex-col items-center gap-4">
           <button
-            onClick={async () => {
-              if (navigator.share) {
-                try {
-                  await navigator.share({
-                    title: "Horizn — Study Abroad Companion",
-                    text: "Check out Horizn — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
-                    url: window.location.origin,
-                  });
-                } catch {
-                  navigator.clipboard.writeText(window.location.origin);
-                }
-              } else {
-                navigator.clipboard.writeText(window.location.origin);
-              }
-            }}
+            onClick={handleShare}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+            style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1a1a" }}
+          >
+            <Share2 className="w-4 h-4" />
+            Share Horizn with a Friend
+          </button>
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm shadow-lg transition-all hover:scale-105 hover:shadow-xl"
             style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1a1a" }}
           >
