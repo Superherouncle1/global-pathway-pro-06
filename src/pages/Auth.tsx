@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Globe, Mail, Lock, User, ArrowRight, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { captureReferralCode, recordReferral } from "@/hooks/use-referral";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,7 +14,12 @@ const Auth = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user } = useAuth();
+
+  // Capture referral code from URL on mount
+  useEffect(() => {
+    captureReferralCode();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +44,14 @@ const Auth = () => {
         if (error) {
           setError(error.message);
         } else {
+          // Record referral after signup — we need to wait for auth state to get user id
+          // The auth listener in AuthContext will set the user; we use a one-time listener here
+          const { data: { subscription: sub } } = (await import("@/integrations/supabase/client")).supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === "SIGNED_IN" && session?.user) {
+              await recordReferral(session.user.id);
+              sub.unsubscribe();
+            }
+          });
           navigate("/");
         }
       }

@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
 import { Globe, Heart, Share2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useReferral } from "@/hooks/use-referral";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Footer = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { getReferralUrl, referralCount } = useReferral();
 
   const handleShare = async () => {
-    const url = window.location.origin;
+    const url = user ? getReferralUrl() : window.location.origin;
     if (navigator.share) {
       try {
         await navigator.share({
@@ -74,6 +78,12 @@ const Footer = () => {
             <Share2 className="w-4 h-4" />
             Share Horizn with a Friend
           </button>
+          {user && referralCount > 0 && (
+            <p className="text-xs opacity-60">
+              🎉 {referralCount} friend{referralCount !== 1 ? "s" : ""} joined via your link
+              {referralCount % 5 === 0 ? " — you earned 20 bonus credits!" : ` — ${5 - (referralCount % 5)} more to earn 20 credits!`}
+            </p>
+          )}
 
           <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs opacity-50">© {new Date().getFullYear()} Horizn by Global Study Hub. All rights reserved.</p>

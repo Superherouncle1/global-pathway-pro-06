@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Users, MessageSquare, BarChart3, Trash2, Shield,
-  Ban, CheckCircle, MessagesSquare, Crown, UserX, ClipboardList, Star,
+  Ban, CheckCircle, MessagesSquare, Crown, UserX, ClipboardList, Star, Share2,
 } from "lucide-react";
 import ActivityLog from "@/components/admin/ActivityLog";
 import { supabase } from "@/integrations/supabase/client";
@@ -54,7 +54,14 @@ interface ActivityEntry {
   target_profile?: { name: string | null; email: string | null } | null;
 }
 
-type TabKey = "messages" | "members" | "chat" | "stats" | "activity";
+type TabKey = "messages" | "members" | "chat" | "stats" | "activity" | "referrals";
+
+interface ReferralStat {
+  referrer_id: string;
+  referrer_name: string | null;
+  referrer_email: string | null;
+  signup_count: number;
+}
 
 const Admin = () => {
   const { isAdmin, isSuperAdmin, loading: adminLoading } = useAdmin();
@@ -69,6 +76,7 @@ const Admin = () => {
   const [activityLog, setActivityLog] = useState<ActivityEntry[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [referralStats, setReferralStats] = useState<ReferralStat[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth");
@@ -80,12 +88,13 @@ const Admin = () => {
 
     const fetchData = async () => {
       setLoadingData(true);
-      const [subsRes, membersRes, chatRes, rolesRes, logRes] = await Promise.all([
+      const [subsRes, membersRes, chatRes, rolesRes, logRes, referralsRes] = await Promise.all([
         supabase.from("contact_submissions").select("*").order("created_at", { ascending: false }),
         supabase.from("profiles").select("*").order("created_at", { ascending: false }),
         supabase.from("chat_messages").select("*, profiles(name, email)").order("created_at", { ascending: false }).limit(100),
         supabase.from("user_roles").select("user_id, role"),
         supabase.from("admin_activity_log").select("*").order("created_at", { ascending: false }).limit(200),
+        supabase.from("referral_signups").select("*").order("created_at", { ascending: false }),
       ]);
 
       if (subsRes.data) setSubmissions(subsRes.data);
@@ -102,6 +111,21 @@ const Admin = () => {
           target_profile: entry.target_user_id ? profileMap.get(entry.target_user_id) || null : null,
         }));
         setActivityLog(enriched);
+      }
+      // Build referral stats
+      if (referralsRes.data && membersRes.data) {
+        const profileMap = new Map((membersRes.data || []).map((p: Profile) => [p.id, p]));
+        const countMap = new Map<string, number>();
+        referralsRes.data.forEach((r: any) => {
+          countMap.set(r.referrer_id, (countMap.get(r.referrer_id) || 0) + 1);
+        });
+        const stats: ReferralStat[] = Array.from(countMap.entries())
+          .map(([referrer_id, signup_count]) => {
+            const p = profileMap.get(referrer_id);
+            return { referrer_id, signup_count, referrer_name: p?.name ?? null, referrer_email: p?.email ?? null };
+          })
+          .sort((a, b) => b.signup_count - a.signup_count);
+        setReferralStats(stats);
       }
       setLoadingData(false);
     };
@@ -192,6 +216,7 @@ const Admin = () => {
     { key: "members" as const, label: "User Management", icon: Users, count: members.length },
     { key: "chat" as const, label: "Chat Moderation", icon: MessagesSquare, count: chatMessages.length },
     { key: "activity" as const, label: "Activity Log", icon: ClipboardList, count: activityLog.length },
+    { key: "referrals" as const, label: "Referrals", icon: Share2, count: referralStats.reduce((s, r) => s + r.signup_count, 0) },
     { key: "stats" as const, label: "Stats", icon: BarChart3 },
   ];
 
@@ -434,6 +459,56 @@ const Admin = () => {
               {/* Activity Log */}
               {activeTab === "activity" && (
                 <ActivityLog entries={activityLog} />
+              )}
+
+              {/* Referrals */}
+              {activeTab === "referrals" && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-card rounded-xl border border-border p-5 text-center">
+                      <Share2 className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <p className="font-display text-2xl font-bold text-foreground">{referralStats.reduce((s, r) => s + r.signup_count, 0)}</p>
+                      <p className="text-xs text-muted-foreground">Total Referral Signups</p>
+                    </div>
+                    <div className="bg-card rounded-xl border border-border p-5 text-center">
+                      <Users className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <p className="font-display text-2xl font-bold text-foreground">{referralStats.length}</p>
+                      <p className="text-xs text-muted-foreground">Active Referrers</p>
+                    </div>
+                    <div className="bg-card rounded-xl border border-border p-5 text-center">
+                      <Star className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <p className="font-display text-2xl font-bold text-foreground">
+                        {referralStats.filter((r) => r.signup_count >= 5).length}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Rewarded (5+ referrals)</p>
+                    </div>
+                  </div>
+
+                  <h3 className="font-display font-semibold text-foreground">Referral Leaderboard</h3>
+                  {referralStats.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No referrals yet.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {referralStats.map((stat, i) => (
+                        <div key={stat.referrer_id} className="flex items-center justify-between bg-card border border-border rounded-xl p-4">
+                          <div className="flex items-center gap-3">
+                            <span className="font-display font-bold text-muted-foreground text-sm w-6">#{i + 1}</span>
+                            <div>
+                              <p className="font-medium text-foreground text-sm">{stat.referrer_name || "Unknown"}</p>
+                              <p className="text-xs text-muted-foreground">{stat.referrer_email}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-display font-bold text-foreground">{stat.signup_count}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {Math.floor(stat.signup_count / 5) * 20} credits earned
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
               )}
 
               {/* Platform Stats */}
