@@ -112,6 +112,21 @@ const Admin = () => {
         }));
         setActivityLog(enriched);
       }
+      // Build referral stats
+      if (referralsRes.data && membersRes.data) {
+        const profileMap = new Map((membersRes.data || []).map((p: Profile) => [p.id, p]));
+        const countMap = new Map<string, number>();
+        referralsRes.data.forEach((r: any) => {
+          countMap.set(r.referrer_id, (countMap.get(r.referrer_id) || 0) + 1);
+        });
+        const stats: ReferralStat[] = Array.from(countMap.entries())
+          .map(([referrer_id, signup_count]) => {
+            const p = profileMap.get(referrer_id);
+            return { referrer_id, signup_count, referrer_name: p?.name ?? null, referrer_email: p?.email ?? null };
+          })
+          .sort((a, b) => b.signup_count - a.signup_count);
+        setReferralStats(stats);
+      }
       setLoadingData(false);
     };
 
