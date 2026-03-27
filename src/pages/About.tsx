@@ -330,7 +330,7 @@ const About = () => {
                 <Share2 className="w-8 h-8 mb-4 opacity-80" />
                 <h3 className="font-display text-xl font-semibold mb-2">Share with Friends</h3>
                 <p className="text-sm opacity-80 mb-5 leading-relaxed">
-                  Know someone planning to study abroad? Share Horizn and help them start their journey right.
+                  Know someone planning to study abroad? Share GlobalGenie and help them start their journey right.
                 </p>
                 <button
                   onClick={handleShare}
