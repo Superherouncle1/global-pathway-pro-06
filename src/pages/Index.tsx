@@ -72,7 +72,7 @@ const Index = () => {
                 Live it.
               </h1>
               <p className="text-base text-muted-foreground mx-auto mb-8 leading-snug">
-                Horizn gives you everything you need to study abroad —
+                GlobalGenie gives you everything you need to study abroad —
                 <br className="hidden md:inline" /> expert guides, a global community, and personalized support
                 <br className="hidden md:inline" /> to turn your education dream into reality.
               </p>

@@ -86,7 +86,7 @@ const Footer = () => {
           )}
 
           <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs opacity-50">© {new Date().getFullYear()} Horizn by Global Study Hub. All rights reserved.</p>
+            <p className="text-xs opacity-50">© {new Date().getFullYear()} GlobalGenie by Global Study Hub. All rights reserved.</p>
             <p className="text-xs opacity-50 flex items-center gap-1">
               Made with <Heart className="w-3 h-3 text-accent" /> for students worldwide
             </p>
