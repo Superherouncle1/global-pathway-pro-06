@@ -76,7 +76,7 @@ const Footer = () => {
             style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1a1a" }}
           >
             <Share2 className="w-4 h-4" />
-            Share Horizn with a Friend
+            Share GlobalGenie with a Friend
           </button>
           {user && referralCount > 0 && (
             <p className="text-xs opacity-60">
