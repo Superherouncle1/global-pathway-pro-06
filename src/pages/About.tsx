@@ -302,7 +302,7 @@ const About = () => {
               </div>
               <div className="text-sm text-muted-foreground leading-relaxed space-y-4">
                 <p>
-                  <strong className="text-foreground">Terms of Use:</strong> By using Horizn, you agree to use the platform responsibly and respectfully. All content provided is for educational and informational purposes. Users must be at least 16 years old. You agree not to misuse the platform, share harmful content, or violate the rights of other users.
+                  <strong className="text-foreground">Terms of Use:</strong> By using GlobalGenie, you agree to use the platform responsibly and respectfully. All content provided is for educational and informational purposes. Users must be at least 16 years old. You agree not to misuse the platform, share harmful content, or violate the rights of other users.
                 </p>
                 <p>
                   <strong className="text-foreground">Privacy Policy:</strong> We take your privacy seriously. Personal information you provide (name, email, contact number) is used solely to personalize your experience. We do not sell your data to third parties. Community interactions are visible to other users. We use standard security measures to protect your information.
