@@ -68,7 +68,7 @@ export const captureReferralCode = () => {
 
 /** After signup, record the referral */
 export const recordReferral = async (newUserId: string) => {
-  const code = sessionStorage.getItem("horizn_ref");
+  const code = sessionStorage.getItem("globalgenie_ref");
   if (!code) return;
 
   // Look up referrer
