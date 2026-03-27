@@ -13,7 +13,7 @@ const sections = [
     content: [
       {
         subtitle: "Account Information",
-        text: "When you create a Horizn account, we collect your name, email address, and password. You may optionally provide your phone number, country, field of study, bio, and profile photo.",
+        text: "When you create a GlobalGenie account, we collect your name, email address, and password. You may optionally provide your phone number, country, field of study, bio, and profile photo.",
       },
       {
         subtitle: "AI Training Data",
@@ -53,7 +53,7 @@ const sections = [
     content: [
       {
         subtitle: "Informational Purpose",
-        text: "All study abroad guidance, resources, training modules, and AI-generated advice provided through Horizn are for informational and educational purposes only. They do not constitute legal, immigration, financial, or professional advice.",
+        text: "All study abroad guidance, resources, training modules, and AI-generated advice provided through GlobalGenie are for informational and educational purposes only. They do not constitute legal, immigration, financial, or professional advice.",
       },
       {
         subtitle: "External Links",
@@ -111,7 +111,7 @@ const sections = [
       },
       {
         subtitle: "Children's Privacy",
-        text: "Horizn is intended for users aged 16 and older. We do not knowingly collect personal information from children under 16.",
+        text: "GlobalGenie is intended for users aged 16 and older. We do not knowingly collect personal information from children under 16.",
       },
       {
         subtitle: "Contact Us",
@@ -119,7 +119,7 @@ const sections = [
       },
       {
         subtitle: "Changes to This Policy",
-        text: "We may update this Privacy Policy from time to time. We will notify users of significant changes through the platform. Continued use of Horizn after changes constitutes acceptance of the updated policy.",
+        text: "We may update this Privacy Policy from time to time. We will notify users of significant changes through the platform. Continued use of GlobalGenie after changes constitutes acceptance of the updated policy.",
       },
     ],
   },
@@ -158,7 +158,7 @@ const Privacy = () => {
             className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-card mb-8"
           >
             <p className="text-sm text-muted-foreground leading-relaxed">
-              At <strong className="text-foreground">Horizn</strong> (operated by Global Study Hub), we are committed to protecting your privacy and being transparent about how we handle your data. This policy explains what information we collect, how we use it — including our AI features — and your rights regarding your personal data.
+              At <strong className="text-foreground">GlobalGenie</strong> (operated by Global Study Hub), we are committed to protecting your privacy and being transparent about how we handle your data. This policy explains what information we collect, how we use it — including our AI features — and your rights regarding your personal data.
             </p>
           </motion.div>
 
