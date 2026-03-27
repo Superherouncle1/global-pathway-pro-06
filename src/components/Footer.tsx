@@ -14,8 +14,8 @@ const Footer = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Horizn — Study Abroad Companion",
-          text: "Check out Horizn — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
+          title: "GlobalGenie — Study Abroad Companion",
+          text: "Check out GlobalGenie — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
           url,
         });
         return;
@@ -40,7 +40,7 @@ const Footer = () => {
               <div className="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center">
                 <Globe className="w-4 h-4 text-primary-foreground" />
               </div>
-              <span className="font-display text-lg font-bold">Horizn</span>
+              <span className="font-display text-lg font-bold">GlobalGenie</span>
             </div>
             <p className="text-sm opacity-70 max-w-sm">
               Empowering students to achieve their study abroad dreams with expert guidance, resources, and a global community.
@@ -76,7 +76,7 @@ const Footer = () => {
             style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#1a1a1a" }}
           >
             <Share2 className="w-4 h-4" />
-            Share Horizn with a Friend
+            Share GlobalGenie with a Friend
           </button>
           {user && referralCount > 0 && (
             <p className="text-xs opacity-60">
@@ -86,7 +86,7 @@ const Footer = () => {
           )}
 
           <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs opacity-50">© {new Date().getFullYear()} Horizn by Global Study Hub. All rights reserved.</p>
+            <p className="text-xs opacity-50">© {new Date().getFullYear()} GlobalGenie by Global Study Hub. All rights reserved.</p>
             <p className="text-xs opacity-50 flex items-center gap-1">
               Made with <Heart className="w-3 h-3 text-accent" /> for students worldwide
             </p>
