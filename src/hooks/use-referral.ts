@@ -85,5 +85,5 @@ export const recordReferral = async (newUserId: string) => {
     referred_user_id: newUserId,
   });
 
-  sessionStorage.removeItem("horizn_ref");
+  sessionStorage.removeItem("globalgenie_ref");
 };

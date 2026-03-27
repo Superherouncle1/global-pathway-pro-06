@@ -219,7 +219,7 @@ const Index = () => {
                 Ready to Start Your Journey?
               </h2>
               <p className="text-primary-foreground/80 max-w-lg mx-auto mb-8">
-                Join thousands of students worldwide who are using Horizn to navigate their study abroad experience.
+                Join thousands of students worldwide who are using GlobalGenie to navigate their study abroad experience.
               </p>
               <Link
                 to="/resources"

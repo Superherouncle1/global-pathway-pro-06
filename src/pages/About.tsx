@@ -336,7 +336,7 @@ const About = () => {
                   onClick={handleShare}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card text-foreground font-semibold text-sm hover:bg-card/90 transition-colors"
                 >
-                  Share Horizn
+                  Share GlobalGenie
                   <Share2 className="w-4 h-4" />
                 </button>
 

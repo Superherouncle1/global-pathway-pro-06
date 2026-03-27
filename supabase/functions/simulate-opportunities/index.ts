@@ -30,7 +30,7 @@ serve(async (req) => {
     if (aiProfile.biggest_challenges) profileLines.push(`Challenges: ${aiProfile.biggest_challenges}`);
     if (aiProfile.additional_context) profileLines.push(`Additional: ${aiProfile.additional_context}`);
 
-    const systemPrompt = `You are Horizn's Global Opportunity Simulator — an expert education futurist. Given a student's profile, generate 3 distinct global education scenarios that show different possible futures.
+    const systemPrompt = `You are GlobalGenie's Global Opportunity Simulator — an expert education futurist. Given a student's profile, generate 3 distinct global education scenarios that show different possible futures.
 
 Each scenario should feel like a different life path the student could take. Be specific with REAL programs, REAL institutions, REAL scholarships, and REAL career outcomes. Make each scenario feel dramatically different so the student can compare truly distinct futures.
 
