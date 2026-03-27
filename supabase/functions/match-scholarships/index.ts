@@ -38,7 +38,7 @@ serve(async (req) => {
       if (filters.fieldOfStudy) filterInstructions += `\nFilter by field: ${filters.fieldOfStudy}`;
     }
 
-    const systemPrompt = `You are Horizn's Scholarship Matcher — an expert in global scholarships, grants, fellowships, and financial aid for international education.
+    const systemPrompt = `You are GlobalGenie's Scholarship Matcher — an expert in global scholarships, grants, fellowships, and financial aid for international education.
 
 Given a student's profile${filterInstructions ? " and their filter preferences" : ""}, find the BEST matching real scholarships and funding opportunities. 
 

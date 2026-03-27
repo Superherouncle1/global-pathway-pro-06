@@ -62,13 +62,13 @@ export const captureReferralCode = () => {
   const params = new URLSearchParams(window.location.search);
   const ref = params.get("ref");
   if (ref) {
-    sessionStorage.setItem("horizn_ref", ref);
+    sessionStorage.setItem("globalgenie_ref", ref);
   }
 };
 
 /** After signup, record the referral */
 export const recordReferral = async (newUserId: string) => {
-  const code = sessionStorage.getItem("horizn_ref");
+  const code = sessionStorage.getItem("globalgenie_ref");
   if (!code) return;
 
   // Look up referrer
@@ -85,5 +85,5 @@ export const recordReferral = async (newUserId: string) => {
     referred_user_id: newUserId,
   });
 
-  sessionStorage.removeItem("horizn_ref");
+  sessionStorage.removeItem("globalgenie_ref");
 };

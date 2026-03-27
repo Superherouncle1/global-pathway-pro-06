@@ -163,8 +163,8 @@ const About = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Horizn — Study Abroad Companion",
-          text: "Check out Horizn — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
+          title: "GlobalGenie — Study Abroad Companion",
+          text: "Check out GlobalGenie — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
           url: window.location.origin,
         });
       } catch {
@@ -204,7 +204,7 @@ const About = () => {
               {
                 icon: Info,
                 title: "Who We Are",
-                text: "Global Study Hub is a team of experienced education professionals and former students. We've walked the path you're on — and we built Horizn to make your journey smoother, faster, and more affordable.",
+                text: "Global Study Hub is a team of experienced education professionals and former students. We've walked the path you're on — and we built GlobalGenie to make your journey smoother, faster, and more affordable.",
                 gradient: "gradient-hero",
               },
               {
@@ -302,13 +302,13 @@ const About = () => {
               </div>
               <div className="text-sm text-muted-foreground leading-relaxed space-y-4">
                 <p>
-                  <strong className="text-foreground">Terms of Use:</strong> By using Horizn, you agree to use the platform responsibly and respectfully. All content provided is for educational and informational purposes. Users must be at least 16 years old. You agree not to misuse the platform, share harmful content, or violate the rights of other users.
+                  <strong className="text-foreground">Terms of Use:</strong> By using GlobalGenie, you agree to use the platform responsibly and respectfully. All content provided is for educational and informational purposes. Users must be at least 16 years old. You agree not to misuse the platform, share harmful content, or violate the rights of other users.
                 </p>
                 <p>
                   <strong className="text-foreground">Privacy Policy:</strong> We take your privacy seriously. Personal information you provide (name, email, contact number) is used solely to personalize your experience. We do not sell your data to third parties. Community interactions are visible to other users. We use standard security measures to protect your information.
                 </p>
                 <p>
-                  <strong className="text-foreground">Content Disclaimer:</strong> The study abroad guidance provided through Horizn and Global Study Hub is informational. Visa, immigration, and academic requirements change frequently — always verify with official sources and consult qualified professionals for your specific situation.
+                  <strong className="text-foreground">Content Disclaimer:</strong> The study abroad guidance provided through GlobalGenie and Global Study Hub is informational. Visa, immigration, and academic requirements change frequently — always verify with official sources and consult qualified professionals for your specific situation.
                 </p>
               </div>
             </motion.div>
@@ -330,13 +330,13 @@ const About = () => {
                 <Share2 className="w-8 h-8 mb-4 opacity-80" />
                 <h3 className="font-display text-xl font-semibold mb-2">Share with Friends</h3>
                 <p className="text-sm opacity-80 mb-5 leading-relaxed">
-                  Know someone planning to study abroad? Share Horizn and help them start their journey right.
+                  Know someone planning to study abroad? Share GlobalGenie and help them start their journey right.
                 </p>
                 <button
                   onClick={handleShare}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card text-foreground font-semibold text-sm hover:bg-card/90 transition-colors"
                 >
-                  Share Horizn
+                  Share GlobalGenie
                   <Share2 className="w-4 h-4" />
                 </button>
 

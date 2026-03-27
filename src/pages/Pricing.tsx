@@ -133,7 +133,7 @@ const Pricing = () => {
               Choose Your <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Plan</span>
             </h1>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Unlock the full power of Horizn with a plan that fits your study abroad journey.
+              Unlock the full power of GlobalGenie with a plan that fits your study abroad journey.
             </p>
             {subscription.subscribed && currentTier && (
               <div className="mt-4 flex items-center justify-center gap-3">

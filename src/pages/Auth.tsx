@@ -82,7 +82,7 @@ const Auth = () => {
             <Globe className="w-7 h-7 text-primary-foreground" />
           </div>
           <h1 className="font-display text-2xl font-bold text-foreground">
-            {isLogin ? "Welcome back" : "Join Horizn"}
+            {isLogin ? "Welcome back" : "Join GlobalGenie"}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
             {isLogin
