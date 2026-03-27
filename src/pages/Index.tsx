@@ -58,7 +58,7 @@ const Index = () => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="font-display text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent mb-4 tracking-tight"
               >
-                Horizn
+                GlobalGenie
               </motion.h2>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
                 <Sparkles className="w-4 h-4" />
