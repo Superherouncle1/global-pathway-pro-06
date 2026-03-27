@@ -308,7 +308,7 @@ const About = () => {
                   <strong className="text-foreground">Privacy Policy:</strong> We take your privacy seriously. Personal information you provide (name, email, contact number) is used solely to personalize your experience. We do not sell your data to third parties. Community interactions are visible to other users. We use standard security measures to protect your information.
                 </p>
                 <p>
-                  <strong className="text-foreground">Content Disclaimer:</strong> The study abroad guidance provided through Horizn and Global Study Hub is informational. Visa, immigration, and academic requirements change frequently — always verify with official sources and consult qualified professionals for your specific situation.
+                  <strong className="text-foreground">Content Disclaimer:</strong> The study abroad guidance provided through GlobalGenie and Global Study Hub is informational. Visa, immigration, and academic requirements change frequently — always verify with official sources and consult qualified professionals for your specific situation.
                 </p>
               </div>
             </motion.div>
