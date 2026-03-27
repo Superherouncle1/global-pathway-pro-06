@@ -14,8 +14,8 @@ const Footer = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Horizn — Study Abroad Companion",
-          text: "Check out Horizn — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
+          title: "GlobalGenie — Study Abroad Companion",
+          text: "Check out GlobalGenie — your all-in-one guide to studying abroad! Free modules, global community, and expert support.",
           url,
         });
         return;
