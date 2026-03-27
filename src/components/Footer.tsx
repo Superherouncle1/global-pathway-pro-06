@@ -40,7 +40,7 @@ const Footer = () => {
               <div className="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center">
                 <Globe className="w-4 h-4 text-primary-foreground" />
               </div>
-              <span className="font-display text-lg font-bold">Horizn</span>
+              <span className="font-display text-lg font-bold">GlobalGenie</span>
             </div>
             <p className="text-sm opacity-70 max-w-sm">
               Empowering students to achieve their study abroad dreams with expert guidance, resources, and a global community.
