@@ -204,7 +204,7 @@ const About = () => {
               {
                 icon: Info,
                 title: "Who We Are",
-                text: "Global Study Hub is a team of experienced education professionals and former students. We've walked the path you're on — and we built Horizn to make your journey smoother, faster, and more affordable.",
+                text: "Global Study Hub is a team of experienced education professionals and former students. We've walked the path you're on — and we built GlobalGenie to make your journey smoother, faster, and more affordable.",
                 gradient: "gradient-hero",
               },
               {
