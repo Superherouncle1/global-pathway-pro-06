@@ -62,7 +62,7 @@ export const captureReferralCode = () => {
   const params = new URLSearchParams(window.location.search);
   const ref = params.get("ref");
   if (ref) {
-    sessionStorage.setItem("horizn_ref", ref);
+    sessionStorage.setItem("globalgenie_ref", ref);
   }
 };
 
