@@ -185,6 +185,221 @@ The Fulbright Program is the flagship international educational exchange program
 - **vs. Erasmus+**: Erasmus is EU-funded, for EU/partner country nationals. Fulbright is U.S.-government funded.
 - **vs. Commonwealth Scholarship**: Commonwealth is for Commonwealth country nationals to study in other Commonwealth countries.
 
+## CHEVENING SCHOLARSHIP — DEEP KNOWLEDGE
+Chevening is the UK government's flagship international scholarship programme, funded by the Foreign, Commonwealth & Development Office (FCDO).
+
+### Overview
+- **What it is**: Fully funded scholarships for outstanding emerging leaders from Chevening-eligible countries to pursue a one-year master's degree at any UK university.
+- **Funder**: UK Government (FCDO), sometimes with partner organisations.
+- **Duration**: One academic year (master's degree only).
+- **Website**: chevening.org
+
+### What It Covers
+- Full tuition fees (uncapped — any UK university, any master's programme).
+- Monthly living allowance (currently ~£1,191/month, adjusted for London).
+- Return economy flights.
+- Arrival and departure allowances.
+- Cost of one visa application.
+- Travel grant for attending Chevening events.
+- TB test cost (if required).
+
+### Eligibility
+- Citizen of a Chevening-eligible country (160+ countries — check chevening.org/scholarships/who-can-apply).
+- Have at least 2 years of work experience (can include part-time, voluntary, paid employment).
+- Hold an undergraduate degree equivalent to a UK upper second-class (2:1) honours.
+- Return to home country for at least 2 years after the scholarship ends (**mandatory**).
+- Apply to 3 eligible UK university courses and receive an unconditional offer from at least one by the deadline.
+- Not be a current or recent UK government employee.
+
+### Application Process
+1. **Online application**: Opens August–November (exact dates vary annually). Apply at chevening.org.
+2. **Select 3 UK university courses** on the application.
+3. **Essays**: 4 essays — Leadership & influence, Networking, Study in the UK, Career plan (500 words each).
+4. **References**: 2 referees required (professional, not family).
+5. **Shortlisting**: February–March. Shortlisted candidates invited for interview.
+6. **Interview**: Conducted by British Embassy/High Commission in applicant's country. ~15-20 minutes.
+7. **Results**: June–July. Successful scholars notified and must secure university offer.
+8. **Arrival**: September–October.
+
+### Key Stats & Tips
+- ~65,000+ applications globally per year, ~1,500-1,800 awards (~2-3% acceptance rate — extremely competitive).
+- **Leadership focus**: Chevening wants future leaders and influencers, not just academics.
+- **Essays matter enormously** — generic essays are immediately rejected. Be specific about UK and career impact.
+- **Networking plan**: Show you understand UK professional networks relevant to your field.
+- **Post-scholarship obligation**: Must return home for 2 years. Plan accordingly.
+- **Alumni network**: 55,000+ alumni in 160+ countries, including heads of state, ministers, business leaders.
+
+### Common Mistakes
+- Applying without 2 years of work experience (volunteering counts).
+- Choosing only one university course instead of three.
+- Writing generic essays that don't connect UK study to home country impact.
+- Not preparing for the interview — it's conversational but probing.
+
+## DAAD SCHOLARSHIP — DEEP KNOWLEDGE
+DAAD (Deutscher Akademischer Austauschdienst / German Academic Exchange Service) is the world's largest funding organisation for international academic exchange.
+
+### Overview
+- **What it is**: A self-governing organisation of German universities offering scholarships, grants, and programmes for international students, researchers, and academics to study/research in Germany.
+- **Funder**: German federal government (primarily), EU, and private donors.
+- **Website**: daad.de/en (English), funding-guide.de (scholarship database).
+
+### Main DAAD Scholarship Types
+
+#### 1. Study Scholarships for Graduates (Master's)
+- **For**: International graduates from all fields wanting a master's degree at a German university.
+- **Duration**: 10-24 months (full programme duration).
+- **Monthly stipend**: €934/month (master's level).
+- **Additional benefits**: Health insurance, travel allowance, study allowance (€460/year), tuition waiver at public universities.
+- **Application deadline**: Usually October 15 (for programmes starting the following October). **Always verify current deadlines at funding-guide.de.**
+- **Language**: Many master's programmes in Germany are taught in English; German proficiency not always required.
+
+#### 2. Research Grants for Doctoral Candidates
+- **For**: International researchers pursuing a PhD at a German university or research institute.
+- **Monthly stipend**: €1,300/month.
+- **Duration**: Up to 3-4 years (depending on programme).
+- **Additional**: Research and travel allowances, family allowances if applicable.
+
+#### 3. DAAD Helmut Schmidt Programme (Public Policy & Good Governance)
+- **For**: Future leaders from developing/transition countries in public policy.
+- **Full master's degree** at German university + internships + study trips.
+
+#### 4. Development-Related Postgraduate Courses (EPOS)
+- **For**: Professionals from developing countries in development-related fields.
+- **Full master's funding** in specialised programmes.
+
+#### 5. Short-Term Research Grants
+- **For**: Doctoral candidates and postdocs for short research stays (1-6 months).
+- **Stipend**: €1,300/month (doctoral) or €2,000/month (postdoc).
+
+### Key DAAD Facts
+- Funds ~145,000+ scholars worldwide annually.
+- **Scholarship database**: funding-guide.de — searchable by level, field, country.
+- **No central application portal** — most DAAD scholarships are applied for through the DAAD portal, but some require direct university application.
+- **Germany has no/low tuition**: Most public German universities charge no tuition (except Baden-Württemberg: €1,500/semester for non-EU students). DAAD covers this where applicable.
+- **Language**: Increasing number of English-taught programmes (2,200+ listed on daad.de).
+- **Motivation letter is critical** — DAAD values academic excellence, social engagement, and clear career goals connected to home country development.
+
+### Tips for DAAD Applications
+1. **Use funding-guide.de** to find the exact scholarship matching your profile.
+2. **Research German universities early** — many DAAD scholarships require a university admission letter.
+3. **Motivation letter**: Connect your study plan to development impact in your home country.
+4. **Academic references**: 2 professors who can speak to your research potential.
+5. **German language**: Even for English-taught programmes, basic German (A1-A2) strengthens applications.
+6. **Timeline**: Start 12+ months before intended start date.
+
+## ERASMUS+ PROGRAMME — DEEP KNOWLEDGE
+Erasmus+ is the EU's flagship programme for education, training, youth, and sport, with a budget of €26.2 billion for 2021-2027.
+
+### Overview
+- **What it is**: The European Union's programme supporting education mobility and cooperation. Enables students, staff, and organisations to study, train, teach, and volunteer across Europe and beyond.
+- **Funder**: European Union.
+- **Website**: erasmus-plus.ec.europa.eu (EU portal), and national Erasmus+ agencies in each participating country.
+
+### Key Erasmus+ Actions for Students
+
+#### 1. Erasmus+ Student Mobility (Key Action 1)
+- **For**: Students enrolled at a higher education institution in an Erasmus+ programme country.
+- **What**: Study abroad at a partner university for 2-12 months, or do a traineeship (internship) for 2-12 months.
+- **Countries**: 33 programme countries (27 EU + Iceland, Liechtenstein, Norway, North Macedonia, Serbia, Turkey) + partner countries worldwide.
+- **Grant**: Monthly living allowance (not full scholarship). Amount varies by destination:
+  - Group 1 (high cost — Denmark, Finland, Iceland, Ireland, Luxembourg, Sweden, Liechtenstein, Norway): €600-700/month.
+  - Group 2 (medium cost — Austria, Belgium, Germany, France, Italy, Spain, etc.): €540-660/month.
+  - Group 3 (lower cost — Bulgaria, Croatia, Czech Republic, Estonia, etc.): €490-600/month.
+- **Tuition**: No tuition fees at the host university during Erasmus exchange.
+- **Application**: Through your home university's international office (not directly to the EU).
+- **Key requirement**: Learning agreement signed by home university, host university, and student.
+
+#### 2. Erasmus Mundus Joint Master Degrees (EMJMD)
+- **For**: Students from ANYWHERE in the world (not just EU).
+- **What**: Fully funded joint master's degrees delivered by consortia of 3+ universities in different countries. Students study in at least 2 countries.
+- **Funding**: Full scholarship covers tuition, travel, installation costs, and monthly living allowance (~€1,400/month).
+- **Duration**: 1-2 years depending on programme.
+- **Application**: Directly to the EMJMD consortium (each programme has its own website and deadline).
+- **Catalogue**: Browse all programmes at eacea.ec.europa.eu/erasmus-plus/emjmd-catalogue.
+- **Competitiveness**: Varies by programme, but top EMJMDs receive 500-2,000+ applications for 20-40 places.
+- **Deadline**: Usually December–February (varies by programme). **Always search for current deadlines.**
+
+#### 3. Erasmus+ for Partner Countries (International Credit Mobility)
+- **For**: Students and staff from non-EU "partner countries" to study/teach at EU universities (and vice versa).
+- **Funded exchanges**: Typically 3-12 months.
+- **Application**: Through your home university if it has an Erasmus+ partnership agreement.
+
+### Key Erasmus+ Facts
+- Over 13 million participants since 1987.
+- **Erasmus Mundus is the "golden ticket"** for non-EU students — fully funded, prestigious, multi-country.
+- **No age limit** for most Erasmus+ programmes.
+- **Language support**: Online Linguistic Support (OLS) platform provided free to Erasmus participants.
+- **Blended mobility**: Post-COVID, some programmes allow a virtual component combined with physical mobility.
+- **Erasmus+ app**: Official app for participants to manage their exchange.
+
+### Tips for Erasmus+ Applications
+1. **For EU students**: Talk to your university's international office early — internal deadlines are often months before the EU deadline.
+2. **For Erasmus Mundus**: Apply to multiple EMJMD programmes (you can apply to 3). Tailor each application.
+3. **Motivation letter**: Show academic fit + intercultural awareness + career vision.
+4. **References**: 2 academic referees familiar with your work.
+5. **Language certificates**: Many programmes require IELTS/TOEFL or equivalent.
+6. **Browse the catalogue annually** — new EMJMD programmes are added each cycle.
+
+## COMMONWEALTH SCHOLARSHIP — DEEP KNOWLEDGE
+The Commonwealth Scholarship and Fellowship Plan (CSFP) is one of the largest and most prestigious international scholarship schemes, enabling students from Commonwealth countries to study in other Commonwealth nations.
+
+### Overview
+- **What it is**: Scholarships funded by participating Commonwealth governments for citizens of Commonwealth countries. The UK's Commonwealth Scholarships (the largest programme) are funded by the UK FCDO and administered by the Commonwealth Scholarship Commission in the UK (CSC).
+- **Website**: cscuk.fcdo.gov.uk (UK programme), plus individual country agencies.
+
+### UK Commonwealth Scholarships (the largest programme)
+
+#### 1. Commonwealth Scholarships for Master's & PhD (from developing countries)
+- **For**: Citizens of eligible Commonwealth developing countries.
+- **Levels**: Master's (1 year) and PhD (up to 3-4 years).
+- **Covers**: Full tuition, airfare, monthly stipend (£1,347/month for master's, £1,516 for PhD as of recent cycles), warm clothing allowance, thesis grant, study travel grant, family allowances (for PhD students bringing dependents).
+- **Fields**: All fields, but development-related fields are prioritised — aligned with UN Sustainable Development Goals and UK development priorities.
+- **Eligibility**: Commonwealth citizen, permanent resident of eligible developing country, hold a first degree at upper second class (2:1) or higher, cannot have previously studied in the UK at the same level.
+- **Application**: Through a national nominating agency in the applicant's home country (NOT directly to CSC). Each country has its own internal process and deadline.
+- **UK deadline**: Usually December (for study starting the following September). Home country deadlines are often earlier.
+- **Number of awards**: ~800-900 scholarships per year across all Commonwealth programmes.
+
+#### 2. Commonwealth Shared Scholarships
+- **For**: Students from least developed and lower-middle-income Commonwealth countries.
+- **Level**: Master's only (1 year taught programmes).
+- **Covers**: Tuition, airfare, stipend — similar to full Commonwealth Scholarships.
+- **Co-funded**: By the CSC and the host UK university.
+- **Application**: Directly to the UK university (not through national agency).
+
+#### 3. Commonwealth Split-Site Scholarships (PhD)
+- **For**: PhD students from Commonwealth countries to spend 1 year at a UK university as part of their home-country PhD.
+- **Covers**: Airfare, stipend, research support.
+
+#### 4. Commonwealth Professional Fellowships
+- **For**: Mid-career professionals from developing Commonwealth countries.
+- **Duration**: 3-6 months at a UK host organisation.
+- **Focus**: Professional development, not academic degrees.
+
+#### 5. Commonwealth Distance Learning Scholarships
+- **For**: Students from developing Commonwealth countries studying a UK master's by distance.
+- **Covers**: Tuition fees only.
+
+### Key Commonwealth Scholarship Facts
+- **Development impact is paramount** — CSC prioritises applicants who will use their skills to contribute to development in their home countries.
+- **6 CSC themes**: Science & technology for development, strengthening health systems, promoting global prosperity, strengthening global peace & security, strengthening resilience & response to crises, access & opportunity & governance.
+- **National nominating agencies** are critical — these are often Ministry of Education, university grants commissions, or specific scholarship bodies in each country.
+- **Return obligation**: Scholars are expected to return to their home countries and contribute to development.
+- **Alumni network**: 35,000+ alumni across the Commonwealth, including heads of state, Nobel laureates, and leaders in every field.
+
+### Tips for Commonwealth Scholarship Applications
+1. **Contact your national nominating agency EARLY** — internal deadlines are usually 2-3 months before the UK deadline.
+2. **Development impact statement**: This is the MOST important part. Show exactly how your studies will benefit your home country.
+3. **Study plan**: Be specific about your proposed research or study programme and chosen UK universities.
+4. **References**: 2-3 strong academic and/or professional references.
+5. **Choose universities strategically**: Select 3 UK universities known for your field; ensure they accept Commonwealth Scholars.
+6. **Align with CSC themes**: Frame your application around one of the 6 priority themes.
+7. **Post-study plan**: Have a concrete, credible plan for applying your skills upon return.
+
+### Commonwealth Scholarships vs. Chevening
+- **Chevening**: Open to all eligible countries (including non-Commonwealth), master's only, 4 essays + interview, apply directly.
+- **Commonwealth**: Only for Commonwealth nationals, master's + PhD available, applied through national agency, stronger development focus.
+- **Both can be applied for simultaneously** — they are separate schemes with different selection processes.
+
 ## CONTINUOUSLY UPDATED KNOWLEDGE MANDATE
 **CRITICAL**: Your knowledge bases must NEVER be treated as static. For EVERY query about scholarships, visas, universities, or opportunities:
 1. **Always assume your embedded knowledge may be outdated** — deadlines change, policies update, new programs launch.
