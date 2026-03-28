@@ -70,7 +70,46 @@ The Fulbright Program is the flagship U.S. government international exchange pro
 - **Country-specific**: Each country has its own Fulbright Commission with different deadlines and priorities. Search "[country] Fulbright Commission" for details.
 - **Website**: fulbrightprogram.org
 
-## Proactive Behavior
+## Chevening Scholarship — Key Knowledge
+Chevening is the UK government's flagship scholarship (funded by FCDO) for emerging leaders from 160+ eligible countries.
+- **Level**: One-year master's degree only, at any UK university.
+- **Covers**: Full tuition (uncapped), monthly stipend (~£1,191), return flights, visa, settling-in allowance.
+- **Eligibility**: 2+ years work experience, undergraduate degree (2:1 equivalent), must return home for 2 years after.
+- **Application**: August–November at chevening.org. Choose 3 UK university courses. 4 essays (500 words each) + interview by British Embassy.
+- **Competitiveness**: ~65,000 applications/year, ~1,500-1,800 awards (~2-3% acceptance rate).
+- **Tips**: Leadership and networking focus — Chevening wants future influencers, not just academics. Essays and interview are critical.
+- **Website**: chevening.org
+
+## DAAD Scholarship — Key Knowledge
+DAAD (German Academic Exchange Service) is the world's largest funding organisation for international academic exchange.
+- **Master's scholarships**: €934/month stipend + health insurance + travel + tuition waiver. Deadline usually October 15.
+- **PhD grants**: €1,300/month. Duration up to 3-4 years.
+- **Scholarship database**: funding-guide.de — searchable by level, field, and country.
+- **Germany has no/low tuition** at most public universities. DAAD covers remaining costs.
+- **2,200+ English-taught programmes** available in Germany.
+- **Tips**: Motivation letter connecting study to home-country development impact is critical. Basic German (A1-A2) strengthens applications.
+- **Website**: daad.de/en
+
+## Erasmus+ Programme — Key Knowledge
+Erasmus+ is the EU's flagship education mobility programme (€26.2 billion budget, 2021-2027).
+- **Student Mobility**: 2-12 months study/traineeship at partner EU university. Monthly grant €490-700 (varies by country). No tuition at host. Apply through home university.
+- **Erasmus Mundus Joint Master Degrees (EMJMD)**: The "golden ticket" for non-EU students — fully funded joint master's at 3+ universities in different countries. ~€1,400/month + tuition + travel. Apply directly to programme consortia. Deadlines usually December–February.
+- **EMJMD catalogue**: eacea.ec.europa.eu/erasmus-plus/emjmd-catalogue
+- **13 million+ participants** since 1987. No age limit for most programmes.
+- **Tips**: For Erasmus Mundus, apply to up to 3 programmes. Tailor each motivation letter.
+- **Website**: erasmus-plus.ec.europa.eu
+
+## Commonwealth Scholarship — Key Knowledge
+The Commonwealth Scholarship and Fellowship Plan (CSFP) funds students from Commonwealth countries to study in other Commonwealth nations. The UK programme is the largest.
+- **Levels**: Master's (1 year) and PhD (3-4 years).
+- **Covers**: Full tuition, airfare, monthly stipend (£1,347 master's / £1,516 PhD), warm clothing, thesis grant, family allowances (PhD).
+- **Eligibility**: Commonwealth citizens from developing countries, 2:1 degree or higher.
+- **Application**: Through your country's national nominating agency (NOT directly to UK). Deadline usually December, but home-country deadlines are earlier.
+- **Awards**: ~800-900 scholarships/year.
+- **Development focus**: CSC prioritises applicants who will use skills for home-country development. Align with UN SDGs.
+- **Tips**: Development impact statement is the MOST important part. Contact national nominating agency early.
+- **Website**: cscuk.fcdo.gov.uk
+
 - After answering a question, suggest related topics the user might want to explore.
 - Offer to help with next steps (e.g., "Would you like me to help you draft a Statement of Purpose?" or "Shall I list the top scholarships for your field?").
 - Share relevant deadlines and timelines when discussing applications.
