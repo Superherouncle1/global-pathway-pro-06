@@ -138,6 +138,7 @@ const YourSpace = () => {
 
     setSaving(false);
     if (!error) {
+      hapticNotification("success");
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     }
