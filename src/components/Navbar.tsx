@@ -147,7 +147,7 @@ const Navbar = () => {
                       </Link>
                       <Link
                         to={item.path}
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => { hapticFeedback("light"); setIsOpen(false); }}
                         className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                           location.pathname === item.path
                             ? "bg-primary text-primary-foreground"
