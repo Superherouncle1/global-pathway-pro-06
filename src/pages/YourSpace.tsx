@@ -69,35 +69,51 @@ const YourSpace = () => {
   };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user) return;
+    try {
+      const file = e.target.files?.[0];
+      if (!file || !user) return;
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-    if (!allowedTypes.includes(file.type)) return;
-    if (file.size > 5 * 1024 * 1024) return; // 5MB max
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+      if (!allowedTypes.includes(file.type)) {
+        toast({ title: "Invalid file type", description: "Please upload a JPEG, PNG, WebP, or GIF image.", variant: "destructive" });
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast({ title: "File too large", description: "Please upload an image under 5MB.", variant: "destructive" });
+        return;
+      }
 
-    setUploadingAvatar(true);
-    const fileExt = file.name.split(".").pop();
-    const filePath = `${user.id}/avatar.${fileExt}`;
+      setUploadingAvatar(true);
+      const fileExt = file.name.split(".").pop();
+      const filePath = `${user.id}/avatar.${fileExt}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from("avatars")
-      .upload(filePath, file, { upsert: true });
-
-    if (!uploadError) {
-      const { data: urlData } = supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .getPublicUrl(filePath);
+        .upload(filePath, file, { upsert: true });
 
-      const avatarUrl = `${urlData.publicUrl}?t=${Date.now()}`;
-      await supabase
-        .from("profiles")
-        .update({ avatar_url: avatarUrl })
-        .eq("id", user.id);
+      if (uploadError) {
+        toast({ title: "Upload failed", description: uploadError.message, variant: "destructive" });
+      } else {
+        const { data: urlData } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(filePath);
 
-      setProfile((prev) => ({ ...prev, avatar_url: avatarUrl }));
+        const avatarUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+        await supabase
+          .from("profiles")
+          .update({ avatar_url: avatarUrl })
+          .eq("id", user.id);
+
+        setProfile((prev) => ({ ...prev, avatar_url: avatarUrl }));
+      }
+    } catch (err: any) {
+      console.error("Avatar upload error:", err);
+      toast({ title: "Something went wrong", description: "Could not upload photo. Please try again.", variant: "destructive" });
+    } finally {
+      setUploadingAvatar(false);
+      // Reset the input so the same file can be re-selected
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
-    setUploadingAvatar(false);
   };
 
   const handleSave = async () => {
