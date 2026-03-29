@@ -4,6 +4,7 @@ import { Menu, X, Globe, LogIn, LogOut, User, Shield, Sparkles } from "lucide-re
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAdmin } from "@/hooks/use-admin";
+import { hapticFeedback } from "@/hooks/use-native";
 
 const navItems = [
   { label: "Home", path: "/" },
