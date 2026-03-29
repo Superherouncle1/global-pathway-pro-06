@@ -76,7 +76,7 @@ const Pricing = () => {
       });
       if (error) throw error;
       if (data?.url) {
-        window.open(data.url, "_blank");
+        window.location.href = data.url;
       }
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Failed to start checkout", variant: "destructive" });
@@ -97,7 +97,7 @@ const Pricing = () => {
       });
       if (error) throw error;
       if (data?.url) {
-        window.open(data.url, "_blank");
+        window.location.href = data.url;
       }
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Failed to start checkout", variant: "destructive" });
@@ -111,7 +111,7 @@ const Pricing = () => {
       const { data, error } = await supabase.functions.invoke("customer-portal");
       if (error) throw error;
       if (data?.url) {
-        window.open(data.url, "_blank");
+        window.location.href = data.url;
       }
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Failed to open portal", variant: "destructive" });
