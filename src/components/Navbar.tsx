@@ -178,7 +178,7 @@ const Navbar = () => {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => { hapticFeedback("light"); setIsOpen(false); }}
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                     location.pathname === "/admin"
                       ? "bg-primary text-primary-foreground"
