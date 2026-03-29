@@ -53,10 +53,12 @@ const Pricing = () => {
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
+      hapticNotification("success");
       toast({ title: "Subscription activated!", description: "Your plan is now active. Welcome aboard! 🎉" });
       checkSubscription();
     }
     if (searchParams.get("topup") === "success") {
+      hapticNotification("success");
       const credits = searchParams.get("credits");
       toast({ title: "Credits added!", description: `${credits} credits have been added to your account.` });
     }
