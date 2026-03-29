@@ -4,6 +4,7 @@ import { Menu, X, Globe, LogIn, LogOut, User, Shield, Sparkles } from "lucide-re
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAdmin } from "@/hooks/use-admin";
+import { hapticFeedback } from "@/hooks/use-native";
 
 const navItems = [
   { label: "Home", path: "/" },
@@ -112,7 +113,7 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => { hapticFeedback("light"); setIsOpen(!isOpen); }}
           className="md:hidden p-2 rounded-lg hover:bg-muted text-foreground"
         >
           {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -135,7 +136,7 @@ const Navbar = () => {
                     <React.Fragment key={item.path}>
                       <Link
                         to="/gini"
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => { hapticFeedback("light"); setIsOpen(false); }}
                         className={`px-4 py-3 rounded-lg text-sm font-semibold flex items-center gap-2 ${
                           location.pathname === "/gini"
                             ? "bg-primary text-primary-foreground"
@@ -146,7 +147,7 @@ const Navbar = () => {
                       </Link>
                       <Link
                         to={item.path}
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => { hapticFeedback("light"); setIsOpen(false); }}
                         className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                           location.pathname === item.path
                             ? "bg-primary text-primary-foreground"
@@ -162,7 +163,7 @@ const Navbar = () => {
                   <Link
                     key={item.path}
                     to={item.path}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => { hapticFeedback("light"); setIsOpen(false); }}
                     className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       location.pathname === item.path
                         ? "bg-primary text-primary-foreground"
@@ -177,7 +178,7 @@ const Navbar = () => {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => { hapticFeedback("light"); setIsOpen(false); }}
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                     location.pathname === "/admin"
                       ? "bg-primary text-primary-foreground"

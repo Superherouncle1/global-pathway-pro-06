@@ -5,6 +5,7 @@ import { Check, Sparkles, Zap, Crown, CreditCard, Settings, Loader2 } from "luci
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, PLAN_TIERS, CREDIT_TOPUPS, getTierByProductId } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -52,10 +53,12 @@ const Pricing = () => {
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
+      hapticNotification("success");
       toast({ title: "Subscription activated!", description: "Your plan is now active. Welcome aboard! 🎉" });
       checkSubscription();
     }
     if (searchParams.get("topup") === "success") {
+      hapticNotification("success");
       const credits = searchParams.get("credits");
       toast({ title: "Credits added!", description: `${credits} credits have been added to your account.` });
     }
@@ -69,6 +72,7 @@ const Pricing = () => {
       navigate("/auth");
       return;
     }
+    hapticFeedback("medium");
     setLoadingPlan(planKey);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
