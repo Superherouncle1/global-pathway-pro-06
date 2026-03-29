@@ -113,7 +113,7 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => { hapticFeedback("light"); setIsOpen(!isOpen); }}
           className="md:hidden p-2 rounded-lg hover:bg-muted text-foreground"
         >
           {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
