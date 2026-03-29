@@ -77,7 +77,7 @@ const Index = () => {
                 <br className="hidden md:inline" /> expert guides, a global community, and personalized support
                 <br className="hidden md:inline" /> to turn your education dream into reality.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
                   to="/gini"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl gradient-hero text-primary-foreground font-semibold text-base shadow-soft hover:shadow-hover transition-all hover:scale-[1.02]"
@@ -91,6 +91,12 @@ const Index = () => {
                 >
                   Learn More
                 </Link>
+                <ShareButton
+                  title="GlobalGenie"
+                  text="Check out GlobalGenie — your pocket study abroad genius! 🌍✨"
+                  variant="ghost"
+                  size="sm"
+                />
               </div>
             </motion.div>
 
