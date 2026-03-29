@@ -120,6 +120,7 @@ const YourSpace = () => {
 
   const handleSave = async () => {
     if (!user) return;
+    hapticFeedback("medium");
     setSaving(true);
 
     const { error } = await supabase
