@@ -4,6 +4,7 @@ import { Users, User, Globe, ArrowRight, GraduationCap, Compass, Sparkles, Messa
 import heroImage from "@/assets/hero-image.jpg";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ShareButton from "@/components/ShareButton";
 
 const features = [
   {
