@@ -136,7 +136,7 @@ const Navbar = () => {
                     <React.Fragment key={item.path}>
                       <Link
                         to="/gini"
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => { hapticFeedback("light"); setIsOpen(false); }}
                         className={`px-4 py-3 rounded-lg text-sm font-semibold flex items-center gap-2 ${
                           location.pathname === "/gini"
                             ? "bg-primary text-primary-foreground"
