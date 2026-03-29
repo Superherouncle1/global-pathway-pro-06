@@ -72,6 +72,7 @@ const Pricing = () => {
       navigate("/auth");
       return;
     }
+    hapticFeedback("medium");
     setLoadingPlan(planKey);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
