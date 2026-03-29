@@ -5,6 +5,7 @@ import { Check, Sparkles, Zap, Crown, CreditCard, Settings, Loader2 } from "luci
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, PLAN_TIERS, CREDIT_TOPUPS, getTierByProductId } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
