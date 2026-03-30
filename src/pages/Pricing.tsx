@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth, PLAN_TIERS, CREDIT_TOPUPS, getTierByProductId } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
+import { useIAP, IAP_PRODUCTS } from "@/hooks/use-iap";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -54,6 +55,7 @@ const Pricing = () => {
   const navigate = useNavigate();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [loadingTopup, setLoadingTopup] = useState<string | null>(null);
+  const { isIOS, purchase, purchasing } = useIAP();
 
   const currentTier = getTierByProductId(subscription.productId);
 
@@ -73,21 +75,15 @@ const Pricing = () => {
     }
   }, [searchParams, checkSubscription]);
 
-  const handleSubscribe = async (priceId: string, planKey: string) => {
-    if (!user) {
-      navigate("/auth");
-      return;
-    }
+  // Stripe checkout for web/Android
+  const handleStripeSubscribe = async (priceId: string, planKey: string) => {
+    if (!user) { navigate("/auth"); return; }
     hapticFeedback("medium");
     setLoadingPlan(planKey);
     try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { priceId },
-      });
+      const { data, error } = await supabase.functions.invoke("create-checkout", { body: { priceId } });
       if (error) throw error;
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      if (data?.url) window.location.href = data.url;
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Failed to start checkout", variant: "destructive" });
     } finally {
@@ -95,20 +91,40 @@ const Pricing = () => {
     }
   };
 
-  const handleTopup = async (priceId: string, key: string) => {
-    if (!user) {
-      navigate("/auth");
-      return;
+  // Apple IAP for iOS
+  const handleIAPSubscribe = async (planKey: string) => {
+    if (!user) { navigate("/auth"); return; }
+    hapticFeedback("medium");
+    const iapId = IAP_PRODUCTS.subscriptions[planKey as keyof typeof IAP_PRODUCTS.subscriptions];
+    if (!iapId) return;
+    try {
+      await purchase(iapId);
+      hapticNotification("success");
+      toast({ title: "Subscription activated!", description: "Your plan is now active. Welcome aboard! 🎉" });
+      checkSubscription();
+    } catch (err: any) {
+      if (err?.code !== "USER_CANCELLED") {
+        toast({ title: "Purchase failed", description: err.message || "Could not complete purchase", variant: "destructive" });
+      }
     }
+  };
+
+  const handleSubscribe = (priceId: string, planKey: string) => {
+    if (isIOS) {
+      handleIAPSubscribe(planKey);
+    } else {
+      handleStripeSubscribe(priceId, planKey);
+    }
+  };
+
+  // Stripe top-up for web/Android
+  const handleStripeTopup = async (priceId: string, key: string) => {
+    if (!user) { navigate("/auth"); return; }
     setLoadingTopup(key);
     try {
-      const { data, error } = await supabase.functions.invoke("create-topup", {
-        body: { priceId },
-      });
+      const { data, error } = await supabase.functions.invoke("create-topup", { body: { priceId } });
       if (error) throw error;
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      if (data?.url) window.location.href = data.url;
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Failed to start checkout", variant: "destructive" });
     } finally {
@@ -116,17 +132,47 @@ const Pricing = () => {
     }
   };
 
+  // Apple IAP top-up for iOS
+  const handleIAPTopup = async (key: string) => {
+    if (!user) { navigate("/auth"); return; }
+    const iapId = IAP_PRODUCTS.topups[key as keyof typeof IAP_PRODUCTS.topups];
+    if (!iapId) return;
+    try {
+      await purchase(iapId);
+      hapticNotification("success");
+      toast({ title: "Credits added!", description: "Your credits have been added to your account." });
+    } catch (err: any) {
+      if (err?.code !== "USER_CANCELLED") {
+        toast({ title: "Purchase failed", description: err.message || "Could not complete purchase", variant: "destructive" });
+      }
+    }
+  };
+
+  const handleTopup = (priceId: string, key: string) => {
+    if (isIOS) {
+      handleIAPTopup(key);
+    } else {
+      handleStripeTopup(priceId, key);
+    }
+  };
+
   const handleManageSubscription = async () => {
+    if (isIOS) {
+      // On iOS, direct users to the native subscription management
+      window.location.href = "https://apps.apple.com/account/subscriptions";
+      return;
+    }
     try {
       const { data, error } = await supabase.functions.invoke("customer-portal");
       if (error) throw error;
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      if (data?.url) window.location.href = data.url;
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Failed to open portal", variant: "destructive" });
     }
   };
+
+  const isLoading = (planKey: string) => loadingPlan === planKey || purchasing === IAP_PRODUCTS.subscriptions[planKey as keyof typeof IAP_PRODUCTS.subscriptions];
+  const isTopupLoading = (key: string) => loadingTopup === key || purchasing === IAP_PRODUCTS.topups[key as keyof typeof IAP_PRODUCTS.topups];
 
   return (
     <div className="min-h-screen bg-background">
@@ -211,12 +257,10 @@ const Pricing = () => {
                   <Button
                     className={`w-full ${isProfessional ? "gradient-hero text-primary-foreground hover:opacity-90" : ""}`}
                     variant={isProfessional ? "default" : "outline"}
-                    disabled={isCurrentPlan || !!loadingPlan}
+                    disabled={isCurrentPlan || isLoading(key)}
                     onClick={() => handleSubscribe(tier.price_id, key)}
                   >
-                    {loadingPlan === key ? (
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    ) : null}
+                    {isLoading(key) ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                     {isCurrentPlan ? "Current Plan" : "Get Started"}
                   </Button>
                 </motion.div>
@@ -252,12 +296,10 @@ const Pricing = () => {
                   <Button
                     variant="outline"
                     className="w-full"
-                    disabled={!!loadingTopup || !user}
+                    disabled={isTopupLoading(key) || !user}
                     onClick={() => handleTopup(topup.price_id, key)}
                   >
-                    {loadingTopup === key ? (
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    ) : null}
+                    {isTopupLoading(key) ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                     ${topup.price}
                   </Button>
                 </div>
