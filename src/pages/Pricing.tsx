@@ -11,6 +11,12 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+const planDescriptions: Record<string, string> = {
+  starter: "Essential AI tools for your study abroad journey",
+  professional: "Advanced guidance with priority support & maps",
+  premium: "Full access with simulator & personal onboarding",
+};
+
 const planFeatures: Record<string, string[]> = {
   starter: [
     "50 AI credits/month",
