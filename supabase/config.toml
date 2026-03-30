@@ -32,3 +32,6 @@ verify_jwt = false
 
 [functions.gtv-assessment]
 verify_jwt = false
+
+[functions.verify-apple-receipt]
+verify_jwt = false
