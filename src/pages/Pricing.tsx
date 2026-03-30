@@ -11,6 +11,12 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+const planDescriptions: Record<string, string> = {
+  starter: "Essential AI tools for your study abroad journey",
+  professional: "Advanced guidance with priority support & maps",
+  premium: "Full access with simulator & personal onboarding",
+};
+
 const planFeatures: Record<string, string[]> = {
   starter: [
     "50 AI credits/month",
@@ -186,6 +192,7 @@ const Pricing = () => {
                       <Icon className={`w-6 h-6 ${isProfessional ? "text-primary-foreground" : "text-primary"}`} />
                     </div>
                     <h3 className="font-display text-xl font-bold text-foreground">{tier.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{planDescriptions[key]}</p>
                     <div className="mt-2">
                       <span className="font-display text-4xl font-bold text-foreground">${tier.price}</span>
                       <span className="text-muted-foreground">/month</span>
