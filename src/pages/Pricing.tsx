@@ -314,6 +314,27 @@ const Pricing = () => {
                 to purchase credits or subscribe.
               </p>
             )}
+
+            {isIOS && user && (
+              <div className="text-center mt-6">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={restoring}
+                  onClick={async () => {
+                    try {
+                      await restorePurchases();
+                      toast({ title: "Restore initiated", description: "If you have previous purchases, they will be restored shortly." });
+                    } catch {
+                      toast({ title: "Restore failed", description: "Could not restore purchases. Please try again.", variant: "destructive" });
+                    }
+                  }}
+                >
+                  {restoring ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <RotateCcw className="w-4 h-4 mr-2" />}
+                  Restore Purchases
+                </Button>
+              </div>
+            )}
           </motion.div>
         </div>
       </section>
