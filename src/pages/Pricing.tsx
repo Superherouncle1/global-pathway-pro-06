@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Check, Sparkles, Zap, Crown, CreditCard, Settings, Loader2 } from "lucide-react";
+import { Check, Sparkles, Zap, Crown, CreditCard, Settings, Loader2, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, PLAN_TIERS, CREDIT_TOPUPS, getTierByProductId } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
@@ -55,7 +55,7 @@ const Pricing = () => {
   const navigate = useNavigate();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [loadingTopup, setLoadingTopup] = useState<string | null>(null);
-  const { isIOS, purchase, purchasing } = useIAP();
+  const { isIOS, purchase, purchasing, restoring, restorePurchases } = useIAP();
 
   const currentTier = getTierByProductId(subscription.productId);
 
@@ -313,6 +313,27 @@ const Pricing = () => {
                 </button>{" "}
                 to purchase credits or subscribe.
               </p>
+            )}
+
+            {isIOS && user && (
+              <div className="text-center mt-6">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={restoring}
+                  onClick={async () => {
+                    try {
+                      await restorePurchases();
+                      toast({ title: "Restore initiated", description: "If you have previous purchases, they will be restored shortly." });
+                    } catch {
+                      toast({ title: "Restore failed", description: "Could not restore purchases. Please try again.", variant: "destructive" });
+                    }
+                  }}
+                >
+                  {restoring ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <RotateCcw className="w-4 h-4 mr-2" />}
+                  Restore Purchases
+                </Button>
+              </div>
             )}
           </motion.div>
         </div>

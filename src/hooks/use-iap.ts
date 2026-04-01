@@ -162,5 +162,24 @@ export const useIAP = () => {
     []
   );
 
-  return { isIOS, ready, products, purchasing, purchase };
+  const [restoring, setRestoring] = useState(false);
+
+  const restorePurchases = useCallback(async () => {
+    const store = getStore();
+    if (!store) {
+      throw new Error("Store not available");
+    }
+    setRestoring(true);
+    try {
+      store.refresh();
+    } catch (err) {
+      setRestoring(false);
+      throw err;
+    }
+    // refresh triggers approved/verified callbacks for owned products
+    // give it a few seconds then stop the spinner
+    setTimeout(() => setRestoring(false), 5000);
+  }, []);
+
+  return { isIOS, ready, products, purchasing, purchase, restoring, restorePurchases };
 };
