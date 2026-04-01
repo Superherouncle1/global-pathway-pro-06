@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Check, Sparkles, Zap, Crown, CreditCard, Settings, Loader2 } from "lucide-react";
+import { Check, Sparkles, Zap, Crown, CreditCard, Settings, Loader2, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, PLAN_TIERS, CREDIT_TOPUPS, getTierByProductId } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
