@@ -55,7 +55,7 @@ const Pricing = () => {
   const navigate = useNavigate();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [loadingTopup, setLoadingTopup] = useState<string | null>(null);
-  const { isIOS, purchase, purchasing } = useIAP();
+  const { isIOS, purchase, purchasing, restoring, restorePurchases } = useIAP();
 
   const currentTier = getTierByProductId(subscription.productId);
 
