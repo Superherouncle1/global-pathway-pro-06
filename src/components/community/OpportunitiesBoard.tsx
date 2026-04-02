@@ -60,6 +60,7 @@ const OpportunitiesBoard = () => {
   const [showDirectory, setShowDirectory] = useState(false);
   const [studentProfiles, setStudentProfiles] = useState<Profile[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<SelectedProfile>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
