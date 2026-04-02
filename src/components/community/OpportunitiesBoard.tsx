@@ -40,6 +40,8 @@ interface Profile {
   email: string | null;
 }
 
+type SelectedProfile = Profile | null;
+
 const typeConfig: Record<string, { icon: React.ElementType; label: string; className: string }> = {
   admission: { icon: GraduationCap, label: "Admission", className: "bg-primary/10 text-primary border-primary/20" },
   recruitment: { icon: Briefcase, label: "Recruitment", className: "bg-accent/10 text-accent border-accent/20" },
@@ -58,6 +60,7 @@ const OpportunitiesBoard = () => {
   const [showDirectory, setShowDirectory] = useState(false);
   const [studentProfiles, setStudentProfiles] = useState<Profile[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<SelectedProfile>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
@@ -182,7 +185,11 @@ const OpportunitiesBoard = () => {
             ) : (
               <div className="grid gap-3 mt-4">
                 {studentProfiles.map((p) => (
-                  <div key={p.id} className="flex items-start gap-3 p-4 rounded-xl bg-muted/50 border border-border">
+                  <button
+                    key={p.id}
+                    onClick={() => setSelectedProfile(p)}
+                    className="flex items-start gap-3 p-4 rounded-xl bg-muted/50 border border-border hover:border-primary/40 hover:bg-muted transition-all cursor-pointer text-left w-full"
+                  >
                     <div className="w-10 h-10 rounded-full gradient-hero flex-shrink-0 flex items-center justify-center text-primary-foreground text-xs font-semibold overflow-hidden">
                       {p.avatar_url ? <img src={p.avatar_url} alt="" className="w-full h-full object-cover" /> : getInitials(p.name)}
                     </div>
@@ -195,16 +202,58 @@ const OpportunitiesBoard = () => {
                         {p.field_of_study && (
                           <span className="text-xs text-muted-foreground flex items-center gap-1"><GraduationCap className="w-3 h-3" />{p.field_of_study}</span>
                         )}
-                        {p.email && (
-                          <span className="text-xs text-muted-foreground flex items-center gap-1"><Mail className="w-3 h-3" />{p.email}</span>
-                        )}
                       </div>
                       {p.bio && <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{p.bio}</p>}
                     </div>
-                  </div>
+                    <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-1" />
+                  </button>
                 ))}
                 {studentProfiles.length === 0 && (
                   <p className="text-center text-muted-foreground py-8">No student profiles found.</p>
+                )}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Student Profile Detail Dialog */}
+        <Dialog open={!!selectedProfile} onOpenChange={(open) => { if (!open) setSelectedProfile(null); }}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="font-display">Student Profile</DialogTitle>
+            </DialogHeader>
+            {selectedProfile && (
+              <div className="space-y-4 mt-2">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full gradient-hero flex-shrink-0 flex items-center justify-center text-primary-foreground text-lg font-semibold overflow-hidden">
+                    {selectedProfile.avatar_url ? <img src={selectedProfile.avatar_url} alt="" className="w-full h-full object-cover" /> : getInitials(selectedProfile.name)}
+                  </div>
+                  <div>
+                    <p className="font-display text-lg font-bold text-foreground">{selectedProfile.name || "Anonymous"}</p>
+                    {selectedProfile.country && (
+                      <p className="text-sm text-muted-foreground flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{selectedProfile.country}</p>
+                    )}
+                  </div>
+                </div>
+                {selectedProfile.field_of_study && (
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 border border-border">
+                    <GraduationCap className="w-4 h-4 text-primary" />
+                    <span className="text-sm text-foreground font-medium">{selectedProfile.field_of_study}</span>
+                  </div>
+                )}
+                {selectedProfile.bio && (
+                  <div>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">About</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedProfile.bio}</p>
+                  </div>
+                )}
+                {selectedProfile.email && (
+                  <a
+                    href={`mailto:${selectedProfile.email}`}
+                    className="flex items-center gap-2 w-full justify-center py-2.5 rounded-xl gradient-hero text-primary-foreground text-sm font-medium hover:shadow-soft transition-all"
+                  >
+                    <Mail className="w-4 h-4" /> Contact Student
+                  </a>
                 )}
               </div>
             )}

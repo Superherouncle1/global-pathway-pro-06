@@ -718,50 +718,58 @@ const Resources = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
               <AnimatePresence mode="popLayout">
                 {filteredResources.map((resource) => (
-                  <motion.a
+                  <motion.div
                     key={resource.title}
                     layout
                     initial={{ opacity: 0, scale: 0.97 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    href={resource.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group p-5 bg-card border border-border rounded-xl hover:shadow-hover hover:-translate-y-0.5 transition-all flex flex-col"
                   >
-                    {/* Top row: category pill + badge */}
-                    <div className="flex items-center justify-between mb-3 gap-2">
-                      <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide border ${CATEGORY_COLORS[resource.category]}`}>
-                        {resource.category === "programs" ? "Programme" : resource.category}
-                      </span>
-                      <div className="flex items-center gap-1.5 flex-wrap justify-end">
-                        {resource.badge && (
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${CATEGORY_BADGE_COLORS[resource.category]}`}>
-                            {resource.badge}
-                          </span>
-                        )}
-                        {/* Country flags */}
-                        <span className="text-xs">
-                          {resource.countries
-                            .filter((c) => c !== "all")
-                            .map((c) => COUNTRIES.find((x) => x.key === c)?.flag)
-                            .join("")}
+                    <a
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        // Safari fallback: ensure link opens even if default is blocked
+                        const opened = window.open(resource.url, '_blank', 'noopener,noreferrer');
+                        if (opened) e.preventDefault();
+                      }}
+                      className="group p-5 bg-card border border-border rounded-xl hover:shadow-hover hover:-translate-y-0.5 transition-all flex flex-col h-full block"
+                    >
+                      {/* Top row: category pill + badge */}
+                      <div className="flex items-center justify-between mb-3 gap-2">
+                        <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide border ${CATEGORY_COLORS[resource.category]}`}>
+                          {resource.category === "programs" ? "Programme" : resource.category}
                         </span>
+                        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                          {resource.badge && (
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${CATEGORY_BADGE_COLORS[resource.category]}`}>
+                              {resource.badge}
+                            </span>
+                          )}
+                          {/* Country flags */}
+                          <span className="text-xs">
+                            {resource.countries
+                              .filter((c) => c !== "all")
+                              .map((c) => COUNTRIES.find((x) => x.key === c)?.flag)
+                              .join("")}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Title */}
-                    <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="font-display font-semibold text-foreground text-sm leading-snug flex-1">
-                        {resource.title}
-                      </h3>
-                      <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-0.5" />
-                    </div>
+                      {/* Title */}
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <h3 className="font-display font-semibold text-foreground text-sm leading-snug flex-1">
+                          {resource.title}
+                        </h3>
+                        <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-0.5" />
+                      </div>
 
-                    {/* Desc */}
-                    <p className="text-xs text-muted-foreground leading-relaxed flex-1">{resource.desc}</p>
-                  </motion.a>
+                      {/* Desc */}
+                      <p className="text-xs text-muted-foreground leading-relaxed flex-1">{resource.desc}</p>
+                    </a>
+                  </motion.div>
                 ))}
               </AnimatePresence>
             </div>
