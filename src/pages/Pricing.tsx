@@ -185,6 +185,9 @@ const Pricing = () => {
       <Navbar />
 
       <section className="pt-24 pb-16">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <BackButton />
+        </div>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

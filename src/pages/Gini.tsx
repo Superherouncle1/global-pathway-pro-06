@@ -75,6 +75,7 @@ const Gini = () => {
       <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
         <div className="mt-16 flex-1 flex flex-col">
+          <div className="px-4 pt-2"><BackButton /></div>
           {/* Mobile tab bar */}
           <div className="flex border-b border-border bg-card">
             <button

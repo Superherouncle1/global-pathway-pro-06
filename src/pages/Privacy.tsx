@@ -133,6 +133,7 @@ const Privacy = () => {
 
       <div className="pt-24 pb-20">
         <div className="container mx-auto px-4 max-w-3xl">
+          <BackButton />
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

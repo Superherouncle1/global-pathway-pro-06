@@ -186,6 +186,9 @@ const About = () => {
       <Navbar />
 
       <div className="pt-24 pb-20">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <BackButton />
+        </div>
         <div className="container mx-auto px-4">
           {/* Header */}
           <motion.div
