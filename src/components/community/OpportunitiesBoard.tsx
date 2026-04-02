@@ -40,6 +40,8 @@ interface Profile {
   email: string | null;
 }
 
+type SelectedProfile = Profile | null;
+
 const typeConfig: Record<string, { icon: React.ElementType; label: string; className: string }> = {
   admission: { icon: GraduationCap, label: "Admission", className: "bg-primary/10 text-primary border-primary/20" },
   recruitment: { icon: Briefcase, label: "Recruitment", className: "bg-accent/10 text-accent border-accent/20" },
