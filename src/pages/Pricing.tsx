@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
 import { useIAP, IAP_PRODUCTS } from "@/hooks/use-iap";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
