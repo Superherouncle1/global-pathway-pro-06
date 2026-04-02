@@ -185,7 +185,11 @@ const OpportunitiesBoard = () => {
             ) : (
               <div className="grid gap-3 mt-4">
                 {studentProfiles.map((p) => (
-                  <div key={p.id} className="flex items-start gap-3 p-4 rounded-xl bg-muted/50 border border-border">
+                  <button
+                    key={p.id}
+                    onClick={() => setSelectedProfile(p)}
+                    className="flex items-start gap-3 p-4 rounded-xl bg-muted/50 border border-border hover:border-primary/40 hover:bg-muted transition-all cursor-pointer text-left w-full"
+                  >
                     <div className="w-10 h-10 rounded-full gradient-hero flex-shrink-0 flex items-center justify-center text-primary-foreground text-xs font-semibold overflow-hidden">
                       {p.avatar_url ? <img src={p.avatar_url} alt="" className="w-full h-full object-cover" /> : getInitials(p.name)}
                     </div>
@@ -198,13 +202,11 @@ const OpportunitiesBoard = () => {
                         {p.field_of_study && (
                           <span className="text-xs text-muted-foreground flex items-center gap-1"><GraduationCap className="w-3 h-3" />{p.field_of_study}</span>
                         )}
-                        {p.email && (
-                          <span className="text-xs text-muted-foreground flex items-center gap-1"><Mail className="w-3 h-3" />{p.email}</span>
-                        )}
                       </div>
                       {p.bio && <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{p.bio}</p>}
                     </div>
-                  </div>
+                    <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-1" />
+                  </button>
                 ))}
                 {studentProfiles.length === 0 && (
                   <p className="text-center text-muted-foreground py-8">No student profiles found.</p>
