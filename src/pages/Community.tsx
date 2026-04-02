@@ -6,6 +6,7 @@ import OpportunitiesBoard from "@/components/community/OpportunitiesBoard";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 
 interface Profile {
