@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { isNativeApp } from "@/hooks/use-native";
-import { supabase } from "@/integrations/supabase/client";
 
 // Apple IAP product IDs — must match App Store Connect exactly
 export const IAP_PRODUCTS = {
@@ -55,11 +54,57 @@ const getStore = (): StorePlugin | null => {
   return null;
 };
 
+let pendingStorePromise: Promise<StorePlugin | null> | null = null;
+
+const waitForStore = (timeoutMs = 8000): Promise<StorePlugin | null> => {
+  const existingStore = getStore();
+  if (existingStore) return Promise.resolve(existingStore);
+  if (typeof window === "undefined") return Promise.resolve(null);
+  if (pendingStorePromise) return pendingStorePromise;
+
+  pendingStorePromise = new Promise((resolve) => {
+    const deadline = Date.now() + timeoutMs;
+    let timeoutId: number | null = null;
+
+    const cleanup = () => {
+      if (timeoutId) window.clearTimeout(timeoutId);
+      document.removeEventListener("deviceready", checkForStore);
+      window.removeEventListener("focus", checkForStore);
+      window.removeEventListener("pageshow", checkForStore);
+    };
+
+    const checkForStore = () => {
+      const store = getStore();
+      if (store) {
+        cleanup();
+        resolve(store);
+        return;
+      }
+
+      if (Date.now() >= deadline) {
+        cleanup();
+        resolve(null);
+        return;
+      }
+
+      timeoutId = window.setTimeout(checkForStore, 250);
+    };
+
+    document.addEventListener("deviceready", checkForStore);
+    window.addEventListener("focus", checkForStore);
+    window.addEventListener("pageshow", checkForStore);
+    checkForStore();
+  }).finally(() => {
+    pendingStorePromise = null;
+  });
+
+  return pendingStorePromise;
+};
+
 export const useIsIOSApp = (): boolean => {
   const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
-    // Check if running as a native iOS app via Capacitor
     const native = isNativeApp();
     const iosDevice =
       /iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -75,100 +120,126 @@ export const useIAP = () => {
   const [products, setProducts] = useState<Record<string, IAPProduct>>({});
   const [purchasing, setPurchasing] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const [restoring, setRestoring] = useState(false);
+  const registeredProducts = useRef<Set<string>>(new Set());
+  const boundListeners = useRef<Set<string>>(new Set());
 
-  // Initialize the store and register products
   useEffect(() => {
-    if (!isIOS) return;
-
-    const store = getStore();
-    if (!store) {
-      console.warn("[IAP] Store plugin not available");
+    if (!isIOS) {
+      setReady(false);
       return;
     }
 
-    // Set the server-side receipt validator URL
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    store.validator = `${supabaseUrl}/functions/v1/verify-apple-receipt`;
+    let cancelled = false;
 
-    // Register subscription products
-    Object.values(IAP_PRODUCTS.subscriptions).forEach((id) => {
-      store.register({ id, type: store.PAID_SUBSCRIPTION });
-    });
+    const initializeStore = async () => {
+      setReady(false);
+      const store = await waitForStore();
 
-    // Register consumable (top-up) products
-    Object.values(IAP_PRODUCTS.topups).forEach((id) => {
-      store.register({ id, type: store.CONSUMABLE });
-    });
+      if (!store || cancelled) {
+        if (!cancelled) {
+          console.warn("[IAP] Store plugin not available after waiting for initialization");
+        }
+        return;
+      }
 
-    // Set up listeners for all products
-    const allIds = [
-      ...Object.values(IAP_PRODUCTS.subscriptions),
-      ...Object.values(IAP_PRODUCTS.topups),
-    ];
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      if (supabaseUrl) {
+        store.validator = `${supabaseUrl}/functions/v1/verify-apple-receipt`;
+      }
 
-    allIds.forEach((id) => {
-      store
-        .when(id)
-        .updated((product: IAPProduct) => {
-          setProducts((prev) => ({
-            ...prev,
-            [product.id]: {
-              id: product.id,
-              title: product.title,
-              description: product.description,
-              price: product.price,
-              loaded: true,
-            },
-          }));
-        })
-        .approved(async (product: StoreProduct) => {
-          // Send receipt to our server for verification
-          try {
-            const receipt = await product.verify();
-            receipt.finish();
-          } catch (err) {
-            console.error("[IAP] Verification failed:", err);
-          }
-        })
-        .verified((product: StoreProduct) => {
-          product.finish();
-          setPurchasing(null);
-        })
-        .error((err: any) => {
-          console.error("[IAP] Error for", id, err);
-          setPurchasing(null);
-        });
-    });
+      const productDefinitions = [
+        ...Object.values(IAP_PRODUCTS.subscriptions).map((id) => ({ id, type: store.PAID_SUBSCRIPTION })),
+        ...Object.values(IAP_PRODUCTS.topups).map((id) => ({ id, type: store.CONSUMABLE })),
+      ];
 
-    store.refresh();
-    setReady(true);
+      productDefinitions.forEach(({ id, type }) => {
+        if (registeredProducts.current.has(id)) return;
+        store.register({ id, type });
+        registeredProducts.current.add(id);
+      });
+
+      const allIds = [
+        ...Object.values(IAP_PRODUCTS.subscriptions),
+        ...Object.values(IAP_PRODUCTS.topups),
+      ];
+
+      allIds.forEach((id) => {
+        if (boundListeners.current.has(id)) return;
+
+        store
+          .when(id)
+          .updated((product: IAPProduct) => {
+            setProducts((prev) => ({
+              ...prev,
+              [product.id]: {
+                id: product.id,
+                title: product.title,
+                description: product.description,
+                price: product.price,
+                loaded: true,
+              },
+            }));
+          })
+          .approved(async (product: StoreProduct) => {
+            try {
+              const receipt = await product.verify();
+              receipt.finish();
+            } catch (err) {
+              console.error("[IAP] Verification failed:", err);
+              setPurchasing(null);
+            }
+          })
+          .verified((product: StoreProduct) => {
+            product.finish();
+            setPurchasing(null);
+          })
+          .error((err: any) => {
+            console.error("[IAP] Error for", id, err);
+            setPurchasing(null);
+          });
+
+        boundListeners.current.add(id);
+      });
+
+      try {
+        store.refresh();
+        if (!cancelled) setReady(true);
+      } catch (err) {
+        console.error("[IAP] Failed to refresh store", err);
+        if (!cancelled) setReady(false);
+      }
+    };
+
+    initializeStore();
+
+    return () => {
+      cancelled = true;
+    };
   }, [isIOS]);
 
-  const purchase = useCallback(
-    async (productId: string) => {
-      const store = getStore();
-      if (!store) {
-        throw new Error("Store not available");
-      }
+  const purchase = useCallback(async (productId: string) => {
+    const store = await waitForStore();
+    if (!store) {
+      throw new Error("App Store purchases are still initializing. Please wait a few seconds and try again.");
+    }
 
-      setPurchasing(productId);
-      try {
-        await store.order(productId);
-      } catch (err) {
-        setPurchasing(null);
-        throw err;
-      }
-    },
-    []
-  );
-
-  const [restoring, setRestoring] = useState(false);
+    setPurchasing(productId);
+    try {
+      store.refresh();
+      await store.order(productId);
+    } catch (err) {
+      setPurchasing(null);
+      throw err;
+    }
+  }, []);
 
   const restorePurchases = useCallback(async () => {
-    const store = getStore();
+    const store = await waitForStore();
     if (!store) {
-      throw new Error("Store not available");
+      throw new Error("App Store purchases are still initializing. Please wait a few seconds and try again.");
     }
+
     setRestoring(true);
     try {
       store.refresh();
@@ -176,9 +247,8 @@ export const useIAP = () => {
       setRestoring(false);
       throw err;
     }
-    // refresh triggers approved/verified callbacks for owned products
-    // give it a few seconds then stop the spinner
-    setTimeout(() => setRestoring(false), 5000);
+
+    window.setTimeout(() => setRestoring(false), 5000);
   }, []);
 
   return { isIOS, ready, products, purchasing, purchase, restoring, restorePurchases };

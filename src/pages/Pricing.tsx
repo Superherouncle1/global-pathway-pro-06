@@ -55,7 +55,7 @@ const Pricing = () => {
   const navigate = useNavigate();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [loadingTopup, setLoadingTopup] = useState<string | null>(null);
-  const { isIOS, purchase, purchasing, restoring, restorePurchases } = useIAP();
+  const { isIOS, ready, purchase, purchasing, restoring, restorePurchases } = useIAP();
 
   const currentTier = getTierByProductId(subscription.productId);
 
@@ -75,7 +75,6 @@ const Pricing = () => {
     }
   }, [searchParams, checkSubscription]);
 
-  // Stripe checkout for web/Android
   const handleStripeSubscribe = async (priceId: string, planKey: string) => {
     if (!user) { navigate("/auth"); return; }
     hapticFeedback("medium");
@@ -91,7 +90,6 @@ const Pricing = () => {
     }
   };
 
-  // Apple IAP for iOS
   const handleIAPSubscribe = async (planKey: string) => {
     if (!user) { navigate("/auth"); return; }
     hapticFeedback("medium");
@@ -110,6 +108,11 @@ const Pricing = () => {
   };
 
   const handleSubscribe = (priceId: string, planKey: string) => {
+    if (isIOS && !ready) {
+      toast({ title: "App Store is loading", description: "Please wait a few seconds for products to finish loading.", variant: "destructive" });
+      return;
+    }
+
     if (isIOS) {
       handleIAPSubscribe(planKey);
     } else {
@@ -117,7 +120,6 @@ const Pricing = () => {
     }
   };
 
-  // Stripe top-up for web/Android
   const handleStripeTopup = async (priceId: string, key: string) => {
     if (!user) { navigate("/auth"); return; }
     setLoadingTopup(key);
@@ -132,7 +134,6 @@ const Pricing = () => {
     }
   };
 
-  // Apple IAP top-up for iOS
   const handleIAPTopup = async (key: string) => {
     if (!user) { navigate("/auth"); return; }
     const iapId = IAP_PRODUCTS.topups[key as keyof typeof IAP_PRODUCTS.topups];
@@ -149,6 +150,11 @@ const Pricing = () => {
   };
 
   const handleTopup = (priceId: string, key: string) => {
+    if (isIOS && !ready) {
+      toast({ title: "App Store is loading", description: "Please wait a few seconds for products to finish loading.", variant: "destructive" });
+      return;
+    }
+
     if (isIOS) {
       handleIAPTopup(key);
     } else {
@@ -158,7 +164,6 @@ const Pricing = () => {
 
   const handleManageSubscription = async () => {
     if (isIOS) {
-      // On iOS, direct users to the native subscription management
       window.location.href = "https://apps.apple.com/account/subscriptions";
       return;
     }
@@ -191,6 +196,11 @@ const Pricing = () => {
             <p className="text-muted-foreground max-w-xl mx-auto">
               Unlock the full power of GlobalGenie with a plan that fits your study abroad journey.
             </p>
+            {isIOS && user && !ready && (
+              <p className="text-sm text-muted-foreground mt-4">
+                Loading App Store products…
+              </p>
+            )}
             {subscription.subscribed && currentTier && (
               <div className="mt-4 flex items-center justify-center gap-3">
                 <Badge variant="secondary" className="text-sm px-4 py-1.5">
@@ -203,7 +213,6 @@ const Pricing = () => {
             )}
           </motion.div>
 
-          {/* Subscription Plans */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-20">
             {(Object.entries(PLAN_TIERS) as [string, typeof PLAN_TIERS[keyof typeof PLAN_TIERS]][]).map(([key, tier], i) => {
               const Icon = planIcons[key as keyof typeof planIcons];
@@ -257,18 +266,17 @@ const Pricing = () => {
                   <Button
                     className={`w-full ${isProfessional ? "gradient-hero text-primary-foreground hover:opacity-90" : ""}`}
                     variant={isProfessional ? "default" : "outline"}
-                    disabled={isCurrentPlan || isLoading(key)}
+                    disabled={isCurrentPlan || isLoading(key) || (isIOS && !ready)}
                     onClick={() => handleSubscribe(tier.price_id, key)}
                   >
                     {isLoading(key) ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                    {isCurrentPlan ? "Current Plan" : "Get Started"}
+                    {isIOS && !ready ? "Loading App Store…" : isCurrentPlan ? "Current Plan" : "Get Started"}
                   </Button>
                 </motion.div>
               );
             })}
           </div>
 
-          {/* Credit Top-Ups */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -296,11 +304,11 @@ const Pricing = () => {
                   <Button
                     variant="outline"
                     className="w-full"
-                    disabled={isTopupLoading(key) || !user}
+                    disabled={isTopupLoading(key) || !user || (isIOS && !ready)}
                     onClick={() => handleTopup(topup.price_id, key)}
                   >
                     {isTopupLoading(key) ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                    ${topup.price}
+                    {isIOS && !ready ? "Loading App Store…" : `$${topup.price}`}
                   </Button>
                 </div>
               ))}
@@ -320,7 +328,7 @@ const Pricing = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  disabled={restoring}
+                  disabled={restoring || !ready}
                   onClick={async () => {
                     try {
                       await restorePurchases();
@@ -331,7 +339,7 @@ const Pricing = () => {
                   }}
                 >
                   {restoring ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <RotateCcw className="w-4 h-4 mr-2" />}
-                  Restore Purchases
+                  {ready ? "Restore Purchases" : "Loading App Store…"}
                 </Button>
               </div>
             )}
