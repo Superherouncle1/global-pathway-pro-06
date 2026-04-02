@@ -62,7 +62,7 @@ const waitForStore = (timeoutMs = 8000): Promise<StorePlugin | null> => {
   if (typeof window === "undefined") return Promise.resolve(null);
   if (pendingStorePromise) return pendingStorePromise;
 
-  pendingStorePromise = new Promise((resolve) => {
+  pendingStorePromise = new Promise<StorePlugin | null>((resolve) => {
     const deadline = Date.now() + timeoutMs;
     let timeoutId: number | null = null;
 
