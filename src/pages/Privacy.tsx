@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Shield, Database, BrainCircuit, GraduationCap, Globe, Mail, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import BackButton from "@/components/BackButton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
