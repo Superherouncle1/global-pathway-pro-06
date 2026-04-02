@@ -6,6 +6,7 @@ import {
   ExternalLink, Globe, GraduationCap, Search, Filter
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 
 // ─── Training Modules ───────────────────────────────────────────────────────
