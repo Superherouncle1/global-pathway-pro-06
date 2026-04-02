@@ -7,6 +7,7 @@ import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Load
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 
