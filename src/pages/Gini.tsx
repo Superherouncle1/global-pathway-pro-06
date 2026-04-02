@@ -10,6 +10,7 @@ import GTVAssessment from "@/components/gini/GTVAssessment";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import BackButton from "@/components/BackButton";
 import { supabase } from "@/integrations/supabase/client";
 import { type AIProfile } from "@/components/yourspace/AITrainingWizard";
 import { useIsMobile } from "@/hooks/use-mobile";
