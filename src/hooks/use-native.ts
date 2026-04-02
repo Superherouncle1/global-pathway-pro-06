@@ -1,7 +1,31 @@
 import { useCallback, useEffect, useState } from "react";
 
+type CapacitorPlugins = {
+  Haptics?: {
+    impact: (options: { style: string }) => void;
+    notification: (options: { type: string }) => void;
+  };
+  Share?: {
+    share: (data: { title?: string; text?: string; url?: string }) => Promise<void>;
+  };
+  Camera?: {
+    getPhoto: (options: Record<string, unknown>) => Promise<{
+      webPath?: string;
+      path?: string;
+      format?: string;
+    }>;
+  };
+};
+
+const getCapacitorPlugins = (): CapacitorPlugins | undefined => {
+  if (typeof window === "undefined") return undefined;
+  return (window as any).Capacitor?.Plugins;
+};
+
 // Platform detection
 export const isNativeApp = (): boolean => {
+  if (typeof window === "undefined") return false;
+
   return (
     (window as any).Capacitor !== undefined ||
     document.URL.startsWith("capacitor://") ||
@@ -9,12 +33,53 @@ export const isNativeApp = (): boolean => {
   );
 };
 
+const isCancelledPhoto = (error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error);
+  return /cancel/i.test(message);
+};
+
+export const canTakePhoto = (): boolean => {
+  return !!getCapacitorPlugins()?.Camera?.getPhoto;
+};
+
+export const capturePhotoFile = async (): Promise<File | null> => {
+  const camera = getCapacitorPlugins()?.Camera;
+  if (!camera?.getPhoto) return null;
+
+  try {
+    const photo = await camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: "uri",
+      source: "CAMERA",
+      saveToGallery: false,
+      correctOrientation: true,
+      presentationStyle: "fullscreen",
+    });
+
+    const photoUrl = photo.webPath ?? photo.path;
+    if (!photoUrl) throw new Error("No photo returned from camera");
+
+    const response = await fetch(photoUrl);
+    const blob = await response.blob();
+    const format = (photo.format || blob.type.split("/")[1] || "jpeg").toLowerCase();
+    const extension = format === "jpeg" ? "jpg" : format;
+    const type = blob.type || `image/${format}`;
+
+    return new File([blob], `avatar-${Date.now()}.${extension}`, { type });
+  } catch (error) {
+    if (isCancelledPhoto(error)) return null;
+    throw error;
+  }
+};
+
 // Haptic feedback using Vibration API (works on most mobile browsers and Capacitor)
 export const hapticFeedback = (style: "light" | "medium" | "heavy" = "light") => {
   try {
-    if ((window as any).Capacitor?.Plugins?.Haptics) {
+    const plugins = getCapacitorPlugins();
+    if (plugins?.Haptics) {
       const impactStyle = style === "light" ? "LIGHT" : style === "medium" ? "MEDIUM" : "HEAVY";
-      (window as any).Capacitor.Plugins.Haptics.impact({ style: impactStyle });
+      plugins.Haptics.impact({ style: impactStyle });
     } else if (navigator.vibrate) {
       const duration = style === "light" ? 10 : style === "medium" ? 20 : 40;
       navigator.vibrate(duration);
@@ -26,8 +91,9 @@ export const hapticFeedback = (style: "light" | "medium" | "heavy" = "light") =>
 
 export const hapticNotification = (type: "success" | "warning" | "error" = "success") => {
   try {
-    if ((window as any).Capacitor?.Plugins?.Haptics) {
-      (window as any).Capacitor.Plugins.Haptics.notification({ type: type.toUpperCase() });
+    const plugins = getCapacitorPlugins();
+    if (plugins?.Haptics) {
+      plugins.Haptics.notification({ type: type.toUpperCase() });
     } else if (navigator.vibrate) {
       const pattern = type === "success" ? [10, 50, 10] : type === "warning" ? [20, 40, 20] : [40, 30, 40, 30, 40];
       navigator.vibrate(pattern);
@@ -40,8 +106,9 @@ export const hapticNotification = (type: "success" | "warning" | "error" = "succ
 // Native share
 export const nativeShare = async (data: { title?: string; text?: string; url?: string }) => {
   try {
-    if ((window as any).Capacitor?.Plugins?.Share) {
-      await (window as any).Capacitor.Plugins.Share.share(data);
+    const share = getCapacitorPlugins()?.Share;
+    if (share) {
+      await share.share(data);
       return true;
     } else if (navigator.share) {
       await navigator.share(data);
@@ -54,7 +121,7 @@ export const nativeShare = async (data: { title?: string; text?: string; url?: s
 };
 
 export const canShare = (): boolean => {
-  return !!(navigator.share || (window as any).Capacitor?.Plugins?.Share);
+  return !!(navigator.share || getCapacitorPlugins()?.Share);
 };
 
 // Online/Offline status hook

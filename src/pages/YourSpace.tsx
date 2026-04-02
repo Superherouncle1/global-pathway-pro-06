@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { toast } from "@/hooks/use-toast";
-import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
+import { hapticFeedback, hapticNotification, canTakePhoto, capturePhotoFile } from "@/hooks/use-native";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2, Camera, ArrowRight } from "lucide-react";
@@ -14,6 +14,15 @@ const languages = [
   "English", "Français", "Español", "Deutsch", "العربية",
   "中文", "Português", "हिन्दी", "日本語", "한국어",
   "Italiano", "Русский", "Türkçe", "Kiswahili",
+];
+
+const allowedAvatarTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/heic",
+  "image/heif",
 ];
 
 const YourSpace = () => {
@@ -70,24 +79,25 @@ const YourSpace = () => {
     setLoadingProfile(false);
   };
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadAvatarFile = async (file: File) => {
+    if (!user) return;
+
+    if (!allowedAvatarTypes.includes(file.type)) {
+      toast({ title: "Invalid file type", description: "Please upload a JPEG, PNG, WebP, GIF, HEIC, or HEIF image.", variant: "destructive" });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Please upload an image under 5MB.", variant: "destructive" });
+      return;
+    }
+
+    setUploadingAvatar(true);
+
     try {
-      const file = e.target.files?.[0];
-      if (!file || !user) return;
-
-      const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-      if (!allowedTypes.includes(file.type)) {
-        toast({ title: "Invalid file type", description: "Please upload a JPEG, PNG, WebP, or GIF image.", variant: "destructive" });
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        toast({ title: "File too large", description: "Please upload an image under 5MB.", variant: "destructive" });
-        return;
-      }
-
-      setUploadingAvatar(true);
-      const fileExt = file.name.split(".").pop();
-      const filePath = `${user.id}/avatar.${fileExt}`;
+      const fileExt = (file.name.split(".").pop() || file.type.split("/").pop() || "jpg").toLowerCase();
+      const normalizedExt = fileExt === "jpeg" ? "jpg" : fileExt;
+      const filePath = `${user.id}/avatar.${normalizedExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from("avatars")
@@ -95,27 +105,53 @@ const YourSpace = () => {
 
       if (uploadError) {
         toast({ title: "Upload failed", description: uploadError.message, variant: "destructive" });
-      } else {
-        const { data: urlData } = supabase.storage
-          .from("avatars")
-          .getPublicUrl(filePath);
-
-        const avatarUrl = `${urlData.publicUrl}?t=${Date.now()}`;
-        await supabase
-          .from("profiles")
-          .update({ avatar_url: avatarUrl })
-          .eq("id", user.id);
-
-        setProfile((prev) => ({ ...prev, avatar_url: avatarUrl }));
+        return;
       }
+
+      const { data: urlData } = supabase.storage
+        .from("avatars")
+        .getPublicUrl(filePath);
+
+      const avatarUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+      await supabase
+        .from("profiles")
+        .update({ avatar_url: avatarUrl })
+        .eq("id", user.id);
+
+      setProfile((prev) => ({ ...prev, avatar_url: avatarUrl }));
     } catch (err: any) {
       console.error("Avatar upload error:", err);
       toast({ title: "Something went wrong", description: "Could not upload photo. Please try again.", variant: "destructive" });
     } finally {
       setUploadingAvatar(false);
-      // Reset the input so the same file can be re-selected
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await uploadAvatarFile(file);
+  };
+
+  const handleAvatarButtonClick = async () => {
+    if (uploadingAvatar) return;
+
+    if (canTakePhoto()) {
+      try {
+        const file = await capturePhotoFile();
+        if (file) {
+          await uploadAvatarFile(file);
+          return;
+        }
+      } catch (err) {
+        console.error("Camera capture error:", err);
+        toast({ title: "Camera unavailable", description: "Could not open the camera. Please try again or upload a photo instead.", variant: "destructive" });
+        return;
+      }
+    }
+
+    fileInputRef.current?.click();
   };
 
   const handleSave = async () => {
