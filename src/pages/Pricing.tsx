@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
 import { useIAP, IAP_PRODUCTS } from "@/hooks/use-iap";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -184,6 +185,9 @@ const Pricing = () => {
       <Navbar />
 
       <section className="pt-24 pb-16">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <BackButton />
+        </div>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

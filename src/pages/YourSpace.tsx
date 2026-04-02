@@ -7,6 +7,7 @@ import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Load
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 
@@ -196,6 +197,9 @@ const YourSpace = () => {
       <Navbar />
 
       <div className="pt-24 pb-20">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <BackButton />
+        </div>
         <div className="container mx-auto px-4 max-w-2xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

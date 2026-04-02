@@ -6,6 +6,7 @@ import OpportunitiesBoard from "@/components/community/OpportunitiesBoard";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 
 interface Profile {
@@ -158,6 +159,9 @@ const Community = () => {
       <Navbar />
 
       <div className="pt-24 pb-20">
+        <div className="container mx-auto px-4">
+          <BackButton />
+        </div>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 
 const faqItems = [
@@ -185,6 +186,9 @@ const About = () => {
       <Navbar />
 
       <div className="pt-24 pb-20">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <BackButton />
+        </div>
         <div className="container mx-auto px-4">
           {/* Header */}
           <motion.div
