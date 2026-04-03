@@ -56,21 +56,35 @@ const Community = () => {
   }, [messages]);
 
   const loadProfiles = async () => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("id, name, country, field_of_study, avatar_url")
-      .order("created_at", { ascending: false });
+    const { data } = await supabase.rpc("get_community_profiles");
     if (data) setProfiles(data);
     setLoadingData(false);
   };
 
   const loadMessages = async () => {
-    const { data } = await supabase
+    const { data: rawMessages } = await supabase
       .from("chat_messages")
-      .select("id, sender_id, message, created_at, profiles(name, avatar_url)")
+      .select("id, sender_id, message, created_at")
       .order("created_at", { ascending: true })
       .limit(100);
-    if (data) setMessages(data as ChatMessage[]);
+    if (!rawMessages) return;
+
+    // Fetch display profiles for all unique senders
+    const senderIds = [...new Set(rawMessages.map((m) => m.sender_id))];
+    const profileMap = new Map<string, { name: string | null; avatar_url: string | null }>();
+    await Promise.all(
+      senderIds.map(async (sid) => {
+        const { data } = await supabase.rpc("get_profile_display", { _user_id: sid });
+        if (data?.[0]) profileMap.set(sid, data[0]);
+      })
+    );
+
+    setMessages(
+      rawMessages.map((m) => ({
+        ...m,
+        profiles: profileMap.get(m.sender_id) || null,
+      }))
+    );
   };
 
   const setupRealtime = () => {
@@ -80,14 +94,13 @@ const Community = () => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "chat_messages" },
         async (payload) => {
-          const { data } = await supabase
-            .from("profiles")
-            .select("name, avatar_url")
-            .eq("id", payload.new.sender_id)
-            .single();
+          const { data } = await supabase.rpc("get_profile_display", {
+            _user_id: payload.new.sender_id,
+          });
+          const profileData = data?.[0] || null;
           const newMsg: ChatMessage = {
             ...(payload.new as ChatMessage),
-            profiles: data,
+            profiles: profileData,
           };
           setMessages((prev) => [...prev, newMsg]);
         }
