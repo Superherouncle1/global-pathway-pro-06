@@ -83,7 +83,7 @@ const Community = () => {
           const profileData = data?.[0] || null;
           const newMsg: ChatMessage = {
             ...(payload.new as ChatMessage),
-            profiles: data,
+            profiles: profileData,
           };
           setMessages((prev) => [...prev, newMsg]);
         }
