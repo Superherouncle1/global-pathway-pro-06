@@ -62,12 +62,29 @@ const Community = () => {
   };
 
   const loadMessages = async () => {
-    const { data } = await supabase
+    const { data: rawMessages } = await supabase
       .from("chat_messages")
-      .select("id, sender_id, message, created_at, profiles(name, avatar_url)")
+      .select("id, sender_id, message, created_at")
       .order("created_at", { ascending: true })
       .limit(100);
-    if (data) setMessages(data as ChatMessage[]);
+    if (!rawMessages) return;
+
+    // Fetch display profiles for all unique senders
+    const senderIds = [...new Set(rawMessages.map((m) => m.sender_id))];
+    const profileMap = new Map<string, { name: string | null; avatar_url: string | null }>();
+    await Promise.all(
+      senderIds.map(async (sid) => {
+        const { data } = await supabase.rpc("get_profile_display", { _user_id: sid });
+        if (data?.[0]) profileMap.set(sid, data[0]);
+      })
+    );
+
+    setMessages(
+      rawMessages.map((m) => ({
+        ...m,
+        profiles: profileMap.get(m.sender_id) || null,
+      }))
+    );
   };
 
   const setupRealtime = () => {
