@@ -56,10 +56,7 @@ const Community = () => {
   }, [messages]);
 
   const loadProfiles = async () => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("id, name, country, field_of_study, avatar_url")
-      .order("created_at", { ascending: false });
+    const { data } = await supabase.rpc("get_community_profiles");
     if (data) setProfiles(data);
     setLoadingData(false);
   };
