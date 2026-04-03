@@ -77,11 +77,10 @@ const Community = () => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "chat_messages" },
         async (payload) => {
-          const { data } = await supabase
-            .from("profiles")
-            .select("name, avatar_url")
-            .eq("id", payload.new.sender_id)
-            .single();
+          const { data } = await supabase.rpc("get_profile_display", {
+            _user_id: payload.new.sender_id,
+          });
+          const profileData = data?.[0] || null;
           const newMsg: ChatMessage = {
             ...(payload.new as ChatMessage),
             profiles: data,
