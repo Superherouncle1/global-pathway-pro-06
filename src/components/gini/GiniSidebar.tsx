@@ -44,18 +44,10 @@ export default function GiniSidebar({ activeView, onViewChange, collapsed, onTog
     };
     fetchCredits();
 
-    const channel = supabase
-      .channel("sidebar-credits")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "user_credits", filter: `user_id=eq.${user.id}` },
-        (payload: any) => {
-          if (payload.new?.credits !== undefined) setCredits(payload.new.credits);
-        }
-      )
-      .subscribe();
+    // Poll credits every 30 seconds instead of realtime (realtime removed for security)
+    const interval = setInterval(fetchCredits, 30000);
 
-    return () => { supabase.removeChannel(channel); };
+    return () => { clearInterval(interval); };
   }, [user]);
 
   return (
