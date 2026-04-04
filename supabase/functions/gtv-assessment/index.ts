@@ -34,7 +34,7 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    if (userId) {
+    {
       const { data: isSuperAdmin } = await supabaseClient.rpc("is_super_admin", { _user_id: userId });
       if (!isSuperAdmin) {
         const { data: creditData } = await supabaseClient
