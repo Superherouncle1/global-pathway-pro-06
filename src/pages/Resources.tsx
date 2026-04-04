@@ -8,6 +8,7 @@ import {
 import Navbar from "@/components/Navbar";
 import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
+import BookmarkButton from "@/components/BookmarkButton";
 
 // ─── Training Modules ───────────────────────────────────────────────────────
 
@@ -594,6 +595,12 @@ const Resources = () => {
                     <p className="text-xs font-medium text-primary mb-1">Module {module.id}</p>
                     <h3 className="font-display text-lg font-semibold text-foreground">{module.title}</h3>
                   </div>
+                  <BookmarkButton
+                    itemType="module"
+                    referenceId={`module-${module.id}`}
+                    title={`Module ${module.id}: ${module.title}`}
+                    description={module.summary}
+                  />
                   {expandedModule === module.id ? (
                     <ChevronUp className="w-5 h-5 text-muted-foreground flex-shrink-0" />
                   ) : (
@@ -767,6 +774,13 @@ const Resources = () => {
                         <h3 className="font-display font-semibold text-foreground text-sm leading-snug flex-1">
                           {resource.title}
                         </h3>
+                        <BookmarkButton
+                          itemType="resource"
+                          referenceId={resource.title.replace(/\s+/g, '-').toLowerCase()}
+                          title={resource.title}
+                          description={resource.desc}
+                          url={resource.url}
+                        />
                         <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-0.5" />
                       </div>
 

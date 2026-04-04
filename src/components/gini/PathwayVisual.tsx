@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { GraduationCap, Globe, DollarSign, Briefcase, Lightbulb, ArrowDown, MapPin, Award, TrendingUp } from "lucide-react";
+import BookmarkButton from "@/components/BookmarkButton";
 
 interface PathwayData {
   current_stage: {
@@ -112,12 +113,18 @@ export default function PathwayVisual({ data, futureGoal }: { data: PathwayData;
               className="bg-muted rounded-lg p-3 border-l-3 border-primary"
             >
               <div className="flex items-start justify-between gap-2">
-                <div>
+                <div className="flex-1">
                   <p className="text-sm font-semibold text-foreground">{opp.title}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     <MapPin className="w-3 h-3 inline mr-1" />{opp.country} · {opp.institution}
                   </p>
                 </div>
+                <BookmarkButton
+                  itemType="opportunity"
+                  referenceId={`pathway-opp-${i}`}
+                  title={opp.title}
+                  description={`${opp.type} at ${opp.institution}, ${opp.country}. ${opp.why_fit}`}
+                />
                 <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary whitespace-nowrap">
                   {opp.type}
                 </span>
@@ -180,7 +187,7 @@ export default function PathwayVisual({ data, futureGoal }: { data: PathwayData;
           {data.funding_sources.map((fs, i) => (
             <div key={i} className="bg-muted rounded-lg p-3 flex items-start gap-3">
               <Award className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-              <div>
+              <div className="flex-1">
                 <p className="text-sm font-semibold text-foreground">{fs.name}</p>
                 <p className="text-xs text-muted-foreground">{fs.provider} · {fs.type}</p>
                 <p className="text-xs text-foreground mt-1">{fs.coverage}</p>
@@ -188,6 +195,12 @@ export default function PathwayVisual({ data, futureGoal }: { data: PathwayData;
                   <p className="text-xs text-primary mt-1 font-medium">{fs.eligibility_note}</p>
                 )}
               </div>
+              <BookmarkButton
+                itemType="scholarship"
+                referenceId={`pathway-fund-${i}`}
+                title={fs.name}
+                description={`${fs.provider} · ${fs.type}. ${fs.coverage}`}
+              />
             </div>
           ))}
         </div>
