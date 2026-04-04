@@ -595,6 +595,12 @@ const Resources = () => {
                     <p className="text-xs font-medium text-primary mb-1">Module {module.id}</p>
                     <h3 className="font-display text-lg font-semibold text-foreground">{module.title}</h3>
                   </div>
+                  <BookmarkButton
+                    itemType="module"
+                    referenceId={`module-${module.id}`}
+                    title={`Module ${module.id}: ${module.title}`}
+                    description={module.summary}
+                  />
                   {expandedModule === module.id ? (
                     <ChevronUp className="w-5 h-5 text-muted-foreground flex-shrink-0" />
                   ) : (
