@@ -135,23 +135,8 @@ const YourSpace = () => {
     await uploadAvatarFile(file);
   };
 
-  const handleAvatarButtonClick = async () => {
+  const handleAvatarButtonClick = () => {
     if (uploadingAvatar) return;
-
-    if (canTakePhoto()) {
-      try {
-        const file = await capturePhotoFile();
-        if (file) {
-          await uploadAvatarFile(file);
-          return;
-        }
-      } catch (err) {
-        console.error("Camera capture error:", err);
-        toast({ title: "Camera unavailable", description: "Could not open the camera. Please try again or upload a photo instead.", variant: "destructive" });
-        return;
-      }
-    }
-
     fileInputRef.current?.click();
   };
 
