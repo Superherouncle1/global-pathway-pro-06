@@ -8,13 +8,6 @@ type CapacitorPlugins = {
   Share?: {
     share: (data: { title?: string; text?: string; url?: string }) => Promise<void>;
   };
-  Camera?: {
-    getPhoto: (options: Record<string, unknown>) => Promise<{
-      webPath?: string;
-      path?: string;
-      format?: string;
-    }>;
-  };
 };
 
 const getCapacitorPlugins = (): CapacitorPlugins | undefined => {
