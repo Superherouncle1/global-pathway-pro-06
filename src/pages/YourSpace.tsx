@@ -230,7 +230,7 @@ const YourSpace = () => {
                   {uploadingAvatar ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <Camera className="w-4 h-4" />
+                    <ImagePlus className="w-4 h-4" />
                   )}
                 </button>
                 <input
