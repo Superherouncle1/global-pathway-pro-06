@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import OfflineBanner from "@/components/OfflineBanner";
+import AuthGate from "@/components/AuthGate";
+import TrainGeniusPrompt from "@/components/TrainGeniusPrompt";
 import Index from "./pages/Index";
 import Resources from "./pages/Resources";
 import YourSpace from "./pages/YourSpace";
@@ -29,21 +31,24 @@ const App = () => (
         <Sonner />
         <OfflineBanner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/your-space" element={<YourSpace />} />
-            <Route path="/gini" element={<GiniPage />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/timi" element={<TimiPage />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <TimiChat />
+          <AuthGate>
+            <TrainGeniusPrompt />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/your-space" element={<YourSpace />} />
+              <Route path="/gini" element={<GiniPage />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/timi" element={<TimiPage />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <TimiChat />
+          </AuthGate>
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>

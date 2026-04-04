@@ -285,8 +285,20 @@ const YourSpace = () => {
             </div>
           </motion.div>
 
+          {/* Pathway Tracker */}
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+            <PathwayTracker />
+          </motion.div>
+
+          {/* Saved Bookmarks */}
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6">
+            <SavedBookmarks />
+          </motion.div>
+
           {/* Personal AI Genius */}
-          <PersonalAIGenius />
+          <div className="mt-6">
+            <PersonalAIGenius />
+          </div>
 
           {/* Resource Hub Link */}
           <motion.div
