@@ -26,45 +26,6 @@ export const isNativeApp = (): boolean => {
   );
 };
 
-const isCancelledPhoto = (error: unknown) => {
-  const message = error instanceof Error ? error.message : String(error);
-  return /cancel/i.test(message);
-};
-
-export const canTakePhoto = (): boolean => {
-  return !!getCapacitorPlugins()?.Camera?.getPhoto;
-};
-
-export const capturePhotoFile = async (): Promise<File | null> => {
-  const camera = getCapacitorPlugins()?.Camera;
-  if (!camera?.getPhoto) return null;
-
-  try {
-    const photo = await camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: "uri",
-      source: "CAMERA",
-      saveToGallery: false,
-      correctOrientation: true,
-      presentationStyle: "fullscreen",
-    });
-
-    const photoUrl = photo.webPath ?? photo.path;
-    if (!photoUrl) throw new Error("No photo returned from camera");
-
-    const response = await fetch(photoUrl);
-    const blob = await response.blob();
-    const format = (photo.format || blob.type.split("/")[1] || "jpeg").toLowerCase();
-    const extension = format === "jpeg" ? "jpg" : format;
-    const type = blob.type || `image/${format}`;
-
-    return new File([blob], `avatar-${Date.now()}.${extension}`, { type });
-  } catch (error) {
-    if (isCancelledPhoto(error)) return null;
-    throw error;
-  }
-};
 
 // Haptic feedback using Vibration API (works on most mobile browsers and Capacitor)
 export const hapticFeedback = (style: "light" | "medium" | "heavy" = "light") => {
