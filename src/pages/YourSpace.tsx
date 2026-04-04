@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { toast } from "@/hooks/use-toast";
-import { hapticFeedback, hapticNotification, canTakePhoto, capturePhotoFile } from "@/hooks/use-native";
+import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2, Camera, ArrowRight } from "lucide-react";
+import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2, ImagePlus, ArrowRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -135,23 +135,8 @@ const YourSpace = () => {
     await uploadAvatarFile(file);
   };
 
-  const handleAvatarButtonClick = async () => {
+  const handleAvatarButtonClick = () => {
     if (uploadingAvatar) return;
-
-    if (canTakePhoto()) {
-      try {
-        const file = await capturePhotoFile();
-        if (file) {
-          await uploadAvatarFile(file);
-          return;
-        }
-      } catch (err) {
-        console.error("Camera capture error:", err);
-        toast({ title: "Camera unavailable", description: "Could not open the camera. Please try again or upload a photo instead.", variant: "destructive" });
-        return;
-      }
-    }
-
     fileInputRef.current?.click();
   };
 
@@ -245,7 +230,7 @@ const YourSpace = () => {
                   {uploadingAvatar ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <Camera className="w-4 h-4" />
+                    <ImagePlus className="w-4 h-4" />
                   )}
                 </button>
                 <input
