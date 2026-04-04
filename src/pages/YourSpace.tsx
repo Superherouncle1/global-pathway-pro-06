@@ -47,11 +47,7 @@ const YourSpace = () => {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth");
-    }
-  }, [user, authLoading, navigate]);
+  // Auth is handled by AuthGate wrapper
 
   useEffect(() => {
     if (user) {
