@@ -4,6 +4,7 @@ import {
   Building2, Calendar, ExternalLink, Globe, GraduationCap, Briefcase,
   Award, BookOpen, Plus, X, Loader2, MapPin, Mail, Filter, Users
 } from "lucide-react";
+import BookmarkButton from "@/components/BookmarkButton";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Input } from "@/components/ui/input";
@@ -383,11 +384,20 @@ const OpportunitiesBoard = () => {
                         </div>
                         <CardTitle className="text-base leading-tight">{listing.title}</CardTitle>
                       </div>
-                      {listing.posted_by === user?.id && (
-                        <button onClick={() => handleDelete(listing.id)} className="text-muted-foreground hover:text-destructive p-1 rounded" title="Delete">
-                          <X className="w-4 h-4" />
-                        </button>
-                      )}
+                      <div className="flex items-center gap-1">
+                        <BookmarkButton
+                          itemType="opportunity"
+                          referenceId={listing.id}
+                          title={listing.title}
+                          description={`${listing.institution_name} — ${listing.listing_type}`}
+                          url={listing.application_link || undefined}
+                        />
+                        {listing.posted_by === user?.id && (
+                          <button onClick={() => handleDelete(listing.id)} className="text-muted-foreground hover:text-destructive p-1 rounded" title="Delete">
+                            <X className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="pt-0 space-y-3">

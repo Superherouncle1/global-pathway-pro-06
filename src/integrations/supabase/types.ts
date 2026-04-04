@@ -235,6 +235,45 @@ export type Database = {
         }
         Relationships: []
       }
+      pathway_tracker_items: {
+        Row: {
+          category: string
+          created_at: string
+          due_date: string | null
+          id: string
+          is_completed: boolean
+          notes: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          is_completed?: boolean
+          notes?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          is_completed?: boolean
+          notes?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -319,6 +358,39 @@ export type Database = {
           id?: string
           referred_user_id?: string
           referrer_id?: string
+        }
+        Relationships: []
+      }
+      saved_bookmarks: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          item_type: string
+          reference_id: string | null
+          title: string
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          item_type: string
+          reference_id?: string | null
+          title: string
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          item_type?: string
+          reference_id?: string | null
+          title?: string
+          url?: string | null
+          user_id?: string
         }
         Relationships: []
       }

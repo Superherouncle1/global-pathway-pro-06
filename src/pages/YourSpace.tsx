@@ -10,6 +10,8 @@ import Navbar from "@/components/Navbar";
 import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
+import PathwayTracker from "@/components/PathwayTracker";
+import SavedBookmarks from "@/components/SavedBookmarks";
 
 const languages = [
   "English", "Français", "Español", "Deutsch", "العربية",
@@ -45,11 +47,7 @@ const YourSpace = () => {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth");
-    }
-  }, [user, authLoading, navigate]);
+  // Auth is handled by AuthGate wrapper
 
   useEffect(() => {
     if (user) {
@@ -283,8 +281,20 @@ const YourSpace = () => {
             </div>
           </motion.div>
 
+          {/* Pathway Tracker */}
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+            <PathwayTracker />
+          </motion.div>
+
+          {/* Saved Bookmarks */}
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6">
+            <SavedBookmarks />
+          </motion.div>
+
           {/* Personal AI Genius */}
-          <PersonalAIGenius />
+          <div className="mt-6">
+            <PersonalAIGenius />
+          </div>
 
           {/* Resource Hub Link */}
           <motion.div
