@@ -8,6 +8,7 @@ import {
 import Navbar from "@/components/Navbar";
 import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
+import BookmarkButton from "@/components/BookmarkButton";
 
 // ─── Training Modules ───────────────────────────────────────────────────────
 
