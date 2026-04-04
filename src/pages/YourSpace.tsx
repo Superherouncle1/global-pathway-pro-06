@@ -10,6 +10,8 @@ import Navbar from "@/components/Navbar";
 import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
+import PathwayTracker from "@/components/PathwayTracker";
+import SavedBookmarks from "@/components/SavedBookmarks";
 
 const languages = [
   "English", "Français", "Español", "Deutsch", "العربية",
