@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { GraduationCap, Globe, DollarSign, Briefcase, Lightbulb, ArrowDown, MapPin, Award, TrendingUp } from "lucide-react";
+import BookmarkButton from "@/components/BookmarkButton";
 
 interface PathwayData {
   current_stage: {
