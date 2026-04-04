@@ -4,6 +4,7 @@ import {
   Building2, Calendar, ExternalLink, Globe, GraduationCap, Briefcase,
   Award, BookOpen, Plus, X, Loader2, MapPin, Mail, Filter, Users
 } from "lucide-react";
+import BookmarkButton from "@/components/BookmarkButton";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Input } from "@/components/ui/input";
