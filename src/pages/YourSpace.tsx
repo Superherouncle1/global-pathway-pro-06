@@ -3,7 +3,7 @@ import { toast } from "@/hooks/use-toast";
 import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2, Camera, ArrowRight } from "lucide-react";
+import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2, ImagePlus, ArrowRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
