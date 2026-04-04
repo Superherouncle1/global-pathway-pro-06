@@ -774,6 +774,13 @@ const Resources = () => {
                         <h3 className="font-display font-semibold text-foreground text-sm leading-snug flex-1">
                           {resource.title}
                         </h3>
+                        <BookmarkButton
+                          itemType="resource"
+                          referenceId={resource.title.replace(/\s+/g, '-').toLowerCase()}
+                          title={resource.title}
+                          description={resource.desc}
+                          url={resource.url}
+                        />
                         <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-0.5" />
                       </div>
 
