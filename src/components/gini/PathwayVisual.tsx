@@ -113,12 +113,18 @@ export default function PathwayVisual({ data, futureGoal }: { data: PathwayData;
               className="bg-muted rounded-lg p-3 border-l-3 border-primary"
             >
               <div className="flex items-start justify-between gap-2">
-                <div>
+                <div className="flex-1">
                   <p className="text-sm font-semibold text-foreground">{opp.title}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     <MapPin className="w-3 h-3 inline mr-1" />{opp.country} · {opp.institution}
                   </p>
                 </div>
+                <BookmarkButton
+                  itemType="opportunity"
+                  referenceId={`pathway-opp-${i}`}
+                  title={opp.title}
+                  description={`${opp.type} at ${opp.institution}, ${opp.country}. ${opp.why_fit}`}
+                />
                 <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary whitespace-nowrap">
                   {opp.type}
                 </span>
