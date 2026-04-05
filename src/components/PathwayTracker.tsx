@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { usePushNotifications } from "@/hooks/use-push-notifications";
 
 interface TrackerItem {
   id: string;
@@ -33,6 +34,7 @@ const CATEGORIES = [
 export default function PathwayTracker() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { scheduleDeadlineReminder } = usePushNotifications();
   const [items, setItems] = useState<TrackerItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [newTitle, setNewTitle] = useState("");
@@ -75,6 +77,10 @@ export default function PathwayTracker() {
       setNewDueDate("");
       setShowAddForm(false);
       await loadItems();
+      // Schedule a push reminder if there's a due date
+      if (newDueDate) {
+        scheduleDeadlineReminder(newTitle.trim(), newDueDate);
+      }
     }
     setAdding(false);
   };

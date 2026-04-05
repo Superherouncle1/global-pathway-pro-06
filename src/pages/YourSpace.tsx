@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 import PathwayTracker from "@/components/PathwayTracker";
 import SavedBookmarks from "@/components/SavedBookmarks";
+import NotificationSettings from "@/components/NotificationSettings";
 
 const languages = [
   "English", "Français", "Español", "Deutsch", "العربية",
@@ -289,6 +290,11 @@ const YourSpace = () => {
           {/* Saved Bookmarks */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6">
             <SavedBookmarks />
+          </motion.div>
+
+          {/* Notification Settings */}
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }} className="mt-6">
+            <NotificationSettings />
           </motion.div>
 
           {/* Personal AI Genius */}
