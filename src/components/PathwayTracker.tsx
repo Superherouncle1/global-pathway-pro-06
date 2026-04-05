@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { usePushNotifications } from "@/hooks/use-push-notifications";
+import { setCacheData, getCacheData, userCacheKey } from "@/lib/offline-cache";
 
 interface TrackerItem {
   id: string;
