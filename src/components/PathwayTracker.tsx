@@ -34,6 +34,7 @@ const CATEGORIES = [
 export default function PathwayTracker() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { scheduleDeadlineReminder } = usePushNotifications();
   const [items, setItems] = useState<TrackerItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [newTitle, setNewTitle] = useState("");
@@ -76,6 +77,10 @@ export default function PathwayTracker() {
       setNewDueDate("");
       setShowAddForm(false);
       await loadItems();
+      // Schedule a push reminder if there's a due date
+      if (newDueDate) {
+        scheduleDeadlineReminder(newTitle.trim(), newDueDate);
+      }
     }
     setAdding(false);
   };
