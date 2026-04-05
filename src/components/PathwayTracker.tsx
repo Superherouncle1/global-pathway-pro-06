@@ -36,7 +36,12 @@ export default function PathwayTracker() {
   const { user } = useAuth();
   const { toast } = useToast();
   const { scheduleDeadlineReminder } = usePushNotifications();
-  const [items, setItems] = useState<TrackerItem[]>([]);
+  const [items, setItems] = useState<TrackerItem[]>(() => {
+    if (user) {
+      return getCacheData<TrackerItem[]>(userCacheKey(user.id, "pathway_items")) || [];
+    }
+    return [];
+  });
   const [loading, setLoading] = useState(true);
   const [newTitle, setNewTitle] = useState("");
   const [newCategory, setNewCategory] = useState("application");
@@ -47,13 +52,19 @@ export default function PathwayTracker() {
 
   const loadItems = useCallback(async () => {
     if (!user) return;
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("pathway_tracker_items")
       .select("*")
       .eq("user_id", user.id)
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: true });
-    if (data) setItems(data as TrackerItem[]);
+    if (data) {
+      setItems(data as TrackerItem[]);
+      setCacheData(userCacheKey(user.id, "pathway_items"), data);
+    } else if (error && !navigator.onLine) {
+      const cached = getCacheData<TrackerItem[]>(userCacheKey(user.id, "pathway_items"));
+      if (cached) setItems(cached);
+    }
     setLoading(false);
   }, [user]);
 
