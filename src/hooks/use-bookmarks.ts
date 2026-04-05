@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { setCacheData, getCacheData, userCacheKey } from "@/lib/offline-cache";
 
 interface Bookmark {
   id: string;
@@ -17,17 +18,29 @@ interface Bookmark {
 export function useBookmarks() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>(() => {
+    if (user) {
+      return getCacheData<Bookmark[]>(userCacheKey(user.id, "bookmarks")) || [];
+    }
+    return [];
+  });
   const [loading, setLoading] = useState(true);
 
   const loadBookmarks = useCallback(async () => {
     if (!user) return;
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("saved_bookmarks")
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
-    if (data) setBookmarks(data as Bookmark[]);
+    if (data) {
+      setBookmarks(data as Bookmark[]);
+      setCacheData(userCacheKey(user.id, "bookmarks"), data);
+    } else if (error && !navigator.onLine) {
+      // Offline — keep cached data
+      const cached = getCacheData<Bookmark[]>(userCacheKey(user.id, "bookmarks"));
+      if (cached) setBookmarks(cached);
+    }
     setLoading(false);
   }, [user]);
 
