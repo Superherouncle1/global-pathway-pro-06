@@ -359,7 +359,15 @@ export type Database = {
           referred_user_id?: string
           referrer_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_referrer_valid_code"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "referral_codes"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       saved_bookmarks: {
         Row: {
