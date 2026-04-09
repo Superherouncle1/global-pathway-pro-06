@@ -10,7 +10,7 @@ import Navbar from "@/components/Navbar";
 import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 import AvatarUpload from "@/components/yourspace/AvatarUpload";
-import ProfileForm, { type ProfileData } from "@/components/yourspace/ProfileForm";
+import ProfileForm, { type ProfileData, type ProfileErrors } from "@/components/yourspace/ProfileForm";
 import LanguageSelector from "@/components/yourspace/LanguageSelector";
 import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 import PathwayTracker from "@/components/PathwayTracker";
@@ -25,6 +25,7 @@ const YourSpace = () => {
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [errors, setErrors] = useState<ProfileErrors>({});
   const [loadingProfile, setLoadingProfile] = useState(true);
 
   useEffect(() => {
@@ -45,8 +46,20 @@ const YourSpace = () => {
     setLoadingProfile(false);
   };
 
+  const validateProfile = (): boolean => {
+    const newErrors: ProfileErrors = {};
+    if (!profile.name.trim()) newErrors.name = "Name is required";
+    else if (profile.name.trim().length > 100) newErrors.name = "Name must be less than 100 characters";
+    if (!profile.email.trim()) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email.trim())) newErrors.email = "Please enter a valid email address";
+    else if (profile.email.trim().length > 255) newErrors.email = "Email must be less than 255 characters";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSave = async () => {
     if (!user) return;
+    if (!validateProfile()) return;
     setSaving(true);
     const { error } = await supabase.from("profiles").update({
       name: profile.name, email: profile.email, phone: profile.phone,
@@ -99,7 +112,7 @@ const YourSpace = () => {
             <h2 className="font-display text-lg font-semibold text-foreground mb-6">Your Profile</h2>
             <AvatarUpload userId={user!.id} avatarUrl={profile.avatar_url}
               onAvatarChange={(url) => setProfile((p) => ({ ...p, avatar_url: url }))} />
-            <ProfileForm profile={profile} onChange={setProfile} />
+            <ProfileForm profile={profile} onChange={(p) => { setProfile(p); setErrors({}); }} errors={errors} />
           </motion.div>
 
           {/* Pathway Tracker */}
