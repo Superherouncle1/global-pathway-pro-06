@@ -10,7 +10,7 @@ import Navbar from "@/components/Navbar";
 import BackButton from "@/components/BackButton";
 import Footer from "@/components/Footer";
 import AvatarUpload from "@/components/yourspace/AvatarUpload";
-import ProfileForm, { type ProfileData } from "@/components/yourspace/ProfileForm";
+import ProfileForm, { type ProfileData, type ProfileErrors } from "@/components/yourspace/ProfileForm";
 import LanguageSelector from "@/components/yourspace/LanguageSelector";
 import PersonalAIGenius from "@/components/yourspace/PersonalAIGenius";
 import PathwayTracker from "@/components/PathwayTracker";
