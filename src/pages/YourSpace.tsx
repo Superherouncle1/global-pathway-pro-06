@@ -235,7 +235,7 @@ const YourSpace = () => {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".jpg,.jpeg,.png,.webp,.gif,.heic,.heif"
+                  accept="*/*"
                   onChange={handleAvatarUpload}
                   className="hidden"
                 />
