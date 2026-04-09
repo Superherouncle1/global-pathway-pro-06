@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { toast } from "@/hooks/use-toast";
-import { hapticFeedback, hapticNotification } from "@/hooks/use-native";
+import { hapticFeedback, hapticNotification, isNativeApp } from "@/hooks/use-native";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { User, Mail, Phone, Globe, Save, Check, MapPin, BookOpen, FileText, Loader2, ImagePlus, ArrowRight } from "lucide-react";
@@ -134,34 +135,41 @@ const YourSpace = () => {
     await uploadAvatarFile(file);
   };
 
-  const handleAvatarButtonClick = () => {
+  const handleAvatarButtonClick = async () => {
     if (uploadingAvatar) return;
-    fileInputRef.current?.click();
-  };
 
-  const handleSave = async () => {
-    if (!user) return;
-    hapticFeedback("medium");
-    setSaving(true);
+    if (!isNativeApp()) {
+      fileInputRef.current?.click();
+      return;
+    }
 
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        name: profile.name,
-        email: profile.email,
-        phone: profile.phone,
-        country: profile.country,
-        field_of_study: profile.field_of_study,
-        bio: profile.bio,
-        preferred_language: profile.preferred_language,
-      })
-      .eq("id", user.id);
+    try {
+      const photo = await Camera.getPhoto({
+        source: CameraSource.Photos,
+        resultType: CameraResultType.Uri,
+        quality: 90,
+        allowEditing: false,
+      });
 
-    setSaving(false);
-    if (!error) {
-      hapticNotification("success");
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2500);
+      if (!photo.webPath) {
+        toast({ title: "Photo unavailable", description: "Please choose a different image.", variant: "destructive" });
+        return;
+      }
+
+      const response = await fetch(photo.webPath);
+      const blob = await response.blob();
+      const format = (photo.format || "jpeg").toLowerCase();
+      const normalizedExt = format === "jpeg" ? "jpg" : format;
+      const mimeType = blob.type || `image/${format === "jpg" ? "jpeg" : format}`;
+      const file = new File([blob], `avatar.${normalizedExt}`, { type: mimeType });
+
+      await uploadAvatarFile(file);
+    } catch (err: any) {
+      const message = String(err?.message || err || "").toLowerCase();
+      if (message.includes("cancel")) return;
+
+      console.error("Avatar picker error:", err);
+      toast({ title: "Could not open photos", description: "Please try again.", variant: "destructive" });
     }
   };
 
@@ -222,7 +230,7 @@ const YourSpace = () => {
                   )}
                 </div>
                 <button
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={handleAvatarButtonClick}
                   disabled={uploadingAvatar}
                   className="absolute bottom-0 right-0 w-8 h-8 rounded-full gradient-hero flex items-center justify-center text-primary-foreground shadow-soft hover:shadow-hover transition-all hover:scale-110 disabled:opacity-60"
                 >
@@ -235,7 +243,7 @@ const YourSpace = () => {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="*/*"
+                  accept=".jpg,.jpeg,.png,.webp,.gif,.heic,.heif"
                   onChange={handleAvatarUpload}
                   className="hidden"
                 />
