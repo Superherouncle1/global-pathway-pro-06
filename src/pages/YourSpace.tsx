@@ -49,6 +49,33 @@ const YourSpace = () => {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const handleSave = async () => {
+    if (!user) return;
+    setSaving(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        country: profile.country,
+        field_of_study: profile.field_of_study,
+        bio: profile.bio,
+        preferred_language: profile.preferred_language,
+      })
+      .eq("id", user.id);
+
+    if (error) {
+      toast({ title: "Save failed", description: error.message, variant: "destructive" });
+    } else {
+      setSaved(true);
+      hapticNotification("success");
+      toast({ title: "Profile saved!" });
+      setTimeout(() => setSaved(false), 2000);
+    }
+    setSaving(false);
+  };
+
   // Auth is handled by AuthGate wrapper
 
   useEffect(() => {
