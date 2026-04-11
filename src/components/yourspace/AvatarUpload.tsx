@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-import { User, Loader2, ImagePlus } from "lucide-react";
+import { User, Loader2, ImagePlus, Images, Upload } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { isNativeApp } from "@/hooks/use-native";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,7 +17,27 @@ interface AvatarUploadProps {
 
 const AvatarUpload = ({ userId, avatarUrl, onAvatarChange }: AvatarUploadProps) => {
   const [uploading, setUploading] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!pickerOpen) return;
+
+    const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setPickerOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [pickerOpen]);
 
   const uploadFile = async (file: File) => {
     if (!allowedAvatarTypes.includes(file.type)) {
@@ -62,8 +82,15 @@ const AvatarUpload = ({ userId, avatarUrl, onAvatarChange }: AvatarUploadProps) 
     if (file) await uploadFile(file);
   };
 
-  const handleClick = async () => {
+  const openFilePicker = () => {
+    setPickerOpen(false);
+    fileInputRef.current?.click();
+  };
+
+  const openPhotoLibrary = async () => {
     if (uploading) return;
+
+    setPickerOpen(false);
 
     if (!isNativeApp()) {
       fileInputRef.current?.click();
@@ -98,9 +125,14 @@ const AvatarUpload = ({ userId, avatarUrl, onAvatarChange }: AvatarUploadProps) 
     }
   };
 
+  const handleClick = () => {
+    if (uploading) return;
+    setPickerOpen((current) => !current);
+  };
+
   return (
     <div className="flex justify-center mb-8">
-      <div className="relative group">
+      <div ref={containerRef} className="relative group">
         <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-border bg-muted flex items-center justify-center">
           {avatarUrl ? (
             <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
@@ -109,12 +141,36 @@ const AvatarUpload = ({ userId, avatarUrl, onAvatarChange }: AvatarUploadProps) 
           )}
         </div>
         <button
+          type="button"
           onClick={handleClick}
           disabled={uploading}
+          aria-label="Change profile photo"
+          aria-expanded={pickerOpen}
+          aria-haspopup="menu"
           className="absolute bottom-0 right-0 w-8 h-8 rounded-full gradient-hero flex items-center justify-center text-primary-foreground shadow-soft hover:shadow-hover transition-all hover:scale-110 disabled:opacity-60"
         >
           {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImagePlus className="w-4 h-4" />}
         </button>
+        {pickerOpen && (
+          <div className="absolute right-0 top-full z-20 mt-3 w-56 rounded-2xl border border-border bg-card p-2 shadow-hover" role="menu" aria-label="Profile photo options">
+            <button
+              type="button"
+              onClick={openPhotoLibrary}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              <Images className="w-4 h-4 text-muted-foreground" />
+              Photo library
+            </button>
+            <button
+              type="button"
+              onClick={openFilePicker}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              <Upload className="w-4 h-4 text-muted-foreground" />
+              Upload file
+            </button>
+          </div>
+        )}
         <input
           ref={fileInputRef}
           type="file"
